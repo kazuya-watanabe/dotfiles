@@ -1,0 +1,98 @@
+#!/bin/bash
+
+set -eu
+
+basedir=$(dirname $0)
+test -r $basedir/scripts/subr.sh && source $basedir/scripts/subr.sh
+
+pushd $basedir >/dev/null 2>&1
+
+function instdir {
+    dir=~/$1
+
+    if [ -h $dir ]; then
+        bkdir=~/backups.$(date +%Y%m%d-%H%M)
+        mkdir -p $bkdir
+        mv -f $dir $bkdir
+    fi
+
+    mkdir -p $dir
+}
+
+function symlink {
+    src=$(pwd)/$1
+    dst=~/$1
+
+    if [ -e $dst ]; then
+        bkdir=~/backups.$(date +%Y%m%d-%H%M)
+        mkdir -p $bkdir
+        mv -f $dst $bkdir
+    fi
+
+    mkdir -p $(dirname $dst)
+    ln -fs $src $dst
+}
+
+instdir .config
+instdir .config/coc
+instdir .config/coc/ultisnips
+symlink .config/coc/ultisnips/all.snippets
+instdir .pip
+symlink .pip/pip.conf
+instdir .ssh
+symlink .ssh/aws-keypair-1.pem
+symlink .ssh/config
+symlink .ssh/github-keypair-1.pem
+instdir .vim
+symlink .vim/coc-install.vim
+symlink .vim/coc-settings.json
+symlink .vim/gvimrc
+symlink .vim/vimrc
+instdir .zsh
+symlink .zsh/.zprofile
+symlink .zsh/.zshrc
+symlink .bash_profile
+symlink .bashrc
+symlink .ctags
+symlink .curlrc
+symlink .gitconfig
+symlink .gitignore.global
+symlink .inputrc
+symlink .npmrc
+symlink .profile
+symlink .tigrc
+symlink .tmux.conf
+symlink .wgetrc
+symlink .zshenv
+
+if [ $(uname) = Darwin ]; then
+    read -p 'Do you want to install the Homebrew packages? [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/homebrew install
+    fi
+fi
+
+source $basedir/.profile
+
+if type npm >/dev/null 2>&1; then
+    read -p 'Do you wanto to install the Node.js packages? [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/nodejs install
+    fi
+fi
+
+if type python >/dev/null 2>&1 || type python3 >/dev/null 2>&1; then
+    read -p 'Do you want to install the Python packages? [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/python install
+    fi
+fi
+
+if type tmux >/dev/null 2>&1; then
+    read -p 'Do you want to install the tmux packages? [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/tmux install
+    fi
+fi
+
+popd >/dev/null 2>&1

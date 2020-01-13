@@ -1,0 +1,50 @@
+#!/bin/bash
+
+set -eu
+
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
+
+function print_usage() {
+    echo "Usage: $0 {install|update}" 1>&2
+}
+
+function install_packages() {
+    $1 install --user virtualenv
+}
+
+function update_packages() {
+    $1 list --user --outdated --format=json | jq -r '.[].name' | xargs $1 install --user --upgrade
+}
+
+if [ $# -ne 1 ]; then
+    print_usage
+    exit 1
+fi
+
+if type pip3 >/dev/null 2>&1; then
+    pipcmd=pip3
+elif type pip >/dev/null 2>&1; then
+    pipcmd=pip
+else
+    err 'The pip command is required.'
+    exit 1
+fi
+
+if ! type jq >/dev/null 2>&1; then
+    err 'The jq command is required.'
+    exit 1
+fi
+
+if ! type xargs >/dev/null 2>&1; then
+    err 'The xargs command is required.'
+    exit 1
+fi
+
+if [ "$1" = install ]; then
+    install_packages $pipcmd
+elif [ "$1" = update ]; then
+    update_packages $pipcmd
+else
+    print_usage
+    exit 1
+fi

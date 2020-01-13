@@ -1,0 +1,5 @@
+{
+    "coc.source.file.ignoreHidden": false,
+    "snippets.snipmate.enable": false,
+    "sql.database": "mysql"
+}
