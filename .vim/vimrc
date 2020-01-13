@@ -1,0 +1,650 @@
+" Initializing {{{1
+scriptencoding utf-8
+
+augroup vimrc
+    autocmd!
+augroup END
+
+filetype plugin indent on
+
+syntax enable
+
+" Japanese {{{1
+if ! has('gui_running')
+    let &termencoding = &encoding
+endif
+
+set encoding=utf-8
+
+set fileencodings=ucs-bom,utf-8
+set fileencodings+=iso-2022-jp-3,iso-2022-jp
+set fileencodings+=euc-jisx0213,euc-jp
+set fileencodings+=cp932,shift_jisx0213,shift_jis
+
+if exists('+spelllang')
+    set spelllang&
+    set spelllang+=cjk
+endif
+
+" System {{{1
+if has('win32') " {{{2
+    autocmd vimrc BufNewFile * setlocal fileencoding=cp932 fileformat=dos
+
+    set ambiwidth=double
+
+    if ! has('gui_running')
+        set t_Co=256
+
+        if exists('+termguicolors')
+            set termguicolors
+        endif
+    endif
+endif
+
+if has('macunix') " {{{2
+    if exists('+macmeta')
+        set macmeta
+    endif
+
+    for s:pyver in ['3.7', '3.6']
+        for s:pyprefix in ['~/.homebrew/Frameworks', '/usr/local/Frameworks']
+            let s:py3dll = expand(s:pyprefix . '/Python.framework/Versions/' . s:pyver . '/lib/libpython' . s:pyver . '.dylib')
+            if filereadable(s:py3dll)
+                let &pythonthreedll = s:py3dll
+                break
+            endif
+        endfor
+        if filereadable(&pythonthreedll)
+            break
+        endif
+    endfor
+endif
+
+" Interface {{{1
+set clipboard&
+if has('unnamedplus')
+    set clipboard+=unnnamedplus
+else
+    set clipboard+=unnamed
+endif
+
+set cmdheight=2
+
+if exists('+diffopt')
+    set diffopt&
+    set diffopt+=vertical
+endif
+
+set display&
+set display+=lastline
+
+if exists('+foldmethod')
+    set foldmethod=marker
+endif
+
+if exists('+guioptions')
+    set guioptions&
+    set guioptions-=e
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions+=c
+endif
+
+set hidden
+
+set history=1000
+
+set laststatus=2
+
+set lazyredraw
+
+set list
+
+if has('win32')
+    set listchars=eol:$,tab:>\ ,trail:-,extends:>,precedes:<
+else
+    set listchars=eol:↩︎,tab:›\ ,trail:∙,extends:»,precedes:«
+endif
+
+set number
+
+if exists('+ruler')
+    set ruler
+endif
+
+set scrolloff=5
+
+set shortmess&
+set shortmess+=aI
+
+set sidescrolloff=5
+
+if exists('+signcolumn')
+    set signcolumn=yes
+endif
+
+if exists('+splitbelow')
+    set splitbelow
+endif
+
+if exists('+splitright')
+    set splitright
+endif
+
+if exists('+statusline')
+    set statusline=%<%f\ %m%r%=
+    set statusline+=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}
+    set statusline+=%y\ %p\ %l:%v
+endif
+
+if exists('+tabpagemax')
+    set tabpagemax=50
+endif
+
+if exists('+virtualedit')
+    set virtualedit=block
+endif
+
+set visualbell t_vb=
+
+set whichwrap&
+set whichwrap+=<,>,~,[,]
+
+if exists('+wildmenu')
+    set wildmenu
+endif
+
+" Editing {{{1
+set autoindent
+
+set autoread
+
+set backspace=indent,eol,start
+
+set nobackup
+
+if exists('+completeopt')
+    set completeopt=menu,longest
+endif
+
+set expandtab
+
+set formatoptions&
+set formatoptions-=t
+set formatoptions-=c
+set formatoptions+=jmM
+
+set nrformats&
+set nrformats-=octal
+
+if exists('+smartindent')
+    set smartindent
+endif
+
+set smarttab
+
+set softtabstop=4
+
+set shiftwidth=4
+
+set noswapfile
+
+set tabstop=4
+
+if exists('+undofile')
+    if has('win32')
+        set undodir=~\vimfiles\undo
+    else
+        set undodir=~/.vim/undo
+    endif
+
+    if exists('*mkdir')
+        call mkdir(&undodir, 'p', '0700')
+    endif
+
+    set undofile
+endif
+
+if exists('+viminfo')
+    if has('win32')
+        set viminfo+=n~/vimfiles/viminfo
+    else
+        set viminfo+=n~/.vim/viminfo
+    endif
+endif
+
+set wildmode=list:longest,full
+
+set nowritebackup
+
+" Search {{{1
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+
+    set grepformat&
+    set grepformat+=%f:%l:%c:%m
+elseif executable('ag')
+    set grepprg=ag\ --vimgrep
+
+    set grepformat&
+    set grepformat+=%f:%l:%c:%m
+endif
+
+command! -nargs=+ Grep silent lgrep! <args> | lwindow
+
+if exists('+hlsearch')
+    set hlsearch
+endif
+
+set ignorecase
+
+if exists('+incsearch')
+    set incsearch
+endif
+
+set smartcase
+
+" Printing {{{1
+if exists('+printheader')
+    set printheader=%{expand(\"%:t:r\")}%=Page\ %N
+endif
+
+" Keymapping {{{1
+let mapleader = ','
+let maplocalleader = ' '
+
+noremap <F1> <Esc>
+noremap! <F1> <Esc>
+
+noremap <silent> <Esc><Esc> :nohlsearch<CR>
+
+noremap <M-j> <Down>
+noremap! <M-j> <Down>
+noremap <M-k> <Up>
+noremap! <M-k> <Up>
+noremap <M-h> <Left>
+noremap! <M-h> <Left>
+noremap <M-l> <Right>
+noremap! <M-l> <Right>
+
+noremap n nzz
+noremap N Nzz
+
+noremap <silent> <M-t> :tabnew<CR>
+noremap! <silent> <M-t> <Esc>:tabnew<CR>
+noremap <silent> <Tab> :tabnext<CR>
+noremap <silent> <S-Tab> :tabprevious<CR>
+
+noremap <C-w>\| :vsplit<CR>
+noremap <C-w>- :split<CR>
+
+noremap <silent> <Leader>q :lclose \| copen<CR>
+noremap <silent> <Leader>l :cclose \| silent! lopen<CR>
+
+if has('terminal')
+    noremap <silent> <Leader>sh :vsplit +terminal\ ++curwin<CR>
+endif
+
+if exists(':Grep')
+    nnoremap <silent> <Leader>g :execute 'Grep ' . expand('<cword>')<CR>
+    vnoremap <silent> <Leader>g "vy:execute 'Grep ' . @v<CR>
+endif
+
+" Filetypes {{{1
+augroup vimrc
+    autocmd FileType help,netrw,qf noremap <buffer> q <C-w>c
+    autocmd FileType qf nnoremap <buffer> t <C-w><Enter><C-w>T
+augroup END
+
+" Utilities {{{1
+command! -nargs=? -complete=dir Cd  call s:change_directory('<args>') " {{{2
+
+function s:change_directory(directory)
+    if a:directory == ''
+        lcd %:p:h
+    else
+        execute('lcd ' . a:directory)
+    endif
+endfunction
+
+command! Note call s:start_note(s:note_file) " {{{2
+
+let s:note_dir  = '~/Documents/Notes'
+let s:note_file = s:note_dir . '/%Y%m/%d.markdown'
+
+function! s:start_note(note_file)
+    let l:note_file = expand(strftime(a:note_file))
+
+    call mkdir(substitute(l:note_file, '^\(.*\)[\\\/]\(.*\)', '\1', ''), 'p')
+    call execute('edit ' . l:note_file, 'silent')
+endfunction
+
+command! -nargs=1 SearchNote call s:search_note(expand('<args>') " {{{2
+
+function! s:search_note(str)
+    call execute('Grep "' . a:str . '" "' . s:note_dir . '"')
+endfunction
+
+if has('macunix') && executable('open') " {{{2
+    command! -nargs=1 MacDictLookup call s:mac_dict_lookup(expand('<args>'))
+
+    function! s:mac_dict_lookup(word)
+        call system('open ' . shellescape('dict://' . a:word))
+    endfunction
+
+    nnoremap <silent> <LocalLeader>d :MacDictLookup <cword><CR>
+    vnoremap <silent> <LocalLeader>d "vy:MacDictLookup <C-r>v<CR>
+endif
+
+" Packages {{{1
+if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vimfiles/autoload/plug.vim'))
+    " Plug {{{2
+    if has('win32')
+        call plug#begin('~/vimfiles/plugged')
+    else
+        call plug#begin('~/.vim/plugged')
+    endif
+
+    if executable('yarn')
+        Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
+
+        Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+    endif
+
+    if executable('fzf')
+        Plug 'junegunn/fzf', { 'do': './install --all' }
+
+        Plug 'junegunn/fzf.vim'
+    endif
+
+    Plug 'scrooloose/nerdcommenter'
+
+    Plug 'scrooloose/nerdtree'
+
+    Plug 'jistr/vim-nerdtree-tabs'
+
+    Plug 'mhartington/oceanic-next'
+
+    Plug 'godlygeek/tabular'
+
+    if executable('ctags') || executable('exctags')
+        Plug 'majutsushi/tagbar'
+    endif
+
+    if executable('gtran')
+        Plug 'skanehira/translate.vim'
+    endif
+
+    Plug 'mbbill/undotree'
+
+    if executable('git')
+        Plug 'tpope/vim-fugitive'
+
+        Plug 'junegunn/gv.vim'
+
+        Plug 'airblade/vim-gitgutter'
+
+        Plug 'idanarye/vim-merginal'
+    endif
+
+    Plug 'vim-airline/vim-airline'
+
+    Plug 'vim-airline/vim-airline-themes'
+
+    Plug 'jeetsukumaran/vim-buffergator'
+
+    Plug 'tpope/vim-eunuch'
+
+    Plug 'drmikehenry/vim-fontsize'
+
+    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+
+    Plug 'honza/vim-snippets'
+
+    Plug 'tpope/vim-speeddating'
+
+    Plug 'tpope/vim-surround'
+
+    if has('python3')
+        Plug 'vim-vdebug/vdebug', { 'for': [ 'php', 'python' ] }
+    endif
+
+    if has('win32')
+        Plug 'Shougo/vimproc.vim'
+    elseif executable('gmake')
+        Plug 'Shougo/vimproc.vim', { 'do': 'gmake' }
+    elseif executable('make')
+        Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+    endif
+
+    Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
+
+    Plug 'ryanoasis/vim-devicons'
+
+    call plug#end()
+
+    " coc.nvim {{{2
+    if exists('g:plugs["coc.nvim"]')
+        " if hidden is not set, TextEdit might fail.
+        set hidden
+
+        " Some servers have issues with backup files, see #649
+        set nobackup
+        set nowritebackup
+
+        " Better display for messages
+        set cmdheight=2
+
+        " You will have bad experience for diagnostic messages when it's default 4000.
+        set updatetime=300
+
+        " don't give |ins-completion-menu| messages.
+        set shortmess+=c
+
+        " always show signcolumns
+        set signcolumn=yes
+
+        " Use tab for trigger completion with characters ahead and navigate.
+        " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+        inoremap <silent><expr> <TAB>
+                    \ pumvisible() ? "\<C-n>" :
+                    \ <SID>check_back_space() ? "\<TAB>" :
+                    \ coc#refresh()
+        inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+        function! s:check_back_space() abort
+            let col = col('.') - 1
+            return !col || getline('.')[col - 1]  =~# '\s'
+        endfunction
+
+        " Use <c-space> to trigger completion.
+        inoremap <silent><expr> <c-space> coc#refresh()
+
+        " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+        " Coc only does snippet and additional edit on confirm.
+        inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+        " Or use `complete_info` if your vim support it, like:
+        " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+
+        " Use `[g` and `]g` to navigate diagnostics
+        nmap <silent> [g <Plug>(coc-diagnostic-prev)
+        nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+        " Remap keys for gotos
+        nmap <silent> gd <Plug>(coc-definition)
+        nmap <silent> gy <Plug>(coc-type-definition)
+        nmap <silent> gi <Plug>(coc-implementation)
+        nmap <silent> gr <Plug>(coc-references)
+
+        " Use K to show documentation in preview window
+        nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+        function! s:show_documentation()
+            if (index(['vim','help'], &filetype) >= 0)
+                execute 'h '.expand('<cword>')
+            else
+                call CocAction('doHover')
+            endif
+        endfunction
+
+        " Highlight symbol under cursor on CursorHold
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+
+        " Remap for rename current word
+        nmap <leader>rn <Plug>(coc-rename)
+
+        " Remap for format selected region
+        xmap <leader>f  <Plug>(coc-format-selected)
+        nmap <leader>f  <Plug>(coc-format-selected)
+
+        augroup mygroup
+            autocmd!
+            " Setup formatexpr specified filetype(s).
+            autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+            " Update signature help on jump placeholder
+            autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+        augroup end
+
+        " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+        xmap <leader>a  <Plug>(coc-codeaction-selected)
+        nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+        " Remap for do codeAction of current line
+        nmap <leader>ac  <Plug>(coc-codeaction)
+        " Fix autofix problem of current line
+        nmap <leader>qf  <Plug>(coc-fix-current)
+
+        " Create mappings for function text object, requires document symbols feature of languageserver.
+        xmap if <Plug>(coc-funcobj-i)
+        xmap af <Plug>(coc-funcobj-a)
+        omap if <Plug>(coc-funcobj-i)
+        omap af <Plug>(coc-funcobj-a)
+
+        " Use <C-d> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+        nmap <silent> <C-d> <Plug>(coc-range-select)
+        xmap <silent> <C-d> <Plug>(coc-range-select)
+
+        " Use `:Format` to format current buffer
+        command! -nargs=0 Format :call CocAction('format')
+
+        " Use `:Fold` to fold current buffer
+        command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+        " use `:OR` for organize import of current buffer
+        command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+        " Add status line support, for integration with other plugin, checkout `:h coc-status`
+        set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+        " Using CocList
+        " Show all diagnostics
+        nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+        " Manage extensions
+        nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+        " Show commands
+        nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+        " Find symbol of current document
+        nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+        " Search workspace symbols
+        nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+        " Do default action for next item.
+        nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+        " Do default action for previous item.
+        nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+        " Resume latest coc list
+        nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+
+
+        " Use <C-l> for trigger snippet expand.
+        imap <C-l> <Plug>(coc-snippets-expand)
+
+        " Use <C-j> for select text for visual placeholder of snippet.
+        vmap <C-j> <Plug>(coc-snippets-select)
+
+        " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+        let g:coc_snippet_next = '<c-j>'
+
+        " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+        let g:coc_snippet_prev = '<c-k>'
+
+        " Use <C-j> for both expand and jump (make expand higher priority.)
+        imap <C-j> <Plug>(coc-snippets-expand-jump)
+    endif
+
+    " fzf.vim {{{2
+    if exists('g:plugs["fzf.vim"]')
+        nnoremap <silent> <Leader>fb :Buffers<CR>
+        nnoremap <silent> <Leader>ff :Files<CR>
+        nnoremap <silent> <Leader>fh :History<CR>
+        nnoremap <silent> <Leader>fl :BLines<CR>
+    endif
+
+    " markdown-preview.nvim {{{2
+    let g:mkdp_auto_start = 1
+    let g:mkdp_preview_options = { 'sync_scroll_type': 'relative' }
+    let g:mkdp_page_title = '${name}'
+
+    " nerdtree {{{2
+    if exists('g:plugs["nerdtree"]')
+        nnoremap <Leader>N :Cd<CR>:NERDTreeCWD<CR>
+    endif
+
+    " nerdtree/vim-nerdtree-tabs {{{2
+    if exists('g:plugs["vim-nerdtree-tabs"]')
+        let g:nerdtree_tabs_open_on_gui_startup = 0
+
+        map <Leader>n <plug>NERDTreeTabsToggle<CR>
+    endif
+
+    " oceanic-next {{{2
+    if index(getcompletion('', 'color'), 'OceanicNext') >= 0
+        set background=dark
+
+        colorscheme OceanicNext
+    endif
+
+    " tagbar {{{2
+    if exists('g:plugs["tagbar"]')
+        if executable('exctags')
+            let g:tagbar_ctags_bin = 'exctags'
+        elseif executable('ctags')
+            let g:tagbar_ctags_bin = 'ctags'
+        endif
+
+        nnoremap <silent> <Leader>t :TagbarToggle<CR>
+    endif
+
+    " undotree {{{2
+    if exists('g:plugs["undotree"]')
+        let g:undotree_WindowLayout = 3
+
+        nnoremap <silent> <Leader>u :UndotreeToggle<CR>
+    endif
+
+    " vim-airline {{{2
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#show_buffers = 0
+
+    " vim-buffergator {{{2
+    if exists('g:plugs["vim-buffergator"]')
+        let g:buffergator_autoexpand_on_split = 0
+        let g:buffergator_suppress_keymaps = 1
+        let g:buffergator_viewport_split_policy = 'R'
+
+        nnoremap <Leader>b :BuffergatorToggle<CR>
+    endif
+
+    " vim-markdown {{{2
+    let g:vim_markdown_folding_disabled = 1
+
+    " vdebug {{{2
+    if ! exists('g:vdebug_options')
+        let g:vdebug_options = {}
+    endif
+    let g:vdebug_options.break_on_open = 0
+
+    " vimproc.vim {{{2
+    if has('win32')
+        let g:vimproc#download_windows_dll = 1
+    endif
+endif

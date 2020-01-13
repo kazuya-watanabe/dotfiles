@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+set -eu
+
+function print_usage() {
+    echo "Usage: $0 {install|update|uninstall}" 1>&2
+    echo
+}
+
+function install_packages() {
+    $1 install --user virtualenv
+}
+
+function update_packages() {
+    $1 list --user --outdated --format=json | jq -r '.[].name' | xargs $1 install --user --upgrade
+}
+
+function uninstall_packages() {
+    $1 list --user --format=json | jq -r '.[].name' | xargs $1 uninstall -y
+}
+
+if [ $# -ne 1 ]
+then
+    print_usage
+    exit 1
+fi
+
+if type pip3 >/dev/null 2>&1
+then
+    pipcmd=pip3
+elif type pip >/dev/null 2>&1
+then
+    pipcmd=pip
+else
+    echo 'pip command required.'
+    exit 2
+fi
+
+if ! type jq >/dev/null 2>&1
+then
+    echo 'jq command required.'
+    exit 2
+fi
+
+if ! type xargs >/dev/null 2>&1
+then
+    echo 'xargs command required.'
+    exit 2
+fi
+
+if [ "$1" = "install" ]
+then
+    install_packages $pipcmd
+elif [ "$1" = "update" ]
+then
+    update_packages $pipcmd
+elif [ "$1" = "uninstall" ]
+then
+    uninstall_packages $pipcmd
+else
+    print_usage
+    exit 1
+fi

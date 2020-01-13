@@ -1,0 +1,10 @@
+*.log
+*.o
+*.sw[po]
+*~
+.*~
+.DS_Store
+.svn
+TAGS
+tags
+yarn.lock

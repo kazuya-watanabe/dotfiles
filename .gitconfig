@@ -1,0 +1,34 @@
+[branch]
+    autosetuprebase = always
+
+[color]
+    branch = auto
+    diff = auto
+    grep = auto
+    interactive = auto
+    status = auto
+    ui = auto
+
+[core]
+    autocrlf = false
+    excludesFile = ~/.gitignore.global
+    fscache = true
+    preloadIndex = true
+
+[diff]
+    compactionHeuristic = true
+    tool = vimdiff
+
+[merge]
+    ff = false
+    tool = vimdiff
+
+[pull]
+    rebase = true
+
+[push]
+    default = current
+
+[user]
+    name = Kazuya Watanabe
+    email = kazuya.watanabe@gmail.com
