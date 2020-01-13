@@ -1,0 +1,90 @@
+#!/bin/bash
+
+set -eu
+
+HOMEBREW_PREFIX=${HOMEBREW_PREFIX:=/opt/homebrew}
+
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
+
+function print_usage() {
+    echo "Usage: $0 {install|update}" 1>&2
+}
+
+function setup_brew() {
+    if ! which brew >/dev/null 2>&1; then
+        if [ ! -d $HOMEBREW_PREFIX ]; then
+            sudo mkdir -p $HOMEBREW_PREFIX
+            sudo chown -R $(id -un):$(id -gn) $HOMEBREW_PREFIX
+        fi
+
+        if [ ! -f $HOMEBREW_PREFIX/bin/brew ]; then
+            curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $HOMEBREW_PREFIX
+        fi
+
+        if ! type brew >/dev/null 2>&1; then
+            export PATH=$HOMEBREW_PREFIX/bin:$PATH
+        fi
+    fi
+}
+
+function install_packages() {
+    brew tap homebrew/cask
+    brew tap homebrew/cask-drivers
+
+    brew cask install 1password
+    brew cask install adguard
+    brew cask install cloudmounter
+    brew cask install firefox
+    brew cask install google-chrome
+    brew cask install java
+    brew cask install karabiner-elements
+    brew cask install macvim
+    brew cask install skype
+
+    brew install cmake
+    brew install colordiff
+    brew install composer
+    brew install coreutils
+    brew install ctags
+    brew install fasd
+    brew install ffmpeg
+    brew install fzf
+    brew install gawk
+    brew install git
+    brew install go
+    brew install highlight
+    brew install jq
+    brew install lesspipe
+    brew install llvm
+    brew install npm
+    brew install p7zip
+    brew install ripgrep
+    brew install ruby
+    brew install tig
+    brew install tmux
+    brew install w3m
+    brew install wget
+}
+
+function update_packages() {
+    brew update
+    brew upgrade
+    brew cask upgrade $(brew cask list)
+    brew cleanup --prune 0
+}
+
+if [ $# -ne 1 ]; then
+    print_usage
+    exit 1
+fi
+
+setup_brew
+
+if [ "$1" = install ]; then
+    install_packages
+elif [ "$1" = update ]; then
+    update_packages
+else
+    print_usage
+    exit 1
+fi

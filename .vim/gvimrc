@@ -1,0 +1,28 @@
+" Initializing {{{1
+scriptencoding utf-8
+
+" Interface {{{1
+set linespace=1
+
+set t_vb=
+
+set visualbell
+
+" System {{{1
+if has('win32') " {{{2
+    set guifont=MS_Gothic:h11
+
+    if has('directx') && &encoding == 'utf-8'
+        set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
+
+        set renderoptions=type:directx
+    endif
+elseif has('gui_gtk2') " {{{2
+    set guifont=Monospace\ 12
+elseif has('macunix') " {{{2
+    if has('fullscreen')
+        set fullscreen
+    endif
+
+    set guifont=Osaka-Mono:h13
+endif
