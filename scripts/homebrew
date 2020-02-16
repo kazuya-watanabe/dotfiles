@@ -1,108 +1,95 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-homebrew_dir="$HOME/.homebrew"
+set -eu
 
-homebrew_uri="https://github.com/Homebrew/brew/tarball/master"
+HOMEBREW_PREFIX=${HOMEBREW_PREFIX:=/opt/homebrew}
+
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
 
 function print_usage() {
-    echo "Usage: $0 {install|update|uninstall}" 1>&2
-    echo
+    echo "使い方: $0 {install|update}" 1>&2
 }
 
 function setup_brew() {
-    if [ ! -x "$homebrew_dir/bin/brew" ]
-    then
-        mkdir -p "$homebrew_dir"
-        curl -L "$homebrew_uri" | tar xz --strip 1 -C "$homebrew_dir"
+    if ! which brew >/dev/null 2>&1; then
+        if [ ! -d $HOMEBREW_PREFIX ]; then
+            read -p "ディレクトリ $HOMEBREW_PREFIX を作成します。 [Y/n]: " ans
+            if ! checkyesno ${ans:-Y}; then
+                warn '中断しました。'
+                exit 1
+            fi
+
+            sudo mkdir -p $HOMEBREW_PREFIX
+            sudo chown -R $(id -un):$(id -gn) $HOMEBREW_PREFIX
+        fi
+
+        if [ ! -f $HOMEBREW_PREFIX/bin/brew ]; then
+            curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $HOMEBREW_PREFIX
+        fi
+
+        if ! type brew >/dev/null 2>&1; then
+            export PATH=$HOMEBREW_PREFIX/bin:$PATH
+        fi
     fi
 }
 
 function install_packages() {
-    "$homebrew_dir/bin/brew" tap homebrew/cask
-    "$homebrew_dir/bin/brew" cask install 1password
-    "$homebrew_dir/bin/brew" cask install adguard
-    "$homebrew_dir/bin/brew" cask install amazon-music
-    "$homebrew_dir/bin/brew" cask install appcleaner
-    "$homebrew_dir/bin/brew" cask install cloudmounter
-    "$homebrew_dir/bin/brew" cask install docker
-    "$homebrew_dir/bin/brew" cask install duet
-    "$homebrew_dir/bin/brew" cask install firefox
-    "$homebrew_dir/bin/brew" cask install garmin-express
-    "$homebrew_dir/bin/brew" cask install google-chrome
-    "$homebrew_dir/bin/brew" cask install java
-    "$homebrew_dir/bin/brew" cask install macvim
-    "$homebrew_dir/bin/brew" cask install steam
+    brew tap homebrew/cask
+    brew tap homebrew/cask-drivers
 
-    "$homebrew_dir/bin/brew" tap homebrew/cask-drivers
-    "$homebrew_dir/bin/brew" cask install xbox360-controller-driver-unofficial
+    brew cask install 1password
+    brew cask install adguard
+    brew cask install cloudmounter
+    brew cask install firefox
+    brew cask install google-chrome
+    brew cask install java
+    brew cask install karabiner-elements
+    brew cask install macvim
+    brew cask install skype
 
-    "$homebrew_dir/bin/brew" tap homebrew/cask-fonts
-    "$homebrew_dir/bin/brew" cask install font-inconsolata-nerd-font
-
-    "$homebrew_dir/bin/brew" install cmake
-    "$homebrew_dir/bin/brew" install colordiff
-    "$homebrew_dir/bin/brew" install composer
-    "$homebrew_dir/bin/brew" install ctags
-    "$homebrew_dir/bin/brew" install fasd
-    "$homebrew_dir/bin/brew" install ffmpeg
-    "$homebrew_dir/bin/brew" install fzf
-    "$homebrew_dir/bin/brew" install highlight
-    "$homebrew_dir/bin/brew" install imagemagick
-    "$homebrew_dir/bin/brew" install jq
-    "$homebrew_dir/bin/brew" install lesspipe
-    "$homebrew_dir/bin/brew" install llvm
-    "$homebrew_dir/bin/brew" install npm
-    "$homebrew_dir/bin/brew" install p7zip
-    "$homebrew_dir/bin/brew" install python
-    "$homebrew_dir/bin/brew" install ripgrep
-    "$homebrew_dir/bin/brew" install tig
-    "$homebrew_dir/bin/brew" install tmux
-    "$homebrew_dir/bin/brew" install vim
-    "$homebrew_dir/bin/brew" install w3m
-    "$homebrew_dir/bin/brew" install wakeonlan
-    "$homebrew_dir/bin/brew" install wget
-    "$homebrew_dir/bin/brew" install yarn
+    brew install cmake
+    brew install colordiff
+    brew install composer
+    brew install coreutils
+    brew install ctags
+    brew install fasd
+    brew install ffmpeg
+    brew install fzf
+    brew install gawk
+    brew install git
+    brew install go
+    brew install highlight
+    brew install jq
+    brew install lesspipe
+    brew install llvm
+    brew install npm
+    brew install p7zip
+    brew install ripgrep
+    brew install ruby
+    brew install tig
+    brew install tmux
+    brew install w3m
+    brew install wget
 }
 
 function update_packages() {
-    "$homebrew_dir/bin/brew" update
-    "$homebrew_dir/bin/brew" upgrade
-    "$homebrew_dir/bin/brew" cask upgrade
-    "$homebrew_dir/bin/brew" cleanup
+    brew update
+    brew upgrade
+    brew cask upgrade $(brew cask list)
+    brew cleanup --prune 0
 }
 
-function uninstall_packages() {
-    "$homebrew_dir/bin/brew" cask list | xargs "$homebrew_dir/bin/brew" cask uninstall --force
-    "$homebrew_dir/bin/brew" list | xargs "$homebrew_dir/bin/brew" uninstall --force --ignore-dependencies
-    "$homebrew_dir/bin/brew" cleanup
-    for i in $("$homebrew_dir/bin/brew" tap)
-    do
-        if [ 'homebrew/core' = $i ]
-        then
-            continue
-        else
-            "$homebrew_dir/bin/brew" untap $i
-        fi
-    done
-}
-
-if [ $# -ne 1 ]
-then
+if [ $# -ne 1 ]; then
     print_usage
     exit 1
 fi
 
 setup_brew
 
-if [ "$1" = "install" ]
-then
+if [ "$1" = install ]; then
     install_packages
-elif [ "$1" = "update" ]
-then
+elif [ "$1" = update ]; then
     update_packages
-elif [ "$1" = "uninstall" ]
-then
-    uninstall_packages
 else
     print_usage
     exit 1
