@@ -32,6 +32,10 @@ if has('win32') " {{{2
 
     set ambiwidth=double
 
+    source $VIMRUNTIME/delmenu.vim
+    set langmenu=none
+    source $VIMRUNTIME/menu.vim
+
     if ! has('gui_running')
         set t_Co=256
 
@@ -345,6 +349,8 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         call plug#begin('~/.vim/plugged')
     endif
 
+    Plug 'rafi/awesome-vim-colorschemes'
+
     if executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
 
@@ -362,8 +368,6 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     Plug 'scrooloose/nerdtree'
 
     Plug 'jistr/vim-nerdtree-tabs'
-
-    Plug 'mhartington/oceanic-next'
 
     Plug 'godlygeek/tabular'
 
@@ -422,6 +426,12 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     Plug 'ryanoasis/vim-devicons'
 
     call plug#end()
+
+    " colorscheme {{{2
+    if count(getcompletion('', 'color'), 'PaperColor') == 1
+        colorscheme PaperColor
+        set background=light
+    endif
 
     " coc.nvim {{{2
     if exists('g:plugs["coc.nvim"]')
@@ -594,13 +604,6 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         let g:nerdtree_tabs_open_on_gui_startup = 0
 
         map <Leader>n <plug>NERDTreeTabsToggle<CR>
-    endif
-
-    " oceanic-next {{{2
-    if index(getcompletion('', 'color'), 'OceanicNext') >= 0
-        set background=dark
-
-        colorscheme OceanicNext
     endif
 
     " tagbar {{{2
