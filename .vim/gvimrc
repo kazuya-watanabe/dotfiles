@@ -10,11 +10,11 @@ set visualbell
 
 autocmd vimrc GUIEnter * call s:setup_nerdfont() " {{{1
 
-function! s:is_nerdfont()
+function! s:is_nerdfont() " {{{2
     return 0
 endfunction
 
-function! s:setup_nerdfont()
+function! s:setup_nerdfont() " {{{2
     if s:is_nerdfont()
         let g:airline_left_sep = ''
         let g:airline_left_alt_sep = ''
