@@ -1,10 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eu
 
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
+
 function print_usage() {
-    echo "Usage: $0 {install|update|uninstall}" 1>&2
-    echo
+    echo "使い方: $0 {install|update}" 1>&2
 }
 
 function install_packages() {
@@ -15,48 +16,34 @@ function update_packages() {
     $1 list --user --outdated --format=json | jq -r '.[].name' | xargs $1 install --user --upgrade
 }
 
-function uninstall_packages() {
-    $1 list --user --format=json | jq -r '.[].name' | xargs $1 uninstall -y
-}
-
-if [ $# -ne 1 ]
-then
+if [ $# -ne 1 ]; then
     print_usage
     exit 1
 fi
 
-if type pip3 >/dev/null 2>&1
-then
+if type pip3 >/dev/null 2>&1; then
     pipcmd=pip3
-elif type pip >/dev/null 2>&1
-then
+elif type pip >/dev/null 2>&1; then
     pipcmd=pip
 else
-    echo 'pip command required.'
-    exit 2
+    err 'pip コマンドが見つかりません。'
+    exit 1
 fi
 
-if ! type jq >/dev/null 2>&1
-then
-    echo 'jq command required.'
-    exit 2
+if ! type jq >/dev/null 2>&1; then
+    err 'jq コマンドが見つかりません。'
+    exit 1
 fi
 
-if ! type xargs >/dev/null 2>&1
-then
-    echo 'xargs command required.'
-    exit 2
+if ! type xargs >/dev/null 2>&1; then
+    err 'xargs コマンドが見つかりません。'
+    exit 1
 fi
 
-if [ "$1" = "install" ]
-then
+if [ "$1" = install ]; then
     install_packages $pipcmd
-elif [ "$1" = "update" ]
-then
+elif [ "$1" = update ]; then
     update_packages $pipcmd
-elif [ "$1" = "uninstall" ]
-then
-    uninstall_packages $pipcmd
 else
     print_usage
     exit 1

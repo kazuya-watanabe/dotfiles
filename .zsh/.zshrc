@@ -1,17 +1,12 @@
 # zplug {{{1
-if [ ! -r "${HOME}/.zplug/init.zsh" ]
-then
-    mkdir -p "${HOME}/.zplug"
-    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+export ZPLUG_HOME=~/.zplug
+if [ ! -d ~/.zplug -a type git >/dev/null 2>&1 ]; then
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
 
-if [ -r "${HOME}/.zplug/init.zsh" ]
-then
-    source "${HOME}/.zplug/init.zsh"
+if [ -r $ZPLUG_HOME/init.zsh ]; then
+    source $ZPLUG_HOME/init.zsh
 
-    zplug 'plugins/aws', from:oh-my-zsh
-    zplug 'plugins/docker', from:oh-my-zsh
-    zplug 'plugins/docker-compose', from:oh-my-zsh
     zplug 'plugins/fasd', from:oh-my-zsh
     zplug 'plugins/git', from:oh-my-zsh
     zplug 'plugins/git-flow', from:oh-my-zsh
@@ -27,14 +22,13 @@ then
     zplug 'zsh-users/zsh-syntax-highlighting', defer:2
 
     zplug load
-fi
 
-if type history-substring-search-up >/dev/null 2>&1
-then
-    bindkey -M emacs '^P' history-substring-search-up
-    bindkey -M emacs '^N' history-substring-search-down
-    bindkey -M vicmd 'k'  history-substring-search-up
-    bindkey -M vicmd 'j'  history-substring-search-down
+    if type history-substring-search-up >/dev/null 2>&1; then
+        bindkey -M emacs '^P' history-substring-search-up
+        bindkey -M emacs '^N' history-substring-search-down
+        bindkey -M vicmd 'k'  history-substring-search-up
+        bindkey -M vicmd 'j'  history-substring-search-down
+    fi
 fi
 
 # Changing Directories {{{1
@@ -45,7 +39,9 @@ setopt pushd_ignore_dups
 # Completion {{{1
 typeset -U fpath FPATH
 
-fpath=("${HOME}/.homebrew/share/zsh/site-functions"(N-/)
+fpath=(/opt/homebrew/share/zsh/site-functions(N-/)
+       /usr/local/share/zsh/site-functions(N-/)
+       /usr/share/zsh/site-functions(N-/)
        $fpath)
 
 setopt auto_name_dirs
@@ -60,7 +56,7 @@ autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 
-HISTFILE="${HOME}/.zsh/.zsh_history"
+HISTFILE=~/.zsh/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
 setopt bang_hist
@@ -111,14 +107,12 @@ zstyle ':vcs_info:git:*' unstagedstr "${_vcsinfo_unstaged_color}+"
 zstyle ':vcs_info:*' formats "${_vcsinfo_normal_color}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
-function precmd
-{
+function precmd {
     vcs_info
 }
 
 # virtualenv_prompt_info
-if ! type virtualenv_prompt_info >/dev/null 2>&1
-then
+if ! type virtualenv_prompt_info >/dev/null 2>&1; then
     function virtualenv_prompt_info() {
     }
 fi
@@ -126,8 +120,7 @@ ZSH_THEME_VIRTUALENV_PREFIX="${_virtualenv_color}["
 ZSH_THEME_VIRTUALENV_SUFFIX=']%f '
 
 # vi mode
-function zle-line-init zle-keymap-select
-{
+function zle-line-init zle-keymap-select {
     _vim_pattern="${${KEYMAP/vicmd/${_vi_norm_pattern}}/(main|viins)/${_vi_ins_pattern}}"
     zle reset-prompt
 }
@@ -152,44 +145,42 @@ unset _vi_norm_color
 
 # Key binding {{{1
 bindkey -v
-bindkey -M viins '^?'  backward-delete-char
-bindkey -M viins '^A'  beginning-of-line
-bindkey -M viins '^B'  backward-char
-bindkey -M viins '^D'  delete-char-or-list
-bindkey -M viins '^E'  end-of-line
-bindkey -M viins '^F'  forward-char
-bindkey -M viins '^G'  send-break
-bindkey -M viins '^H'  backward-delete-char
-bindkey -M viins '^K'  kill-line
-bindkey -M viins '^N'  history-beginning-search-forward-end
-bindkey -M viins '^P'  history-beginning-search-backward-end
-bindkey -M viins '^R'  history-incremental-pattern-search-backward
-bindkey -M viins '^U'  backward-kill-line
-bindkey -M viins '^W'  backward-kill-word
-bindkey -M viins '^Y'  yank
+bindkey -M viins '^?' backward-delete-char
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^B' backward-char
+bindkey -M viins '^D' delete-char-or-list
+bindkey -M viins '^E' end-of-line
+bindkey -M viins '^F' forward-char
+bindkey -M viins '^G' send-break
+bindkey -M viins '^H' backward-delete-char
+bindkey -M viins '^K' kill-line
+bindkey -M viins '^N' history-beginning-search-forward-end
+bindkey -M viins '^P' history-beginning-search-backward-end
+bindkey -M viins '^R' history-incremental-pattern-search-backward
+bindkey -M viins '^U' backward-kill-line
+bindkey -M viins '^W' backward-kill-word
+bindkey -M viins '^Y' yank
 
 # Aliases {{{1
-case "$(uname)" in
-    'Darwin' | 'FreeBSD')
+case $(uname) in
+    Darwin | FreeBSD)
         alias ls='ls -FG'
         ;;
-    'Linux')
+    Linux)
         alias ls='ls --color=auto --classify --group-directories-first --quoting-style=literal'
         ;;
-    'MINGW'* | 'MSYS_NT'* | 'CYGWIN_NT'*)
+    MINGW* | MSYS_NT* | CYGWIN_NT*)
         alias ls='ls --color=auto --classify --group-directories-first --quoting-style=literal --show-control-chars'
         ;;
 esac
-if type gls >/dev/null 2>&1
-then
+if type gls >/dev/null 2>&1; then
     alias ls='gls --color=auto --classify --group-directories-first --quoting-style=literal'
 fi
 alias l='ls -l'
 alias ll='ls -Al'
 alias la='ls -A'
 
-if [ "$(uname)" = 'Darwin' ]
-then
+if [ $(uname) = 'Darwin' ]; then
     alias cp='cp -Xi'
 else
     alias cp='cp -i'
@@ -199,24 +190,22 @@ alias mv='mv -i'
 
 alias rm='rm -i'
 
-alias vi='vim'
+alias vi=vim
 
-alias more='less'
+alias more=less
 
-if type colordiff >/dev/null 2>&1
-then
+if type colordiff >/dev/null 2>&1; then
     alias colordiff='colordiff -u'
-    alias diff='colordiff'
+    alias diff=colordiff
 else
     alias diff='diff -u'
 fi
 
-if type exctags >/dev/null 2>&1
-then
-    alias ctags='exctags'
+if type exctags >/dev/null 2>&1; then
+    alias ctags=exctags
 fi
 
 alias sudo='sudo '
 
 # External Commands {{{1
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+test -r ~/.fzf.zsh && source ~/.fzf.zsh

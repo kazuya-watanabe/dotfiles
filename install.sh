@@ -1,27 +1,46 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eu
 
-pushd "$(dirname ${0})" >/dev/null 2>&1
+basedir=$(dirname $0)
+test -r $basedir/scripts/subr.sh && source $basedir/scripts/subr.sh
 
-for i in .??*
-do
-    [[ $i = '.git' ]] && continue
-    [[ $i = '.gitignore' ]] && continue
-    [[ $i = '.gitmodules' ]] && continue
+pushd $basedir >/dev/null 2>&1
 
-    if [ -e "${HOME}/${i}" ]
-    then
-        mv -f "${HOME}/${i}" "${HOME}/${i}.$(date +%s)"
-    fi
+for i in .??*; do
+    test $i = .git && continue
+    test $i = .gitignore && continue
+    test $i = .gitmodules && continue
 
-    if type python3 >/dev/null 2>&1
-    then
-        ln -fs "$(python3 -c "import os; print(os.path.relpath(\"${i}\", \"${HOME}\"))")" "${HOME}/"
-    elif type python >/dev/null 2>&1
-    then
-        ln -fs "$(python -c "import os; print(os.path.relpath(\"${i}\", \"${HOME}\"))")" "${HOME}/"
-    fi
+    ln -fs $(pwd)/$i ~/
 done
+
+if [ $(uname) = Darwin ]; then
+    read -p 'Homebrew パッケージをインストールしますか？ [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/homebrew install
+    fi
+fi
+
+if type npm >/dev/null 2>&1; then
+    read -p 'Node.js パッケージをインストールしますか？ [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/nodejs install
+    fi
+fi
+
+if type python >/dev/null 2>&1 || type python3 >/dev/null 2>&1; then
+    read -p 'Python パッケージをインストールしますか？ [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/python install
+    fi
+fi
+
+if type tmux >/dev/null 2>&1; then
+    read -p 'tmux パッケージをインストールしますか？ [Y/n]: ' -a ans
+    if checkyesno ${ans:-y}; then
+        $basedir/scripts/tmux install
+    fi
+fi
 
 popd >/dev/null 2>&1
