@@ -1,58 +1,44 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eu
 
-tpmdir="$HOME/.tmux/plugins/tpm"
+tpmdir=~/.tmux/plugins/tpm
 
 function print_usage() {
-    echo "Usage: $0 {install|update|uninstall}" 1>&2
-    echo
+    echo "Usage: $0 {install|update}" 1>&2
 }
 
 function install_packages() {
-    "$1/bin/install_plugins"
+    $1/bin/install_plugins
 }
 
 function update_packages() {
-    "$1/bin/update_plugins" all
+    $1/bin/update_plugins all
 }
 
-function uninstall_packages() {
-    rm -frv "$1"
-}
-
-if [ $# -ne 1 ]
-then
+if [ $# -ne 1 ]; then
     print_usage
     exit 1
 fi
 
-if ! type tmux >/dev/null 2>&1
-then
-    echo 'tmux command required.'
+if ! type tmux >/dev/null 2>&1; then
+    echo 'tmux コマンドが見つかりません。'
     exit 2
 fi
 
-if ! type git >/dev/null 2>&1
-then
-    echo 'git command required.'
+if ! type git >/dev/null 2>&1; then
+    echo 'git コマンドが見つかりません。'
     exit 2
 fi
 
-if [ ! -d "$tpmdir" ]
-then
-    git clone https://github.com/tmux-plugins/tpm.git "$tpmdir"
+if [ ! -d $tpmdir ]; then
+    git clone https://github.com/tmux-plugins/tpm.git $tpmdir
 fi
 
-if [ "$1" = "install" ]
-then
+if [ "$1" = install ]; then
     install_packages $tpmdir
-elif [ "$1" = "update" ]
-then
+elif [ "$1" = update ]; then
     update_packages $tpmdir
-elif [ "$1" = "uninstall" ]
-then
-    uninstall_packages $tpmdir
 else
     print_usage
     exit 1

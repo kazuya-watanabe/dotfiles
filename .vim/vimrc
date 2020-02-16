@@ -27,10 +27,18 @@ if exists('+spelllang')
 endif
 
 " System {{{1
+let s:user_dir = expand('~/.vim')
+
 if has('win32') " {{{2
+    let s:user_dir = expand('~/vimfiles')
+
     autocmd vimrc BufNewFile * setlocal fileencoding=cp932 fileformat=dos
 
     set ambiwidth=double
+
+    source $VIMRUNTIME/delmenu.vim
+    set langmenu=none
+    source $VIMRUNTIME/menu.vim
 
     if ! has('gui_running')
         set t_Co=256
@@ -39,25 +47,10 @@ if has('win32') " {{{2
             set termguicolors
         endif
     endif
-endif
-
-if has('macunix') " {{{2
+elseif has('macunix') " {{{2
     if exists('+macmeta')
         set macmeta
     endif
-
-    for s:pyver in ['3.7', '3.6']
-        for s:pyprefix in ['~/.homebrew/Frameworks', '/usr/local/Frameworks']
-            let s:py3dll = expand(s:pyprefix . '/Python.framework/Versions/' . s:pyver . '/lib/libpython' . s:pyver . '.dylib')
-            if filereadable(s:py3dll)
-                let &pythonthreedll = s:py3dll
-                break
-            endif
-        endfor
-        if filereadable(&pythonthreedll)
-            break
-        endif
-    endfor
 endif
 
 " Interface {{{1
@@ -70,7 +63,7 @@ endif
 
 set cmdheight=2
 
-if exists('+diffopt')
+if exists('+diffopt') && version > 801
     set diffopt&
     set diffopt+=vertical
 endif
@@ -92,7 +85,7 @@ endif
 
 set hidden
 
-set history=1000
+set history=10000
 
 set laststatus=2
 
@@ -100,10 +93,10 @@ set lazyredraw
 
 set list
 
-if has('win32')
-    set listchars=eol:$,tab:>\ ,trail:-,extends:>,precedes:<
+if &encoding == 'utf-8' && ! has('win32')
+    set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
 else
-    set listchars=eol:↩︎,tab:›\ ,trail:∙,extends:»,precedes:«
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 endif
 
 set number
@@ -192,11 +185,7 @@ set noswapfile
 set tabstop=4
 
 if exists('+undofile')
-    if has('win32')
-        set undodir=~\vimfiles\undo
-    else
-        set undodir=~/.vim/undo
-    endif
+    let &undodir = s:user_dir . '/undo'
 
     if exists('*mkdir')
         call mkdir(&undodir, 'p', '0700')
@@ -206,11 +195,7 @@ if exists('+undofile')
 endif
 
 if exists('+viminfo')
-    if has('win32')
-        set viminfo+=n~/vimfiles/viminfo
-    else
-        set viminfo+=n~/.vim/viminfo
-    endif
+    let &viminfo = &viminfo . ',n' . s:user_dir . '/viminfo'
 endif
 
 set wildmode=list:longest,full
@@ -230,7 +215,7 @@ elseif executable('ag')
     set grepformat+=%f:%l:%c:%m
 endif
 
-command! -nargs=+ Grep silent lgrep! <args> | lwindow
+command! -nargs=+ Grep silent grep! <args> | copen
 
 if exists('+hlsearch')
     set hlsearch
@@ -307,24 +292,6 @@ function s:change_directory(directory)
     endif
 endfunction
 
-command! Note call s:start_note(s:note_file) " {{{2
-
-let s:note_dir  = '~/Documents/Notes'
-let s:note_file = s:note_dir . '/%Y%m/%d.markdown'
-
-function! s:start_note(note_file)
-    let l:note_file = expand(strftime(a:note_file))
-
-    call mkdir(substitute(l:note_file, '^\(.*\)[\\\/]\(.*\)', '\1', ''), 'p')
-    call execute('edit ' . l:note_file, 'silent')
-endfunction
-
-command! -nargs=1 SearchNote call s:search_note(expand('<args>') " {{{2
-
-function! s:search_note(str)
-    call execute('Grep "' . a:str . '" "' . s:note_dir . '"')
-endfunction
-
 if has('macunix') && executable('open') " {{{2
     command! -nargs=1 MacDictLookup call s:mac_dict_lookup(expand('<args>'))
 
@@ -337,78 +304,69 @@ if has('macunix') && executable('open') " {{{2
 endif
 
 " Packages {{{1
-if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vimfiles/autoload/plug.vim'))
-    " Plug {{{2
-    if has('win32')
-        call plug#begin('~/vimfiles/plugged')
-    else
-        call plug#begin('~/.vim/plugged')
-    endif
+if ! filereadable(expand(s:user_dir . '/autoload/plug.vim')) && executable('curl') " {{{2
+    let s:vimplug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    silent execute '! curl -fLo ' . expand(s:user_dir . '/autoload/plug.vim') . ' --create-dirs ' . s:vimplug_url
+    autocmd vimrc VimEnter *
+                \  PlugInstall --sync
+                \| if filereadable(expand(s:user_dir . '/coc-install.vim'))
+                \|     execute 'source ' . expand(s:user_dir . '/coc-install.vim')
+                \| endif
+                \| quitall
+endif
 
+if filereadable(expand(s:user_dir . '/autoload/plug.vim')) " {{{2
+    function! s:is_plugged(name) " {{{2
+        return exists('g:plugs') && has_key(g:plugs, a:name) && has_key(g:plugs[a:name], 'dir')
+                    \ ? isdirectory(g:plugs[a:name]['dir'])
+                    \ : 0
+    endfunction
+
+    " Plug {{{2
+    call plug#begin(s:user_dir . '/plugged')
+
+    Plug 'rafi/awesome-vim-colorschemes'
     if executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-
         Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
     endif
-
     if executable('fzf')
         Plug 'junegunn/fzf', { 'do': './install --all' }
-
         Plug 'junegunn/fzf.vim'
     endif
-
-    Plug 'scrooloose/nerdcommenter'
-
-    Plug 'scrooloose/nerdtree'
-
-    Plug 'jistr/vim-nerdtree-tabs'
-
-    Plug 'mhartington/oceanic-next'
-
+    Plug 'preservim/nerdcommenter'
+    Plug 'preservim/nerdtree'
+    Plug 'junegunn/vim-plug'
     Plug 'godlygeek/tabular'
-
     if executable('ctags') || executable('exctags')
         Plug 'majutsushi/tagbar'
     endif
-
-    if executable('gtran')
-        Plug 'skanehira/translate.vim'
+    if ! has('win32') && executable('curl')
+        Plug 'echuraev/translate-shell.vim', { 'do': 'curl -o ~/bin/trans https://git.io/trans && chmod +x ~/bin/trans' }
     endif
-
     Plug 'mbbill/undotree'
-
     if executable('git')
         Plug 'tpope/vim-fugitive'
-
         Plug 'junegunn/gv.vim'
-
         Plug 'airblade/vim-gitgutter'
-
         Plug 'idanarye/vim-merginal'
     endif
-
     Plug 'vim-airline/vim-airline'
-
     Plug 'vim-airline/vim-airline-themes'
-
     Plug 'jeetsukumaran/vim-buffergator'
-
+    Plug 'easymotion/vim-easymotion'
     Plug 'tpope/vim-eunuch'
-
+    Plug 'terryma/vim-expand-region'
     Plug 'drmikehenry/vim-fontsize'
-
-    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
-
+    Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-repeat'
     Plug 'honza/vim-snippets'
-
     Plug 'tpope/vim-speeddating'
-
     Plug 'tpope/vim-surround'
-
     if has('python3')
         Plug 'vim-vdebug/vdebug', { 'for': [ 'php', 'python' ] }
     endif
-
+    Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
     if has('win32')
         Plug 'Shougo/vimproc.vim'
     elseif executable('gmake')
@@ -416,15 +374,18 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     elseif executable('make')
         Plug 'Shougo/vimproc.vim', { 'do': 'make' }
     endif
-
-    Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
-
-    Plug 'ryanoasis/vim-devicons'
+    Plug 'vim-jp/vimdoc-ja'
 
     call plug#end()
 
+    " colorscheme {{{2
+    if count(getcompletion('', 'color'), 'OceanicNext') == 1
+        colorscheme OceanicNext
+        set background=dark
+    endif
+
     " coc.nvim {{{2
-    if exists('g:plugs["coc.nvim"]')
+    if s:is_plugged('coc.nvim')
         " if hidden is not set, TextEdit might fail.
         set hidden
 
@@ -572,7 +533,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     endif
 
     " fzf.vim {{{2
-    if exists('g:plugs["fzf.vim"]')
+    if s:is_plugged('fzf.vim')
         nnoremap <silent> <Leader>fb :Buffers<CR>
         nnoremap <silent> <Leader>ff :Files<CR>
         nnoremap <silent> <Leader>fh :History<CR>
@@ -580,31 +541,20 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     endif
 
     " markdown-preview.nvim {{{2
-    let g:mkdp_auto_start = 1
-    let g:mkdp_preview_options = { 'sync_scroll_type': 'relative' }
-    let g:mkdp_page_title = '${name}'
+    if s:is_plugged('markdown-preview.nvim')
+        let g:mkdp_auto_start = 1
+        let g:mkdp_preview_options = { 'sync_scroll_type': 'relative' }
+        let g:mkdp_page_title = '${name}'
+    endif
 
     " nerdtree {{{2
-    if exists('g:plugs["nerdtree"]')
-        nnoremap <Leader>N :Cd<CR>:NERDTreeCWD<CR>
-    endif
-
-    " nerdtree/vim-nerdtree-tabs {{{2
-    if exists('g:plugs["vim-nerdtree-tabs"]')
-        let g:nerdtree_tabs_open_on_gui_startup = 0
-
-        map <Leader>n <plug>NERDTreeTabsToggle<CR>
-    endif
-
-    " oceanic-next {{{2
-    if index(getcompletion('', 'color'), 'OceanicNext') >= 0
-        set background=dark
-
-        colorscheme OceanicNext
+    if s:is_plugged('nerdtree')
+        nnoremap <Leader>n :Cd<CR>:NERDTreeCWD<CR>
+        let NERDTreeBookmarksFile = s:user_dir . '/NERDTreeBookmarks'
     endif
 
     " tagbar {{{2
-    if exists('g:plugs["tagbar"]')
+    if s:is_plugged('tagbar')
         if executable('exctags')
             let g:tagbar_ctags_bin = 'exctags'
         elseif executable('ctags')
@@ -615,18 +565,20 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     endif
 
     " undotree {{{2
-    if exists('g:plugs["undotree"]')
+    if s:is_plugged('undotree')
         let g:undotree_WindowLayout = 3
 
         nnoremap <silent> <Leader>u :UndotreeToggle<CR>
     endif
 
     " vim-airline {{{2
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#show_buffers = 0
+    if s:is_plugged('vim-airline')
+        let g:airline#extensions#tabline#enabled = 1
+        let g:airline#extensions#tabline#show_buffers = 0
+    endif
 
     " vim-buffergator {{{2
-    if exists('g:plugs["vim-buffergator"]')
+    if s:is_plugged('vim-buffergator')
         let g:buffergator_autoexpand_on_split = 0
         let g:buffergator_suppress_keymaps = 1
         let g:buffergator_viewport_split_policy = 'R'
@@ -634,17 +586,43 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         nnoremap <Leader>b :BuffergatorToggle<CR>
     endif
 
+    " vim-easymotion {{{2
+    if s:is_plugged('vim-easymotion')
+        let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+        " Jump to anywhere you want with minimal keystrokes, with just one key binding.
+        " `s{char}{label}`
+        nmap s <Plug>(easymotion-overwin-f)
+        " or
+        " `s{char}{char}{label}`
+        " Need one more keystroke, but on average, it may be more comfortable.
+        nmap s <Plug>(easymotion-overwin-f2)
+
+        " Turn on case-insensitive feature
+        let g:EasyMotion_smartcase = 1
+
+        " JK motions: Line motions
+        map <Leader>j <Plug>(easymotion-j)
+        map <Leader>k <Plug>(easymotion-k)
+    endif
+
     " vim-markdown {{{2
-    let g:vim_markdown_folding_disabled = 1
+    if s:is_plugged('vim-markdown')
+        let g:vim_markdown_folding_disabled = 1
+    endif
 
     " vdebug {{{2
-    if ! exists('g:vdebug_options')
-        let g:vdebug_options = {}
+    if s:is_plugged('vdebug')
+        if ! exists('g:vdebug_options')
+            let g:vdebug_options = {}
+        endif
+        let g:vdebug_options.break_on_open = 0
     endif
-    let g:vdebug_options.break_on_open = 0
 
     " vimproc.vim {{{2
-    if has('win32')
-        let g:vimproc#download_windows_dll = 1
+    if s:is_plugged('vimproc.vim')
+        if has('win32')
+            let g:vimproc#download_windows_dll = 1
+        endif
     endif
 endif

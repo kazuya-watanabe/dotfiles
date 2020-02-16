@@ -8,65 +8,21 @@ set t_vb=
 
 set visualbell
 
-autocmd vimrc GUIEnter * call s:setup_nerdfont() " {{{1
-
-function! s:is_nerdfont()
-    return 0
-endfunction
-
-function! s:setup_nerdfont()
-    if s:is_nerdfont()
-        let g:airline_left_sep = ''
-        let g:airline_left_alt_sep = ''
-        let g:airline_right_sep = ''
-        let g:airline_right_alt_sep = ''
-        let g:airline_powerline_fonts = 1
-        if ! exists('g:airline_symbols')
-            let g:airline_symbols = {}
-        endif
-        let g:airline_symbols.branch = ''
-        let g:airline_symbols.readonly = ''
-        let g:airline_symbols.linenr = ''
-        let g:airline_symbols.maxlinenr = 'ﬀ'
-        let g:airline_symbols.dirty=''
-        let g:airline#extensions#tabline#left_sep = g:airline_left_sep
-        let g:airline#extensions#tabline#left_alt_sep = g:airline_left_alt_sep
-        let g:airline#extensions#tabline#right_sep = g:airline_right_sep
-        let g:airline#extensions#tabline#right_alt_sep = g:airline_right_alt_sep
-    else
-        let g:webdevicons_enable = 0
-    endif
-endfunction
-
 " System {{{1
 if has('win32') " {{{2
-    set ambiwidth=single
+    set guifont=MS_Gothic:h11
 
-    set guifont=Inconsolata_NF:h11:cANSI,Consolas:h11:cANSI
-
-    set guifontwide=MS_Gothic:h11:cSHIFTJIS
-
-    if has('directx')
-        set listchars=eol:↩︎,tab:›\ ,trail:∙,extends:»,precedes:«
+    if has('directx') && &encoding == 'utf-8'
+        set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
 
         set renderoptions=type:directx
     endif
-
-    function! s:is_nerdfont()
-        return stridx(getfontname(), '_NF:') >= 0
-    endf
-endif
-
-if has('gui_gtk2') " {{{2
+elseif has('gui_gtk2') " {{{2
     set guifont=Monospace\ 12
-endif
+elseif has('macunix') " {{{2
+    if has('fullscreen')
+        set fullscreen
+    endif
 
-if has('macunix') " {{{2
-    set guifont=InconsolataNerdFontComplete-Medium:h13,Menlo:h13
-
-    set guifontwide=Osaka-Mono:h13
-
-    function! s:is_nerdfont()
-        return stridx(getfontname(), 'NerdFont') >= 0
-    endf
+    set guifont=Osaka-Mono:h13
 endif

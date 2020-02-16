@@ -1,1 +1,2 @@
 test -r ~/.profile && source ~/.profile
+test -r ~/.bashrc && source ~/.bashrc
