@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-homebrew_dir="$HOME/.homebrew"
+homebrew_dir="/opt/homebrew"
 
 homebrew_uri="https://github.com/Homebrew/brew/tarball/master"
 
@@ -19,25 +19,22 @@ function setup_brew() {
 
 function install_packages() {
     "$homebrew_dir/bin/brew" tap homebrew/cask
+    "$homebrew_dir/bin/brew" tap homebrew/cask-drivers
+
     "$homebrew_dir/bin/brew" cask install 1password
     "$homebrew_dir/bin/brew" cask install adguard
-    "$homebrew_dir/bin/brew" cask install amazon-music
     "$homebrew_dir/bin/brew" cask install appcleaner
     "$homebrew_dir/bin/brew" cask install cloudmounter
     "$homebrew_dir/bin/brew" cask install docker
-    "$homebrew_dir/bin/brew" cask install duet
     "$homebrew_dir/bin/brew" cask install firefox
     "$homebrew_dir/bin/brew" cask install garmin-express
     "$homebrew_dir/bin/brew" cask install google-chrome
     "$homebrew_dir/bin/brew" cask install java
     "$homebrew_dir/bin/brew" cask install macvim
     "$homebrew_dir/bin/brew" cask install steam
-
-    "$homebrew_dir/bin/brew" tap homebrew/cask-drivers
     "$homebrew_dir/bin/brew" cask install xbox360-controller-driver-unofficial
 
-    "$homebrew_dir/bin/brew" tap homebrew/cask-fonts
-    "$homebrew_dir/bin/brew" cask install font-inconsolata-nerd-font
+    read -p "Hit enter: " IN
 
     "$homebrew_dir/bin/brew" install cmake
     "$homebrew_dir/bin/brew" install colordiff

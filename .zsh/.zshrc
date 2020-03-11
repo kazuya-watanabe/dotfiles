@@ -45,7 +45,7 @@ setopt pushd_ignore_dups
 # Completion {{{1
 typeset -U fpath FPATH
 
-fpath=("${HOME}/.homebrew/share/zsh/site-functions"(N-/)
+fpath=("/opt/homebrew/share/zsh/site-functions"(N-/)
        $fpath)
 
 setopt auto_name_dirs
