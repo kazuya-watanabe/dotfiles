@@ -2,7 +2,7 @@
 
 cat << EOS
 export ZDOTDIR=\$HOME/.zsh
-export PATH=\$HOME/bin:\$HOME/go/bin:\$HOME/.homebrew/bin:\$HOME/.homebrew/sbin:\$HOME/.homebrew/opt/llvm/bin:\$HOME/Library/Python/3.7/bin:\$PATH
+export PATH=\$HOME/bin:\$HOME/Library/Python/3.7/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/llvm/bin:\$PATH
 EOS
 
 if [ `uname` = "Darwin" ]
@@ -33,7 +33,7 @@ then
     fi
 fi
 
-if type fzf >/dev/null 2>&1
+if type fzf || type /opt/homebrew/bin/fzf >/dev/null 2>&1
 then
     cat << EOS
 export FZF_DEFAULT_OPTS='

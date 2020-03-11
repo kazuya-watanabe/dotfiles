@@ -51,7 +51,7 @@ if has('macunix') " {{{2
     endif
 
     for s:pyver in ['3.7', '3.6']
-        for s:pyprefix in ['~/.homebrew/Frameworks', '/usr/local/Frameworks']
+        for s:pyprefix in ['/opt/homebrew/Frameworks', '/usr/local/Frameworks']
             let s:py3dll = expand(s:pyprefix . '/Python.framework/Versions/' . s:pyver . '/lib/libpython' . s:pyver . '.dylib')
             if filereadable(s:py3dll)
                 let &pythonthreedll = s:py3dll
@@ -105,9 +105,9 @@ set lazyredraw
 set list
 
 if has('win32')
-    set listchars=eol:$,tab:>\ ,trail:-,extends:>,precedes:<
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 else
-    set listchars=eol:↩︎,tab:›\ ,trail:∙,extends:»,precedes:«
+    set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
 endif
 
 set number
@@ -397,11 +397,17 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
 
     Plug 'jeetsukumaran/vim-buffergator'
 
+    Plug 'easymotion/vim-easymotion'
+
     Plug 'tpope/vim-eunuch'
+
+    Plug 'terryma/vim-expand-region'
 
     Plug 'drmikehenry/vim-fontsize'
 
-    Plug 'plasticboy/vim-markdown', { 'for': 'markdown' }
+    Plug 'sheerun/vim-polyglot'
+
+    Plug 'tpope/vim-repeat'
 
     Plug 'honza/vim-snippets'
 
@@ -413,6 +419,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         Plug 'vim-vdebug/vdebug', { 'for': [ 'php', 'python' ] }
     endif
 
+    Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
     if has('win32')
         Plug 'Shougo/vimproc.vim'
     elseif executable('gmake')
@@ -421,9 +428,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         Plug 'Shougo/vimproc.vim', { 'do': 'make' }
     endif
 
-    Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
-
-    Plug 'ryanoasis/vim-devicons'
+    Plug 'vim-jp/vimdoc-ja'
 
     call plug#end()
 
@@ -635,6 +640,32 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         let g:buffergator_viewport_split_policy = 'R'
 
         nnoremap <Leader>b :BuffergatorToggle<CR>
+    endif
+
+    " vim-easymotion {{{2
+    if exists('g:plugs["vim-easymotion"]')
+        let g:EasyMotion_do_mapping = 0 " Disable default mappings
+
+        " Jump to anywhere you want with minimal keystrokes, with just one key binding.
+        " `s{char}{label}`
+        nmap s <Plug>(easymotion-overwin-f)
+        " or
+        " `s{char}{char}{label}`
+        " Need one more keystroke, but on average, it may be more comfortable.
+        nmap s <Plug>(easymotion-overwin-f2)
+
+        " Turn on case-insensitive feature
+        let g:EasyMotion_smartcase = 1
+
+        " JK motions: Line motions
+        map <Leader>j <Plug>(easymotion-j)
+        map <Leader>k <Plug>(easymotion-k)
+    endif
+
+    " vim-expand-region {{{2
+    if exists('g:plugs["vim-expand-region"]')
+        vmap v <Plug>(expand_region_expand)
+        vmap <C-v> <Plug>(expand_region_shrink)
     endif
 
     " vim-markdown {{{2
