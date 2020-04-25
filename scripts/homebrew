@@ -1,84 +1,116 @@
 #!/usr/bin/env bash
 
-homebrew_dir="/opt/homebrew"
+DEFAULT_DIR="/opt/homebrew"
 
-homebrew_uri="https://github.com/Homebrew/brew/tarball/master"
+function print_warn() {
+    echo "WARN: $*" 1>&2
+}
+
+function check_yesno() {
+    case "$1" in
+        [Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|[Oo][Nn]|[Yy])
+            return 0
+            ;;
+        [Nn][Oo]|[Ff][Aa][Ll][Ss][Ee]|[Oo][Ff][Ff]|[Nn])
+            return 1
+            ;;
+        *)
+            print_warn "$1 is not set properly."
+            return 1
+            ;;
+    esac
+}
 
 function print_usage() {
     echo "Usage: $0 {install|update|uninstall}" 1>&2
-    echo
 }
 
 function setup_brew() {
-    if [ ! -x "$homebrew_dir/bin/brew" ]
+    if ! type brew >/dev/null 2>&1
     then
-        mkdir -p "$homebrew_dir"
-        curl -L "$homebrew_uri" | tar xz --strip 1 -C "$homebrew_dir"
+        read -p "homebrew dir ($DEFAULT_DIR): " INPUT
+        BREWDIR="${INPUT:-DEFAULT_DIR}"
+
+        if [ ! -d "$BREWDIR" ]
+        then
+            read -p "Are you sure you want to create this directory? ($BREWDIR) [Y/n]: " INPUT
+            if ! check_yesno "$INPUT"
+            then
+                print_warn "setup aborted."
+                exit 1
+            fi
+
+            sudo mkdir -p "$BREWDIR"
+            sudo chown -R "$(id -un)":"$(id -gn)" "$BREWDIR"
+        fi
+
+        if [ ! -f "$BREWDIR/bin/brew" ]
+        then
+            curl -L "https://github.com/Homebrew/brew/tarball/master" | tar xz --strip 1 -C "$BREWDIR"
+        fi
+
+        if ! type brew >/dev/null 2>&1
+        then
+            export PATH="$BREWDIR/bin":$PATH
+        fi
     fi
 }
 
 function install_packages() {
-    "$homebrew_dir/bin/brew" tap homebrew/cask
-    "$homebrew_dir/bin/brew" tap homebrew/cask-drivers
+    brew tap homebrew/cask
+    brew tap homebrew/cask-drivers
 
-    "$homebrew_dir/bin/brew" cask install 1password
-    "$homebrew_dir/bin/brew" cask install adguard
-    "$homebrew_dir/bin/brew" cask install appcleaner
-    "$homebrew_dir/bin/brew" cask install cloudmounter
-    "$homebrew_dir/bin/brew" cask install docker
-    "$homebrew_dir/bin/brew" cask install firefox
-    "$homebrew_dir/bin/brew" cask install garmin-express
-    "$homebrew_dir/bin/brew" cask install google-chrome
-    "$homebrew_dir/bin/brew" cask install java
-    "$homebrew_dir/bin/brew" cask install macvim
-    "$homebrew_dir/bin/brew" cask install steam
-    "$homebrew_dir/bin/brew" cask install xbox360-controller-driver-unofficial
+    brew cask install 1password
+    brew cask install adguard
+    brew cask install cloudmounter
+    brew cask install firefox
+    brew cask install garmin-express
+    brew cask install google-chrome
+    brew cask install java
+    brew cask install macvim
 
-    read -p "Hit enter: " IN
-
-    "$homebrew_dir/bin/brew" install cmake
-    "$homebrew_dir/bin/brew" install colordiff
-    "$homebrew_dir/bin/brew" install composer
-    "$homebrew_dir/bin/brew" install ctags
-    "$homebrew_dir/bin/brew" install fasd
-    "$homebrew_dir/bin/brew" install ffmpeg
-    "$homebrew_dir/bin/brew" install fzf
-    "$homebrew_dir/bin/brew" install highlight
-    "$homebrew_dir/bin/brew" install imagemagick
-    "$homebrew_dir/bin/brew" install jq
-    "$homebrew_dir/bin/brew" install lesspipe
-    "$homebrew_dir/bin/brew" install llvm
-    "$homebrew_dir/bin/brew" install npm
-    "$homebrew_dir/bin/brew" install p7zip
-    "$homebrew_dir/bin/brew" install python
-    "$homebrew_dir/bin/brew" install ripgrep
-    "$homebrew_dir/bin/brew" install tig
-    "$homebrew_dir/bin/brew" install tmux
-    "$homebrew_dir/bin/brew" install vim
-    "$homebrew_dir/bin/brew" install w3m
-    "$homebrew_dir/bin/brew" install wakeonlan
-    "$homebrew_dir/bin/brew" install wget
-    "$homebrew_dir/bin/brew" install yarn
+    brew install cmake
+    brew install colordiff
+    brew install composer
+    brew install ctags
+    brew install fasd
+    brew install ffmpeg
+    brew install fzf
+    brew install go
+    brew install highlight
+    brew install jq
+    brew install lesspipe
+    brew install llvm
+    brew install npm
+    brew install p7zip
+    brew install python
+    brew install ripgrep
+    brew install tig
+    brew install tmux
+    brew install w3m
+    brew install wget
+    brew install yarn
 }
 
 function update_packages() {
-    "$homebrew_dir/bin/brew" update
-    "$homebrew_dir/bin/brew" upgrade
-    "$homebrew_dir/bin/brew" cask upgrade
-    "$homebrew_dir/bin/brew" cleanup
+    brew update
+    brew upgrade
+    brew cask upgrade
+    brew cleanup --prune 0
 }
 
 function uninstall_packages() {
-    "$homebrew_dir/bin/brew" cask list | xargs "$homebrew_dir/bin/brew" cask uninstall --force
-    "$homebrew_dir/bin/brew" list | xargs "$homebrew_dir/bin/brew" uninstall --force --ignore-dependencies
-    "$homebrew_dir/bin/brew" cleanup
-    for i in $("$homebrew_dir/bin/brew" tap)
+    brew cask list | xargs brew cask uninstall --force
+    brew list | xargs brew uninstall --force --ignore-dependencies
+    brew cleanup --prune 0
+
+    for i in $(brew tap)
     do
-        if [ 'homebrew/core' = $i ]
+        if [ "homebrew/core" = "$i" ]
         then
             continue
         else
-            "$homebrew_dir/bin/brew" untap $i
+            brew untap "$i"
         fi
     done
 }

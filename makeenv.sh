@@ -33,7 +33,7 @@ then
     fi
 fi
 
-if type fzf || type /opt/homebrew/bin/fzf >/dev/null 2>&1
+if type fzf >/dev/null 2>&1 || type /opt/homebrew/bin/fzf >/dev/null 2>&1
 then
     cat << EOS
 export FZF_DEFAULT_OPTS='
