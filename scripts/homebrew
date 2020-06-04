@@ -1,42 +1,26 @@
 #!/usr/bin/env bash
 
-DEFAULT_DIR="/opt/homebrew"
+set -eu
 
-function print_warn() {
-    echo "WARN: $*" 1>&2
-}
+BREWDIR="${BREWDIR:=/opt/homebrew}"
 
-function check_yesno() {
-    case "$1" in
-        [Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|[Oo][Nn]|[Yy])
-            return 0
-            ;;
-        [Nn][Oo]|[Ff][Aa][Ll][Ss][Ee]|[Oo][Ff][Ff]|[Nn])
-            return 1
-            ;;
-        *)
-            print_warn "$1 is not set properly."
-            return 1
-            ;;
-    esac
-}
+test -r "$(dirname $0)/subr.sh" && source "$(dirname $0)/subr.sh"
 
-function print_usage() {
+function print_usage()
+{
     echo "Usage: $0 {install|update|uninstall}" 1>&2
 }
 
-function setup_brew() {
-    if ! type brew >/dev/null 2>&1
+function setup_brew()
+{
+    if ! which brew >/dev/null 2>&1
     then
-        read -p "homebrew dir ($DEFAULT_DIR): " INPUT
-        BREWDIR="${INPUT:-DEFAULT_DIR}"
-
         if [ ! -d "$BREWDIR" ]
         then
             read -p "Are you sure you want to create this directory? ($BREWDIR) [Y/n]: " INPUT
-            if ! check_yesno "$INPUT"
+            if ! checkyesno "$INPUT"
             then
-                print_warn "setup aborted."
+                warn "setup aborted."
                 exit 1
             fi
 
@@ -53,10 +37,13 @@ function setup_brew() {
         then
             export PATH="$BREWDIR/bin":$PATH
         fi
+    else
+        debug "brew: $(which brew)"
     fi
 }
 
-function install_packages() {
+function install_packages()
+{
     brew tap homebrew/cask
     brew tap homebrew/cask-drivers
 
@@ -92,14 +79,16 @@ function install_packages() {
     brew install yarn
 }
 
-function update_packages() {
+function update_packages()
+{
     brew update
     brew upgrade
     brew cask upgrade
     brew cleanup --prune 0
 }
 
-function uninstall_packages() {
+function uninstall_packages()
+{
     brew cask list | xargs brew cask uninstall --force
     brew list | xargs brew uninstall --force --ignore-dependencies
     brew cleanup --prune 0

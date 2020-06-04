@@ -4,20 +4,24 @@ set -eu
 
 tpmdir="$HOME/.tmux/plugins/tpm"
 
-function print_usage() {
+function print_usage()
+{
     echo "Usage: $0 {install|update|uninstall}" 1>&2
     echo
 }
 
-function install_packages() {
+function install_packages()
+{
     "$1/bin/install_plugins"
 }
 
-function update_packages() {
+function update_packages()
+{
     "$1/bin/update_plugins" all
 }
 
-function uninstall_packages() {
+function uninstall_packages()
+{
     rm -frv "$1"
 }
 
