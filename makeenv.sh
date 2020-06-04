@@ -1,10 +1,30 @@
 #!/usr/bin/env bash
 
+test -r "$(dirname $0)/scripts/subr.sh" && source "$(dirname $0)/scripts/subr.sh"
+
+# PYTHON
+PYDIR="$($(getpython) -m site --user-base)"
+if [ ! -z "$PYDIR" ]
+then
+    PYDIR="$PYDIR/bin"
+fi
+
+# HOMEBREW
+if [ -d "/opt/homebrew" ]
+then
+    BREWDIR_BIN="/opt/homebrew/bin"
+    BREWDIR_SBIN="/opt/homebrew/sbin"
+    BREWDIR_LLVM="/opt/homebrew/opt/llvm/bin"
+    echo export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f
+fi
+
+# PATH
 cat << EOS
-export ZDOTDIR=\$HOME/.zsh
-export PATH=\$HOME/bin:\$HOME/Library/Python/3.7/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/opt/homebrew/opt/llvm/bin:\$PATH
+export ZDOTDIR="$HOME/.zsh"
+export PATH="\$HOME/bin":"$PYDIR":"$BREWDIR_BIN":"$BREWDIR_SBIN":"$BREWDIR_LLVM":\$PATH
 EOS
 
+# MACOS
 if [ `uname` = "Darwin" ]
 then
     cat << EOS
@@ -22,6 +42,7 @@ else
     echo export EDITOR=vi
 fi
 
+# LESS
 if type less >/dev/null 2>&1
 then
     echo export PAGER=less
@@ -33,6 +54,7 @@ then
     fi
 fi
 
+# FZF
 if type fzf >/dev/null 2>&1 || type /opt/homebrew/bin/fzf >/dev/null 2>&1
 then
     cat << EOS
@@ -54,5 +76,3 @@ elif type ag >/dev/null 2>&1
 then
     echo export FZF_DEFAULT_COMMAND=\'ag --filename-pattern \"\"\'
 fi
-
-echo export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f

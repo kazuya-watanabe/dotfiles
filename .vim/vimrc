@@ -32,9 +32,9 @@ if has('win32') " {{{2
 
     set ambiwidth=double
 
-    source $VIMRUNTIME/delmenu.vim
+    source $VIMRUNTIME\delmenu.vim
     set langmenu=none
-    source $VIMRUNTIME/menu.vim
+    source $VIMRUNTIME\menu.vim
 
     if ! has('gui_running')
         set t_Co=256
@@ -211,7 +211,7 @@ endif
 
 if exists('+viminfo')
     if has('win32')
-        set viminfo+=n~/vimfiles/viminfo
+        set viminfo+=n~\vimfiles\viminfo
     else
         set viminfo+=n~/.vim/viminfo
     endif
@@ -311,24 +311,6 @@ function s:change_directory(directory)
     endif
 endfunction
 
-command! Note call s:start_note(s:note_file) " {{{2
-
-let s:note_dir  = '~/Documents/Notes'
-let s:note_file = s:note_dir . '/%Y%m/%d.markdown'
-
-function! s:start_note(note_file)
-    let l:note_file = expand(strftime(a:note_file))
-
-    call mkdir(substitute(l:note_file, '^\(.*\)[\\\/]\(.*\)', '\1', ''), 'p')
-    call execute('edit ' . l:note_file, 'silent')
-endfunction
-
-command! -nargs=1 SearchNote call s:search_note(expand('<args>') " {{{2
-
-function! s:search_note(str)
-    call execute('Grep "' . a:str . '" "' . s:note_dir . '"')
-endfunction
-
 if has('macunix') && executable('open') " {{{2
     command! -nargs=1 MacDictLookup call s:mac_dict_lookup(expand('<args>'))
 
@@ -344,7 +326,7 @@ endif
 if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vimfiles/autoload/plug.vim'))
     " Plug {{{2
     if has('win32')
-        call plug#begin('~/vimfiles/plugged')
+        call plug#begin('~\vimfiles\plugged')
     else
         call plug#begin('~/.vim/plugged')
     endif
@@ -421,7 +403,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
 
     Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
     if has('win32')
-        Plug 'Shougo/vimproc.vim'
+        Plug 'Shougo\vimproc.vim'
     elseif executable('gmake')
         Plug 'Shougo/vimproc.vim', { 'do': 'gmake' }
     elseif executable('make')
