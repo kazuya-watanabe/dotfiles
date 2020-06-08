@@ -32,9 +32,9 @@ if has('win32') " {{{2
 
     set ambiwidth=double
 
-    source $VIMRUNTIME\delmenu.vim
+    source $VIMRUNTIME/delmenu.vim
     set langmenu=none
-    source $VIMRUNTIME\menu.vim
+    source $VIMRUNTIME/menu.vim
 
     if ! has('gui_running')
         set t_Co=256
@@ -197,7 +197,7 @@ set tabstop=4
 
 if exists('+undofile')
     if has('win32')
-        set undodir=~\vimfiles\undo
+        set undodir=~/vimfiles/undo
     else
         set undodir=~/.vim/undo
     endif
@@ -211,7 +211,7 @@ endif
 
 if exists('+viminfo')
     if has('win32')
-        set viminfo+=n~\vimfiles\viminfo
+        set viminfo+=n~/vimfiles/viminfo
     else
         set viminfo+=n~/.vim/viminfo
     endif
@@ -326,7 +326,7 @@ endif
 if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vimfiles/autoload/plug.vim'))
     " Plug {{{2
     if has('win32')
-        call plug#begin('~\vimfiles\plugged')
+        call plug#begin('~/vimfiles/plugged')
     else
         call plug#begin('~/.vim/plugged')
     endif
@@ -403,7 +403,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
 
     Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
     if has('win32')
-        Plug 'Shougo\vimproc.vim'
+        Plug 'Shougo/vimproc.vim'
     elseif executable('gmake')
         Plug 'Shougo/vimproc.vim', { 'do': 'gmake' }
     elseif executable('make')
