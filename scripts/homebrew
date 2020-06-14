@@ -77,6 +77,7 @@ function install_packages()
     brew install w3m
     brew install wget
     brew install yarn
+    brew install zplug
 }
 
 function update_packages()

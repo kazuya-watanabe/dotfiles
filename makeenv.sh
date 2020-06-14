@@ -18,11 +18,20 @@ then
     echo export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f
 fi
 
+# ZSH
+echo export ZDOTDIR="$HOME/.zsh"
+
 # PATH
-cat << EOS
-export ZDOTDIR="$HOME/.zsh"
-export PATH="\$HOME/bin":"$PYDIR":"$BREWDIR_BIN":"$BREWDIR_SBIN":"$BREWDIR_LLVM":\$PATH
+if [ -z "$BREWDIR_BIN" ]
+then
+    cat << EOS
+export PATH="$HOME/bin":"$PYDIR":\$PATH
 EOS
+else
+    cat << EOS
+export PATH="$HOME/bin":"$PYDIR":"$BREWDIR_BIN":"$BREWDIR_SBIN":"$BREWDIR_LLVM":\$PATH
+EOS
+fi
 
 # MACOS
 if [ `uname` = "Darwin" ]
@@ -35,11 +44,14 @@ EOS
     type xcrun >/dev/null 2>&1 && echo "export SDKROOT=$(xcrun --show-sdk-path)"
 fi
 
+# VIM
 if type vim >/dev/null 2>&1
 then
     echo export EDITOR=vim
+    echo export VISUAL=vim
 else
     echo export EDITOR=vi
+    echo export VISUAL=vi
 fi
 
 # LESS
@@ -51,7 +63,13 @@ then
     then
         echo export LESSOPEN="| lesspipe.sh %s"
         echo export LESS_ADVANCED_PREPROCESSOR=1
+    elif type lesspipe >/dev/null 2>&1
+    then
+        echo export LESSOPEN="| lesspipe %s"
+        echo export LESS_ADVANCED_PREPROCESSOR=1
     fi
+else
+    echo export PAGER=more
 fi
 
 # FZF
@@ -67,12 +85,11 @@ export FZF_DEFAULT_OPTS='
     rougify {} ||
     cat {}) 2> /dev/null | head -500"'
 EOS
-fi
-
-if type rg >/dev/null 2>&1
-then
-    echo export FZF_DEFAULT_COMMAND=\'rg --files --glob \"\"\'
-elif type ag >/dev/null 2>&1
-then
-    echo export FZF_DEFAULT_COMMAND=\'ag --filename-pattern \"\"\'
+    if type rg >/dev/null 2>&1
+    then
+        echo export FZF_DEFAULT_COMMAND=\'rg --files --glob \"\"\'
+    elif type ag >/dev/null 2>&1
+    then
+        echo export FZF_DEFAULT_COMMAND=\'ag --filename-pattern \"\"\'
+    fi
 fi

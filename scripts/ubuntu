@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+set -eu
+
+test -r "$(dirname $0)/subr.sh" && source "$(dirname $0)/subr.sh"
+
+function print_usage()
+{
+    echo "Usage: $0 {install|update|uninstall}" 1>&2
+}
+
+function install_packages()
+{
+    sudo apt install colordiff
+    sudo apt install universal-ctags
+    sudo apt install fasd
+    sudo apt install ffmpeg
+    sudo apt install fzf
+    sudo apt install golang
+    sudo apt install highlight
+    sudo apt install jq
+    sudo apt install npm
+    sudo apt install p7zip
+    sudo apt install ripgrep
+    sudo apt install tig
+    sudo apt install tmux
+    sudo apt install w3m
+    sudo apt install wget
+    sudo apt install yarnpkg
+    sudo apt install zplug
+    sudo apt install zsh
+}
+
+function update_packages()
+{
+    sudo apt update
+    sudo apt full-upgrade
+}
+
+function uninstall_packages()
+{
+    sudo apt autoremove colordiff \
+        universal-ctags \
+        fasd \
+        ffmpeg \
+        fzf \
+        golang \
+        highlight \
+        jq \
+        npm \
+        p7zip \
+        ripgrep \
+        tig \
+        tmux \
+        w3m \
+        wget \
+        yarnpkg \
+        zplug \
+        zsh
+}
+
+if [ $# -ne 1 ]
+then
+    print_usage
+    exit 1
+fi
+
+if [ "$1" = "install" ]
+then
+    install_packages
+elif [ "$1" = "update" ]
+then
+    update_packages
+elif [ "$1" = "uninstall" ]
+then
+    uninstall_packages
+else
+    print_usage
+    exit 1
+fi

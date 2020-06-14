@@ -415,9 +415,9 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     call plug#end()
 
     " colorscheme {{{2
-    if count(getcompletion('', 'color'), 'PaperColor') == 1
-        colorscheme PaperColor
-        set background=light
+    if count(getcompletion('', 'color'), 'OceanicNext') == 1
+        colorscheme OceanicNext
+        set background=dark
     endif
 
     " coc.nvim {{{2
