@@ -1,13 +1,24 @@
 # zplug {{{1
-if [ ! -r "${HOME}/.zplug/init.zsh" ]
+
+if [ -d '/usr/local/opt/zplug' ]
 then
-    mkdir -p "${HOME}/.zplug"
-    curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+    ZPLUG_DIR='/usr/local/opt/zplug'
+elif [ -d '/opt/homebrew/opt/zplug' ]
+then
+    ZPLUG_DIR='/opt/homebrew/opt/zplug'
+elif [ -d '/usr/share/zplug' ]
+then
+    ZPLUG_DIR='/usr/share/zplug'
+elif [ -d "${HOME}/.zplug" ]
+then
+    ZPLUG_DIR="${HOME}/.zplug"
 fi
 
-if [ -r "${HOME}/.zplug/init.zsh" ]
+if [ -r "${ZPLUG_DIR}/init.zsh" ]
 then
-    source "${HOME}/.zplug/init.zsh"
+    export ZPLUG_HOME="${HOME}/.zplug"
+
+    source "${ZPLUG_DIR}/init.zsh"
 
     zplug 'plugins/aws', from:oh-my-zsh
     zplug 'plugins/docker', from:oh-my-zsh
