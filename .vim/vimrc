@@ -66,7 +66,7 @@ endif
 
 " Interface {{{1
 set clipboard&
-if has('unnamedplus')
+if ! has('nvim') && has('unnamedplus')
     set clipboard+=unnnamedplus
 else
     set clipboard+=unnamed
@@ -209,7 +209,7 @@ if exists('+undofile')
     set undofile
 endif
 
-if exists('+viminfo')
+if ! has('nvim') && exists('+viminfo')
     if has('win32')
         set viminfo+=n~/vimfiles/viminfo
     else

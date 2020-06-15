@@ -17,7 +17,7 @@ do
         mv -f "$HOME/$i" "$HOME/$i.$(date +%s)"
     fi
 
-    ln -fs "$(relpath \"$i\", \"$HOME\")" "$HOME/"
+    ln -fs "$(relpath $i $HOME)" "$HOME/"
 done
 
 popd >/dev/null 2>&1
