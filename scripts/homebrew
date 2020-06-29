@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eu
 
@@ -6,20 +6,15 @@ BREWDIR="${BREWDIR:=/opt/homebrew}"
 
 test -r "$(dirname $0)/subr.sh" && source "$(dirname $0)/subr.sh"
 
-function print_usage()
-{
+function print_usage() {
     echo "Usage: $0 {install|update|uninstall}" 1>&2
 }
 
-function setup_brew()
-{
-    if ! which brew >/dev/null 2>&1
-    then
-        if [ ! -d "$BREWDIR" ]
-        then
+function setup_brew() {
+    if ! which brew >/dev/null 2>&1; then
+        if [ ! -d "$BREWDIR" ]; then
             read -p "Are you sure you want to create this directory? ($BREWDIR) [Y/n]: " INPUT
-            if ! checkyesno "$INPUT"
-            then
+            if ! checkyesno "$INPUT"; then
                 warn "setup aborted."
                 exit 1
             fi
@@ -28,13 +23,11 @@ function setup_brew()
             sudo chown -R "$(id -un)":"$(id -gn)" "$BREWDIR"
         fi
 
-        if [ ! -f "$BREWDIR/bin/brew" ]
-        then
+        if [ ! -f "$BREWDIR/bin/brew" ]; then
             curl -L "https://github.com/Homebrew/brew/tarball/master" | tar xz --strip 1 -C "$BREWDIR"
         fi
 
-        if ! type brew >/dev/null 2>&1
-        then
+        if ! type brew >/dev/null 2>&1; then
             export PATH="$BREWDIR/bin":$PATH
         fi
     else
@@ -42,8 +35,7 @@ function setup_brew()
     fi
 }
 
-function install_packages()
-{
+function install_packages() {
     brew tap homebrew/cask
     brew tap homebrew/cask-drivers
 
@@ -80,24 +72,20 @@ function install_packages()
     brew install zplug
 }
 
-function update_packages()
-{
+function update_packages() {
     brew update
     brew upgrade
     brew cask upgrade
     brew cleanup --prune 0
 }
 
-function uninstall_packages()
-{
+function uninstall_packages() {
     brew cask list | xargs brew cask uninstall --force
     brew list | xargs brew uninstall --force --ignore-dependencies
     brew cleanup --prune 0
 
-    for i in $(brew tap)
-    do
-        if [ "homebrew/core" = "$i" ]
-        then
+    for i in $(brew tap); do
+        if [ "homebrew/core" = "$i" ]; then
             continue
         else
             brew untap "$i"
@@ -105,22 +93,18 @@ function uninstall_packages()
     done
 }
 
-if [ $# -ne 1 ]
-then
+if [ $# -ne 1 ]; then
     print_usage
     exit 1
 fi
 
 setup_brew
 
-if [ "$1" = "install" ]
-then
+if [ "$1" = "install" ]; then
     install_packages
-elif [ "$1" = "update" ]
-then
+elif [ "$1" = "update" ]; then
     update_packages
-elif [ "$1" = "uninstall" ]
-then
+elif [ "$1" = "uninstall" ]; then
     uninstall_packages
 else
     print_usage

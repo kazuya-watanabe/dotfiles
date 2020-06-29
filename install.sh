@@ -1,23 +1,22 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eu
 
-test -r "$(dirname $0)/scripts/subr.sh" && source "$(dirname $0)/scripts/subr.sh"
+basedir="$(cd "$(dirname ${0})" && pwd)"
+test -r "$basedir/scripts/subr.sh" && source "$basedir/scripts/subr.sh"
 
-pushd "$(dirname ${0})" >/dev/null 2>&1
+pushd "$basedir" >/dev/null 2>&1
 
-for i in .??*
-do
+for i in .??*; do
     [[ "$i" = ".git" ]] && continue
     [[ "$i" = ".gitignore" ]] && continue
     [[ "$i" = ".gitmodules" ]] && continue
 
-    if [ -e "$HOME/$i" ]
-    then
-        mv -f "$HOME/$i" "$HOME/$i.$(date +%s)"
+    if [ -e "~/$i" ]; then
+        mv -f "~/$i" "~/$i.$(date +%s)"
     fi
 
-    ln -fs "$(relpath $i $HOME)" "$HOME/"
+    ln -fs "$basedir/$i" ~/
 done
 
 popd >/dev/null 2>&1

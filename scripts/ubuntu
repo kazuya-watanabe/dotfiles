@@ -1,16 +1,14 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -eu
 
 test -r "$(dirname $0)/subr.sh" && source "$(dirname $0)/subr.sh"
 
-function print_usage()
-{
+function print_usage() {
     echo "Usage: $0 {install|update|uninstall}" 1>&2
 }
 
-function install_packages()
-{
+function install_packages() {
     sudo apt update
     sudo apt install colordiff \
         universal-ctags \
@@ -31,14 +29,12 @@ function install_packages()
         zsh
 }
 
-function update_packages()
-{
+function update_packages() {
     sudo apt update
     sudo apt full-upgrade
 }
 
-function uninstall_packages()
-{
+function uninstall_packages() {
     sudo apt autoremove colordiff \
         universal-ctags \
         fasd \
@@ -58,20 +54,16 @@ function uninstall_packages()
         zsh
 }
 
-if [ $# -ne 1 ]
-then
+if [ $# -ne 1 ]; then
     print_usage
     exit 1
 fi
 
-if [ "$1" = "install" ]
-then
+if [ "$1" = "install" ]; then
     install_packages
-elif [ "$1" = "update" ]
-then
+elif [ "$1" = "update" ]; then
     update_packages
-elif [ "$1" = "uninstall" ]
-then
+elif [ "$1" = "uninstall" ]; then
     uninstall_packages
 else
     print_usage
