@@ -1,17 +1,13 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 test -r "$(dirname $0)/scripts/subr.sh" && source "$(dirname $0)/scripts/subr.sh"
 
 # PYTHON
-PYDIR="$($(getpython) -m site --user-base)"
-if [ ! -z "$PYDIR" ]
-then
-    PYDIR="$PYDIR/bin"
-fi
+echo export PYTHONUSERBASE="~/.local"
+PYDIR="~/.local/bin"
 
 # HOMEBREW
-if [ -d "/opt/homebrew" ]
-then
+if [ -d "/opt/homebrew" ]; then
     BREWDIR_BIN="/opt/homebrew/bin"
     BREWDIR_SBIN="/opt/homebrew/sbin"
     BREWDIR_LLVM="/opt/homebrew/opt/llvm/bin"
@@ -19,23 +15,21 @@ then
 fi
 
 # ZSH
-echo export ZDOTDIR="$HOME/.zsh"
+echo export ZDOTDIR="~/.zsh"
 
 # PATH
-if [ -z "$BREWDIR_BIN" ]
-then
+if [ -z "$BREWDIR_BIN" ]; then
     cat << EOS
-export PATH="$HOME/bin":"$PYDIR":\$PATH
+export PATH="~/bin":"$PYDIR":\$PATH
 EOS
 else
     cat << EOS
-export PATH="$HOME/bin":"$PYDIR":"$BREWDIR_BIN":"$BREWDIR_SBIN":"$BREWDIR_LLVM":\$PATH
+export PATH="~/bin":"$PYDIR":"$BREWDIR_BIN":"$BREWDIR_SBIN":"$BREWDIR_LLVM":\$PATH
 EOS
 fi
 
 # MACOS
-if [ `uname` = "Darwin" ]
-then
+if [ `uname` = "Darwin" ]; then
     cat << EOS
 export COPY_EXTENDED_ATTRIBUTES_DISABLE=1
 export COPYFILE_DISABLE=1
@@ -45,8 +39,7 @@ EOS
 fi
 
 # VIM
-if type vim >/dev/null 2>&1
-then
+if type vim >/dev/null 2>&1; then
     echo export EDITOR=vim
     echo export VISUAL=vim
 else
@@ -55,16 +48,13 @@ else
 fi
 
 # LESS
-if type less >/dev/null 2>&1
-then
+if type less >/dev/null 2>&1; then
     echo export PAGER=less
     echo export LESS=-iJMR
-    if type lesspipe.sh >/dev/null 2>&1
-    then
+    if type lesspipe.sh >/dev/null 2>&1; then
         echo export LESSOPEN="| lesspipe.sh %s"
         echo export LESS_ADVANCED_PREPROCESSOR=1
-    elif type lesspipe >/dev/null 2>&1
-    then
+    elif type lesspipe >/dev/null 2>&1; then
         echo export LESSOPEN="| lesspipe %s"
         echo export LESS_ADVANCED_PREPROCESSOR=1
     fi
@@ -73,8 +63,7 @@ else
 fi
 
 # FZF
-if type fzf >/dev/null 2>&1 || type /opt/homebrew/bin/fzf >/dev/null 2>&1
-then
+if type fzf >/dev/null 2>&1 || type /opt/homebrew/bin/fzf >/dev/null 2>&1; then
     cat << EOS
 export FZF_DEFAULT_OPTS='
     --reverse
@@ -85,11 +74,18 @@ export FZF_DEFAULT_OPTS='
     rougify {} ||
     cat {}) 2> /dev/null | head -500"'
 EOS
-    if type rg >/dev/null 2>&1
-    then
+    if type rg >/dev/null 2>&1; then
         echo export FZF_DEFAULT_COMMAND=\'rg --files --glob \"\"\'
-    elif type ag >/dev/null 2>&1
-    then
+    elif type ag >/dev/null 2>&1; then
         echo export FZF_DEFAULT_COMMAND=\'ag --filename-pattern \"\"\'
     fi
 fi
+
+# SHELL
+cat << EOS
+if [ \$SHELL = '/bin/bash' ]; then
+    test -r "/etc/bash.bashrc" && source "/etc/bash.bashrc"
+    test -r "/etc/bashrc" && source "/etc/bashrc"
+    test -r "~/.bashrc" && "~/.bashrc"
+fi
+EOS

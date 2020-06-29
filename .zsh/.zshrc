@@ -1,22 +1,17 @@
 # zplug {{{1
 
-if [ -d '/usr/local/opt/zplug' ]
-then
+if [ -d '/usr/local/opt/zplug' ]; then
     ZPLUG_DIR='/usr/local/opt/zplug'
-elif [ -d '/opt/homebrew/opt/zplug' ]
-then
+elif [ -d '/opt/homebrew/opt/zplug' ]; then
     ZPLUG_DIR='/opt/homebrew/opt/zplug'
-elif [ -d '/usr/share/zplug' ]
-then
+elif [ -d '/usr/share/zplug' ]; then
     ZPLUG_DIR='/usr/share/zplug'
-elif [ -d "${HOME}/.zplug" ]
-then
-    ZPLUG_DIR="${HOME}/.zplug"
+elif [ -d "~/.zplug" ]; then
+    ZPLUG_DIR="~/.zplug"
 fi
 
-if [ -r "${ZPLUG_DIR}/init.zsh" ]
-then
-    export ZPLUG_HOME="${HOME}/.zplug"
+if [ -r "${ZPLUG_DIR}/init.zsh" ]; then
+    export ZPLUG_HOME="~/.zplug"
 
     source "${ZPLUG_DIR}/init.zsh"
 
@@ -40,8 +35,7 @@ then
     zplug load
 fi
 
-if type history-substring-search-up >/dev/null 2>&1
-then
+if type history-substring-search-up >/dev/null 2>&1; then
     bindkey -M emacs '^P' history-substring-search-up
     bindkey -M emacs '^N' history-substring-search-down
     bindkey -M vicmd 'k'  history-substring-search-up
@@ -71,7 +65,7 @@ autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 
-HISTFILE="${HOME}/.zsh/.zsh_history"
+HISTFILE="~/.zsh/.zsh_history"
 HISTSIZE=100000
 SAVEHIST=100000
 setopt bang_hist
@@ -122,14 +116,12 @@ zstyle ':vcs_info:git:*' unstagedstr "${_vcsinfo_unstaged_color}+"
 zstyle ':vcs_info:*' formats "${_vcsinfo_normal_color}%c%u[%b]%f"
 zstyle ':vcs_info:*' actionformats '[%b|%a]'
 
-function precmd
-{
+function precmd {
     vcs_info
 }
 
 # virtualenv_prompt_info
-if ! type virtualenv_prompt_info >/dev/null 2>&1
-then
+if ! type virtualenv_prompt_info >/dev/null 2>&1; then
     function virtualenv_prompt_info() {
     }
 fi
@@ -137,8 +129,7 @@ ZSH_THEME_VIRTUALENV_PREFIX="${_virtualenv_color}["
 ZSH_THEME_VIRTUALENV_SUFFIX=']%f '
 
 # vi mode
-function zle-line-init zle-keymap-select
-{
+function zle-line-init zle-keymap-select {
     _vim_pattern="${${KEYMAP/vicmd/${_vi_norm_pattern}}/(main|viins)/${_vi_ins_pattern}}"
     zle reset-prompt
 }
@@ -191,16 +182,14 @@ case "$(uname)" in
         alias ls='ls --color=auto --classify --group-directories-first --quoting-style=literal --show-control-chars'
         ;;
 esac
-if type gls >/dev/null 2>&1
-then
+if type gls >/dev/null 2>&1; then
     alias ls='gls --color=auto --classify --group-directories-first --quoting-style=literal'
 fi
 alias l='ls -l'
 alias ll='ls -Al'
 alias la='ls -A'
 
-if [ "$(uname)" = 'Darwin' ]
-then
+if [ "$(uname)" = 'Darwin' ]; then
     alias cp='cp -Xi'
 else
     alias cp='cp -i'
@@ -214,20 +203,18 @@ alias vi='vim'
 
 alias more='less'
 
-if type colordiff >/dev/null 2>&1
-then
+if type colordiff >/dev/null 2>&1; then
     alias colordiff='colordiff -u'
     alias diff='colordiff'
 else
     alias diff='diff -u'
 fi
 
-if type exctags >/dev/null 2>&1
-then
+if type exctags >/dev/null 2>&1; then
     alias ctags='exctags'
 fi
 
 alias sudo='sudo '
 
 # External Commands {{{1
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+test -r ~/.fzf.zsh && source ~/.fzf.zsh
