@@ -1,10 +1,10 @@
 #!/bin/bash
 
-WARN="${WARN:=yes}"
-INFO="${INFO:=yes}"
-DEBUG="${DEBUG:=no}"
+WARN=${WARN:=yes}
+INFO=${INFO:=yes}
+DEBUG=${DEBUG:=no}
 
-LOGGER="${LOGGER:=/usr/bin/logger}"
+LOGGER=${LOGGER:=/usr/bin/logger}
 
 function checkyesno() {
     case "$1" in
@@ -14,7 +14,7 @@ function checkyesno() {
         [Nn][Oo]|[Ff][Aa][Ll][Ss][Ee]|[Oo][Ff][Ff])
             return 1
             ;;
-        "")
+        '')
             return 2
             ;;
         *)
@@ -24,17 +24,17 @@ function checkyesno() {
 }
 
 function err() {
-    if [ -x "$LOGGER" ]; then
-        "$LOGGER" -p user.err "ERROR: $*"
+    if [ -x $LOGGER ]; then
+        $LOGGER -p user.err "ERROR: $*"
     fi
     echo 1>&2 "ERROR: $*"
     return 0
 }
 
 function warn() {
-    if checkyesno "$WARN"; then
-        if [ -x "$LOGGER" ]; then
-            "$LOGGER" -p user.warn "WARN: $*"
+    if checkyesno $WARN; then
+        if [ -x $LOGGER ]; then
+            $LOGGER -p user.warn "WARN: $*"
         fi
         echo 1>&2 "WARN: $*"
     fi
@@ -42,9 +42,9 @@ function warn() {
 }
 
 function info() {
-    if checkyesno "$INFO"; then
-        if [ -x "$LOGGER" ]; then
-            "$LOGGER" -p user.info "INFO: $*"
+    if checkyesno $INFO; then
+        if [ -x $LOGGER ]; then
+            $LOGGER -p user.info "INFO: $*"
         fi
         echo "INFO: $*"
     fi
@@ -52,9 +52,9 @@ function info() {
 }
 
 function debug() {
-    if checkyesno "$DEBUG"; then
-        if [ -x "$LOGGER" ]; then
-            "$LOGGER" -p user.debug "DEBUG: $*"
+    if checkyesno $DEBUG; then
+        if [ -x $LOGGER ]; then
+            $LOGGER -p user.debug "DEBUG: $*"
         fi
         echo 1>&2 "DEBUG: $*"
     fi
@@ -63,9 +63,9 @@ function debug() {
 
 function getpython() {
     if which python3 >/dev/null 2>&1; then
-        echo "python3"
+        echo 'python3'
     elif which python >/dev/null 2>&1; then
-        echo "python"
+        echo 'python'
     else
         return 1
     fi
