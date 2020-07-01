@@ -2,9 +2,9 @@
 
 set -eu
 
-BREWDIR="${BREWDIR:=/opt/homebrew}"
+BREWDIR=${BREWDIR:=/opt/homebrew}
 
-test -r "$(dirname $0)/subr.sh" && source "$(dirname $0)/subr.sh"
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
 
 function print_usage() {
     echo "Usage: $0 {install|update|uninstall}" 1>&2
@@ -12,23 +12,23 @@ function print_usage() {
 
 function setup_brew() {
     if ! which brew >/dev/null 2>&1; then
-        if [ ! -d "$BREWDIR" ]; then
+        if [ ! -d $BREWDIR ]; then
             read -p "Are you sure you want to create this directory? ($BREWDIR) [Y/n]: " INPUT
-            if ! checkyesno "$INPUT"; then
-                warn "setup aborted."
+            if ! checkyesno $INPUT; then
+                warn 'setup aborted.'
                 exit 1
             fi
 
-            sudo mkdir -p "$BREWDIR"
-            sudo chown -R "$(id -un)":"$(id -gn)" "$BREWDIR"
+            sudo mkdir -p $BREWDIR
+            sudo chown -R $(id -un):$(id -gn) $BREWDIR
         fi
 
-        if [ ! -f "$BREWDIR/bin/brew" ]; then
-            curl -L "https://github.com/Homebrew/brew/tarball/master" | tar xz --strip 1 -C "$BREWDIR"
+        if [ ! -f $BREWDIR/bin/brew ]; then
+            curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
         fi
 
         if ! type brew >/dev/null 2>&1; then
-            export PATH="$BREWDIR/bin":$PATH
+            export PATH=$BREWDIR/bin:$PATH
         fi
     else
         debug "brew: $(which brew)"
@@ -85,10 +85,10 @@ function uninstall_packages() {
     brew cleanup --prune 0
 
     for i in $(brew tap); do
-        if [ "homebrew/core" = "$i" ]; then
+        if [ homebrew/core = $i ]; then
             continue
         else
-            brew untap "$i"
+            brew untap $i
         fi
     done
 }
@@ -100,11 +100,11 @@ fi
 
 setup_brew
 
-if [ "$1" = "install" ]; then
+if [ "$1" = install ]; then
     install_packages
-elif [ "$1" = "update" ]; then
+elif [ "$1" = update ]; then
     update_packages
-elif [ "$1" = "uninstall" ]; then
+elif [ "$1" = uninstall ]; then
     uninstall_packages
 else
     print_usage

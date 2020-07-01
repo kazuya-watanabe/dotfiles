@@ -2,7 +2,7 @@
 
 set -eu
 
-test -r "$(dirname $0)/subr.sh" && source "$(dirname $0)/subr.sh"
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
 
 function print_usage() {
     echo "Usage: $0 {install|update|uninstall}" 1>&2
@@ -10,16 +10,16 @@ function print_usage() {
 
 function setup_pip() {
     if ! which curl >/dev/null 2>&1; then
-        err "curl not found."
+        err 'curl not found.'
         return 1
     fi
     if ! getpython >/dev/null 2>&1; then
-        err "python not found."
+        err 'python not found.'
         return 1
     fi
     curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
     $(getpython) get-pip.py --user
-    export PATH="$($(getpython) -m site --user-base)/bin":$PATH
+    export PATH=$($(getpython) -m site --user-base)/bin:$PATH
     return 0
 }
 
@@ -45,25 +45,25 @@ if type pip3 >/dev/null 2>&1; then
 elif type pip >/dev/null 2>&1; then
     pipcmd=pip
 else setup_pip
-    err "pip command required."
+    err 'pip command required.'
     exit 1
 fi
 
 if ! type jq >/dev/null 2>&1; then
-    err "jq command required."
+    err 'jq command required.'
     exit 1
 fi
 
 if ! type xargs >/dev/null 2>&1; then
-    err "xargs command required."
+    err 'xargs command required.'
     exit 1
 fi
 
-if [ "$1" = "install" ]; then
+if [ "$1" = install ]; then
     install_packages $pipcmd
-elif [ "$1" = "update" ]; then
+elif [ "$1" = update ]; then
     update_packages $pipcmd
-elif [ "$1" = "uninstall" ]; then
+elif [ "$1" = uninstall ]; then
     uninstall_packages $pipcmd
 else
     print_usage
