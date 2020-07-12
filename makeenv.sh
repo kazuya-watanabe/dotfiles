@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 test -r "$(dirname $0)/scripts/subr.sh" && source "$(dirname $0)/scripts/subr.sh"
 
 # PYTHON
@@ -83,7 +85,7 @@ fi
 
 # SHELL
 cat << EOS
-if [ \$SHELL = '/bin/bash' ]; then
+if [ \$SHELL = /bin/bash -o \$SHELL = /usr/bin/bash ]; then
     test -r /etc/bash.bashrc && source /etc/bash.bashrc
     test -r /etc/bashrc && source /etc/bashrc
     test -r ~/.bashrc && source ~/.bashrc
