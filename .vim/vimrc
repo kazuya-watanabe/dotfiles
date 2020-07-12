@@ -357,8 +357,8 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         Plug 'majutsushi/tagbar'
     endif
 
-    if executable('gtran')
-        Plug 'skanehira/translate.vim'
+    if executable('curl') && executable('bash')
+        Plug 'echuraev/translate-shell.vim', { 'do': 'curl -o ~/bin/trans https://git.io/trans && chmod +x ~/bin/trans' }
     endif
 
     Plug 'mbbill/undotree'

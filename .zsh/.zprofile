@@ -1,4 +1,1 @@
-if [ -r ~/.zshenv ]
-then
-    source ~/.zshenv
-fi
+test -r ~/.zshenv && source ~/.zshenv

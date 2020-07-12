@@ -51,10 +51,13 @@ function install_packages() {
     brew install cmake
     brew install colordiff
     brew install composer
+    brew install coreutils
     brew install ctags
     brew install fasd
     brew install ffmpeg
     brew install fzf
+    brew install gawk
+    brew install git
     brew install go
     brew install highlight
     brew install jq
@@ -64,6 +67,7 @@ function install_packages() {
     brew install p7zip
     brew install python
     brew install ripgrep
+    brew install ruby
     brew install tig
     brew install tmux
     brew install w3m
