@@ -1,4 +1,5 @@
-autoload/plug.vim.old
+NERDTreeBookmarks
+autoload
 plugged
 undo
 viminfo

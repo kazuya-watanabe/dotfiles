@@ -54,10 +54,10 @@ if type less >/dev/null 2>&1; then
     echo export PAGER=less
     echo export LESS=-iJMR
     if type lesspipe.sh >/dev/null 2>&1; then
-        echo export LESSOPEN='| lesspipe.sh %s'
+        echo "export LESSOPEN='| lesspipe.sh %s'"
         echo export LESS_ADVANCED_PREPROCESSOR=1
     elif type lesspipe >/dev/null 2>&1; then
-        echo export LESSOPEN='| lesspipe %s'
+        echo "export LESSOPEN='| lesspipe %s'"
         echo export LESS_ADVANCED_PREPROCESSOR=1
     fi
 else
