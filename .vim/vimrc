@@ -74,7 +74,7 @@ endif
 
 set cmdheight=2
 
-if exists('+diffopt')
+if exists('+diffopt') && version > 801
     set diffopt&
     set diffopt+=vertical
 endif
@@ -323,7 +323,17 @@ if has('macunix') && executable('open') " {{{2
 endif
 
 " Packages {{{1
-if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vimfiles/autoload/plug.vim'))
+if has('win32')
+    let s:plug_vim_file = '~/vimfiles/autoload/plug.vim'
+else
+    let s:plug_vim_file = '~/.vim/autoload/plug.vim'
+endif
+if ! filereadable(expand(s:plug_vim_file)) && executable('curl')
+    execute '! curl -fLo ' . expand(s:plug_vim_file) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall
+endif
+
+if filereadable(expand(s:plug_vim_file))
     " Plug {{{2
     if has('win32')
         call plug#begin('~/vimfiles/plugged')
@@ -357,7 +367,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
         Plug 'majutsushi/tagbar'
     endif
 
-    if executable('curl') && executable('bash')
+    if ! has('win32') && executable('curl')
         Plug 'echuraev/translate-shell.vim', { 'do': 'curl -o ~/bin/trans https://git.io/trans && chmod +x ~/bin/trans' }
     endif
 
@@ -421,7 +431,7 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     endif
 
     " coc.nvim {{{2
-    if exists('g:plugs["coc.nvim"]')
+    if exists('CocActionAsync()')
         " if hidden is not set, TextEdit might fail.
         set hidden
 
@@ -584,6 +594,11 @@ if filereadable(expand('~/.vim/autoload/plug.vim')) || filereadable(expand('~/vi
     " nerdtree {{{2
     if exists('g:plugs["nerdtree"]')
         nnoremap <Leader>N :Cd<CR>:NERDTreeCWD<CR>
+        if has('win32')
+            let NERDTreeBookmarksFile = '~/vimfiles/NERDTreeBookmarks'
+        else
+            let NERDTreeBookmarksFile = '~/.vim/NERDTreeBookmarks'
+        endif
     endif
 
     " nerdtree/vim-nerdtree-tabs {{{2
