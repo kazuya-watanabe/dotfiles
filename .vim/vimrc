@@ -405,7 +405,7 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     endif
 
     " coc.nvim {{{2
-    if exists('*CocAction')
+    if exists('g:plugs["coc.nvim"]')
         " if hidden is not set, TextEdit might fail.
         set hidden
 
