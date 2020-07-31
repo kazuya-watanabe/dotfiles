@@ -27,7 +27,11 @@ if exists('+spelllang')
 endif
 
 " System {{{1
+let s:user_dir = expand('~/.vim')
+
 if has('win32') " {{{2
+    let s:user_dir = expand('~/vimfiles')
+
     autocmd vimrc BufNewFile * setlocal fileencoding=cp932 fileformat=dos
 
     set ambiwidth=double
@@ -49,19 +53,6 @@ if has('macunix') " {{{2
     if exists('+macmeta')
         set macmeta
     endif
-
-    for s:pyver in ['3.7', '3.6']
-        for s:pyprefix in ['/opt/homebrew/Frameworks', '/usr/local/Frameworks']
-            let s:py3dll = expand(s:pyprefix . '/Python.framework/Versions/' . s:pyver . '/lib/libpython' . s:pyver . '.dylib')
-            if filereadable(s:py3dll)
-                let &pythonthreedll = s:py3dll
-                break
-            endif
-        endfor
-        if filereadable(&pythonthreedll)
-            break
-        endif
-    endfor
 endif
 
 " Interface {{{1
@@ -196,11 +187,7 @@ set noswapfile
 set tabstop=4
 
 if exists('+undofile')
-    if has('win32')
-        set undodir=~/vimfiles/undo
-    else
-        set undodir=~/.vim/undo
-    endif
+    let &undodir = s:user_dir . '/undo'
 
     if exists('*mkdir')
         call mkdir(&undodir, 'p', '0700')
@@ -210,11 +197,7 @@ if exists('+undofile')
 endif
 
 if ! has('nvim') && exists('+viminfo')
-    if has('win32')
-        set viminfo+=n~/vimfiles/viminfo
-    else
-        set viminfo+=n~/.vim/viminfo
-    endif
+    let &viminfo = &viminfo . ',n' . s:user_dir . '/viminfo'
 endif
 
 set wildmode=list:longest,full
@@ -323,23 +306,14 @@ if has('macunix') && executable('open') " {{{2
 endif
 
 " Packages {{{1
-if has('win32')
-    let s:plug_vim_file = '~/vimfiles/autoload/plug.vim'
-else
-    let s:plug_vim_file = '~/.vim/autoload/plug.vim'
-endif
-if ! filereadable(expand(s:plug_vim_file)) && executable('curl')
+if ! filereadable(expand(s:user_dir . '/autoload/plug.vim')) && executable('curl')
     execute '! curl -fLo ' . expand(s:plug_vim_file) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     autocmd VimEnter * PlugInstall
 endif
 
-if filereadable(expand(s:plug_vim_file))
+if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     " Plug {{{2
-    if has('win32')
-        call plug#begin('~/vimfiles/plugged')
-    else
-        call plug#begin('~/.vim/plugged')
-    endif
+    call plug#begin(s:user_dir . '/plugged')
 
     Plug 'rafi/awesome-vim-colorschemes'
 
@@ -431,7 +405,7 @@ if filereadable(expand(s:plug_vim_file))
     endif
 
     " coc.nvim {{{2
-    if exists('CocActionAsync()')
+    if exists('*CocAction')
         " if hidden is not set, TextEdit might fail.
         set hidden
 
@@ -594,11 +568,7 @@ if filereadable(expand(s:plug_vim_file))
     " nerdtree {{{2
     if exists('g:plugs["nerdtree"]')
         nnoremap <Leader>N :Cd<CR>:NERDTreeCWD<CR>
-        if has('win32')
-            let NERDTreeBookmarksFile = '~/vimfiles/NERDTreeBookmarks'
-        else
-            let NERDTreeBookmarksFile = '~/.vim/NERDTreeBookmarks'
-        endif
+        let NERDTreeBookmarksFile = s:user_dir . '/NERDTreeBookmarks'
     endif
 
     " nerdtree/vim-nerdtree-tabs {{{2

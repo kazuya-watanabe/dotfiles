@@ -43,7 +43,6 @@ function install_packages() {
     brew cask install adguard
     brew cask install cloudmounter
     brew cask install firefox
-    brew cask install garmin-express
     brew cask install google-chrome
     brew cask install java
     brew cask install macvim
