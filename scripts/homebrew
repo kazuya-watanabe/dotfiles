@@ -2,33 +2,33 @@
 
 set -eu
 
-BREWDIR=${BREWDIR:=/opt/homebrew}
+HOMEBREW_PREFIX=${HOMEBREW_PREFIX:=/opt/homebrew}
 
 test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
 
 function print_usage() {
-    echo "Usage: $0 {install|update|uninstall}" 1>&2
+    echo "Usage: $0 {install|update}" 1>&2
 }
 
 function setup_brew() {
     if ! which brew >/dev/null 2>&1; then
-        if [ ! -d $BREWDIR ]; then
-            read -p "Are you sure you want to create this directory? ($BREWDIR) [Y/n]: " INPUT
+        if [ ! -d $HOMEBREW_PREFIX ]; then
+            read -p "Are you sure you want to create this directory? ($HOMEBREW_PREFIX) [Y/n]: " INPUT
             if ! checkyesno $INPUT; then
                 warn 'setup aborted.'
                 exit 1
             fi
 
-            sudo mkdir -p $BREWDIR
-            sudo chown -R $(id -un):$(id -gn) $BREWDIR
+            sudo mkdir -p $HOMEBREW_PREFIX
+            sudo chown -R $(id -un):$(id -gn) $HOMEBREW_PREFIX
         fi
 
-        if [ ! -f $BREWDIR/bin/brew ]; then
-            curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
+        if [ ! -f $HOMEBREW_PREFIX/bin/brew ]; then
+            curl -L https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $HOMEBREW_PREFIX
         fi
 
         if ! type brew >/dev/null 2>&1; then
-            export PATH=$BREWDIR/bin:$PATH
+            export PATH=$HOMEBREW_PREFIX/bin:$PATH
         fi
     else
         debug "brew: $(which brew)"
@@ -46,6 +46,7 @@ function install_packages() {
     brew cask install google-chrome
     brew cask install java
     brew cask install macvim
+    brew cask install skype
 
     brew install cmake
     brew install colordiff
@@ -64,36 +65,19 @@ function install_packages() {
     brew install llvm
     brew install npm
     brew install p7zip
-    brew install python
     brew install ripgrep
     brew install ruby
     brew install tig
     brew install tmux
     brew install w3m
     brew install wget
-    brew install yarn
-    brew install zplug
 }
 
 function update_packages() {
     brew update
     brew upgrade
-    brew cask upgrade
+    brew cask upgrade $(brew cask list)
     brew cleanup --prune 0
-}
-
-function uninstall_packages() {
-    brew cask list | xargs brew cask uninstall --force
-    brew list | xargs brew uninstall --force --ignore-dependencies
-    brew cleanup --prune 0
-
-    for i in $(brew tap); do
-        if [ homebrew/core = $i ]; then
-            continue
-        else
-            brew untap $i
-        fi
-    done
 }
 
 if [ $# -ne 1 ]; then
@@ -107,8 +91,6 @@ if [ "$1" = install ]; then
     install_packages
 elif [ "$1" = update ]; then
     update_packages
-elif [ "$1" = uninstall ]; then
-    uninstall_packages
 else
     print_usage
     exit 1

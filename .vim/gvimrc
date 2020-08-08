@@ -17,12 +17,8 @@ if has('win32') " {{{2
 
         set renderoptions=type:directx
     endif
-endif
-
-if has('gui_gtk2') " {{{2
+elseif has('gui_gtk2') " {{{2
     set guifont=Monospace\ 12
-endif
-
-if has('macunix') " {{{2
+elseif has('macunix') " {{{2
     set guifont=Osaka-Mono:h13
 endif

@@ -5,7 +5,7 @@ set -eu
 tpmdir=~/.tmux/plugins/tpm
 
 function print_usage() {
-    echo "Usage: $0 {install|update|uninstall}" 1>&2
+    echo "Usage: $0 {install|update}" 1>&2
 }
 
 function install_packages() {
@@ -14,10 +14,6 @@ function install_packages() {
 
 function update_packages() {
     $1/bin/update_plugins all
-}
-
-function uninstall_packages() {
-    rm -frv $1
 }
 
 if [ $# -ne 1 ]; then
@@ -43,8 +39,6 @@ if [ "$1" = install ]; then
     install_packages $tpmdir
 elif [ "$1" = update ]; then
     update_packages $tpmdir
-elif [ "$1" = uninstall ]; then
-    uninstall_packages $tpmdir
 else
     print_usage
     exit 1
