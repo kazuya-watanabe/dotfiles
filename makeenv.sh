@@ -5,14 +5,13 @@ set -eu
 test -r "$(dirname $0)/scripts/subr.sh" && source "$(dirname $0)/scripts/subr.sh"
 
 # PYTHON
-echo export PYTHONUSERBASE=~/.local
-PYDIR=~/.local/bin
+if getpython >/dev/null 2>&1; then
+    echo export PYTHONUSERBASE=$($(getpython) -m site --user-base)
+fi
 
 # HOMEBREW
-if [ -d /opt/homebrew ]; then
-    BREWDIR_BIN=/opt/homebrew/bin
-    BREWDIR_SBIN=/opt/homebrew/sbin
-    BREWDIR_LLVM=/opt/homebrew/opt/llvm/bin
+if type brew >/dev/null 2>&1 || ; then
+    echo $(brew shellenv)
     echo export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f
 fi
 
@@ -20,15 +19,9 @@ fi
 echo export ZDOTDIR=~/.zsh
 
 # PATH
-if [ -z "$BREWDIR_BIN" ]; then
-    cat << EOS
-export PATH=~/bin:~/.local/bin:\$PATH
+cat << EOS
+export PATH=$HOME/bin:$PYTHONUSERBASE/bin:\$PATH
 EOS
-else
-    cat << EOS
-export PATH=~/bin:~/.local/bin:$BREWDIR_BIN:$BREWDIR_SBIN:$BREWDIR_LLVM:\$PATH
-EOS
-fi
 
 # MACOS
 if [ `uname` = Darwin ]; then

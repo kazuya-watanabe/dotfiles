@@ -47,9 +47,7 @@ if has('win32') " {{{2
             set termguicolors
         endif
     endif
-endif
-
-if has('macunix') " {{{2
+elseif has('macunix') " {{{2
     if exists('+macmeta')
         set macmeta
     endif
@@ -57,7 +55,7 @@ endif
 
 " Interface {{{1
 set clipboard&
-if ! has('nvim') && has('unnamedplus')
+if has('unnamedplus')
     set clipboard+=unnnamedplus
 else
     set clipboard+=unnamed
@@ -95,10 +93,10 @@ set lazyredraw
 
 set list
 
-if has('win32')
-    set listchars=tab:>\ ,trail:-,extends:>,precedes:<
-else
+if &encoding == 'utf-8' || ! has('win32')
     set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
+else
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<
 endif
 
 set number
@@ -196,7 +194,7 @@ if exists('+undofile')
     set undofile
 endif
 
-if ! has('nvim') && exists('+viminfo')
+if exists('+viminfo')
     let &viminfo = &viminfo . ',n' . s:user_dir . '/viminfo'
 endif
 
@@ -217,7 +215,7 @@ elseif executable('ag')
     set grepformat+=%f:%l:%c:%m
 endif
 
-command! -nargs=+ Grep silent lgrep! <args> | lwindow
+command! -nargs=+ Grep silent grep! <args> | copen
 
 if exists('+hlsearch')
     set hlsearch
@@ -307,7 +305,8 @@ endif
 
 " Packages {{{1
 if ! filereadable(expand(s:user_dir . '/autoload/plug.vim')) && executable('curl')
-    execute '! curl -fLo ' . expand(s:plug_vim_file) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    let s:vimplug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    execute '! curl -fLo ' . expand(s:plug_vim_file) . ' --create-dirs ' . s:vimplug_url
     autocmd VimEnter * PlugInstall
 endif
 

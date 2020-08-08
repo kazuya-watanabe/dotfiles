@@ -5,7 +5,7 @@ set -eu
 test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
 
 function print_usage() {
-    echo "Usage: $0 {install|update|uninstall}" 1>&2
+    echo "Usage: $0 {install|update}" 1>&2
 }
 
 function setup_pip() {
@@ -25,14 +25,11 @@ function setup_pip() {
 
 function install_packages() {
     $1 install --user virtualenv
+    $1 install --user pyenv
 }
 
 function update_packages() {
     $1 list --user --outdated --format=json | jq -r '.[].name' | xargs $1 install --user --upgrade
-}
-
-function uninstall_packages() {
-    $1 list --user --format=json | jq -r '.[].name' | xargs $1 uninstall -y
 }
 
 if [ $# -ne 1 ]; then
@@ -63,8 +60,6 @@ if [ "$1" = install ]; then
     install_packages $pipcmd
 elif [ "$1" = update ]; then
     update_packages $pipcmd
-elif [ "$1" = uninstall ]; then
-    uninstall_packages $pipcmd
 else
     print_usage
     exit 1

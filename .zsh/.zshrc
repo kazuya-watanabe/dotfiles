@@ -1,19 +1,11 @@
 # zplug {{{1
-
-if [ -d /usr/share/zplug ]; then
-    ZPLUG_DIR=/usr/share/zplug
-elif [ -d /usr/local/opt/zplug ]; then
-    ZPLUG_DIR=/usr/local/opt/zplug
-elif [ -d /opt/homebrew/opt/zplug ]; then
-    ZPLUG_DIR=/opt/homebrew/opt/zplug
-elif [ -d ~/.zplug ]; then
-    ZPLUG_DIR=~/.zplug
+export ZPLUG_HOME=~/.zplug
+if [ ! -d ~/.zplug -a type git >/dev/null 2>&1 ]; then
+    git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
 
-if [ -r ${ZPLUG_DIR}/init.zsh ]; then
-    export ZPLUG_HOME=~/.zplug
-
-    source ${ZPLUG_DIR}/init.zsh
+if [ -r $ZPLUG_HOME/init.zsh ]; then
+    source $ZPLUG_HOME/init.zsh
 
     zplug 'plugins/fasd', from:oh-my-zsh
     zplug 'plugins/git', from:oh-my-zsh
@@ -30,13 +22,13 @@ if [ -r ${ZPLUG_DIR}/init.zsh ]; then
     zplug 'zsh-users/zsh-syntax-highlighting', defer:2
 
     zplug load
-fi
 
-if type history-substring-search-up >/dev/null 2>&1; then
-    bindkey -M emacs '^P' history-substring-search-up
-    bindkey -M emacs '^N' history-substring-search-down
-    bindkey -M vicmd 'k'  history-substring-search-up
-    bindkey -M vicmd 'j'  history-substring-search-down
+    if type history-substring-search-up >/dev/null 2>&1; then
+        bindkey -M emacs '^P' history-substring-search-up
+        bindkey -M emacs '^N' history-substring-search-down
+        bindkey -M vicmd 'k'  history-substring-search-up
+        bindkey -M vicmd 'j'  history-substring-search-down
+    fi
 fi
 
 # Changing Directories {{{1
@@ -153,21 +145,21 @@ unset _vi_norm_color
 
 # Key binding {{{1
 bindkey -v
-bindkey -M viins '^?'  backward-delete-char
-bindkey -M viins '^A'  beginning-of-line
-bindkey -M viins '^B'  backward-char
-bindkey -M viins '^D'  delete-char-or-list
-bindkey -M viins '^E'  end-of-line
-bindkey -M viins '^F'  forward-char
-bindkey -M viins '^G'  send-break
-bindkey -M viins '^H'  backward-delete-char
-bindkey -M viins '^K'  kill-line
-bindkey -M viins '^N'  history-beginning-search-forward-end
-bindkey -M viins '^P'  history-beginning-search-backward-end
-bindkey -M viins '^R'  history-incremental-pattern-search-backward
-bindkey -M viins '^U'  backward-kill-line
-bindkey -M viins '^W'  backward-kill-word
-bindkey -M viins '^Y'  yank
+bindkey -M viins '^?' backward-delete-char
+bindkey -M viins '^A' beginning-of-line
+bindkey -M viins '^B' backward-char
+bindkey -M viins '^D' delete-char-or-list
+bindkey -M viins '^E' end-of-line
+bindkey -M viins '^F' forward-char
+bindkey -M viins '^G' send-break
+bindkey -M viins '^H' backward-delete-char
+bindkey -M viins '^K' kill-line
+bindkey -M viins '^N' history-beginning-search-forward-end
+bindkey -M viins '^P' history-beginning-search-backward-end
+bindkey -M viins '^R' history-incremental-pattern-search-backward
+bindkey -M viins '^U' backward-kill-line
+bindkey -M viins '^W' backward-kill-word
+bindkey -M viins '^Y' yank
 
 # Aliases {{{1
 case $(uname) in

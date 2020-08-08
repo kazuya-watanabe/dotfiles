@@ -2,7 +2,7 @@
 
 set -eu
 
-basedir=$(dirname ${0})
+basedir=$(dirname $0)
 test -r $basedir/scripts/subr.sh && source $basedir/scripts/subr.sh
 
 pushd $basedir >/dev/null 2>&1

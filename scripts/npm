@@ -1,0 +1,36 @@
+#!/bin/bash
+
+set -eu
+
+test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
+
+function print_usage() {
+    echo "Usage: $0 {install|update}" 1>&2
+}
+
+function install_packages() {
+    npm install -g yarn
+}
+
+function update_packages() {
+    npm update -g
+}
+
+if [ $# -ne 1 ]; then
+    print_usage
+    exit 1
+fi
+
+if ! type npm >/dev/null 2>&1; then
+    err 'npm command required.'
+    exit 1
+fi
+
+if [ "$1" = install ]; then
+    install_packages
+elif [ "$1" = update ]; then
+    update_packages
+else
+    print_usage
+    exit 1
+fi
