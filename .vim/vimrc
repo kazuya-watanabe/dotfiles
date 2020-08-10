@@ -93,7 +93,7 @@ set lazyredraw
 
 set list
 
-if &encoding == 'utf-8' || ! has('win32')
+if &encoding == 'utf-8' && ! has('win32')
     set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
 else
     set listchars=tab:>\ ,trail:-,extends:>,precedes:<

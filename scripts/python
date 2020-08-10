@@ -8,21 +8,6 @@ function print_usage() {
     echo "Usage: $0 {install|update}" 1>&2
 }
 
-function setup_pip() {
-    if ! which curl >/dev/null 2>&1; then
-        err 'curl not found.'
-        return 1
-    fi
-    if ! getpython >/dev/null 2>&1; then
-        err 'python not found.'
-        return 1
-    fi
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    $(getpython) get-pip.py --user
-    export PATH=$($(getpython) -m site --user-base)/bin:$PATH
-    return 0
-}
-
 function install_packages() {
     $1 install --user virtualenv
     $1 install --user pyenv
@@ -41,7 +26,7 @@ if type pip3 >/dev/null 2>&1; then
     pipcmd=pip3
 elif type pip >/dev/null 2>&1; then
     pipcmd=pip
-else setup_pip
+else
     err 'pip command required.'
     exit 1
 fi

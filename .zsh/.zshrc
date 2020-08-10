@@ -1,6 +1,6 @@
 # zplug {{{1
-export ZPLUG_HOME=~/.zplug
-if [ ! -d ~/.zplug -a type git >/dev/null 2>&1 ]; then
+export ZPLUG_HOME=$HOME/.zplug
+if [ ! -d $HOME/.zplug -a type git >/dev/null 2>&1 ]; then
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
 
@@ -56,7 +56,7 @@ autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 
-HISTFILE=~/.zsh/.zsh_history
+HISTFILE=$HOME/.zsh/.zsh_history
 HISTSIZE=100000
 SAVEHIST=100000
 setopt bang_hist
@@ -208,4 +208,4 @@ fi
 alias sudo='sudo '
 
 # External Commands {{{1
-test -r ~/.fzf.zsh && source ~/.fzf.zsh
+test -r $HOME/.fzf.zsh && source $HOME/.fzf.zsh
