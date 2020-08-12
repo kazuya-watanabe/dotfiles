@@ -10,7 +10,6 @@ function print_usage() {
 
 function install_packages() {
     $1 install --user virtualenv
-    $1 install --user pyenv
 }
 
 function update_packages() {

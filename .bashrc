@@ -46,7 +46,7 @@ alias sudo='sudo '
 
 # External Commands {{{1
 if type fasd >/dev/null 2>&1; then
-    fasd_cache="$HOME/.fasd-init-bash"
+    fasd_cache="~/.fasd-init-bash"
     if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
       fasd --init posix-alias bash-hook bash-ccomp bash-ccomp-install >| "$fasd_cache"
     fi
@@ -54,4 +54,4 @@ if type fasd >/dev/null 2>&1; then
     unset fasd_cache
 fi
 
-test -r $HOME/.fzf.bash && source $HOME/.fzf.bash
+test -r ~/.fzf.bash && source ~/.fzf.bash
