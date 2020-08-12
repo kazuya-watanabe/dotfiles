@@ -5,7 +5,7 @@ fi
 
 if type less >/dev/null 2>&1; then
     export PAGER=less
-    export LESS=-iJMR
+    export LESS=-iJMRX
     if type lesspipe.sh >/dev/null 2>&1; then
         export LESSOPEN='| lesspipe.sh %s'
         export LESS_ADVANCED_PREPROCESSOR=1
