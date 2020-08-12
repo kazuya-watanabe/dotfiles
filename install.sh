@@ -12,8 +12,6 @@ for i in .??*; do
     test $i = .gitignore && continue
     test $i = .gitmodules && continue
 
-    test $i = .profile && ln -fs $(pwd)/$i $HOME/.zshenv
-
     ln -fs $(pwd)/$i ~/
 done
 

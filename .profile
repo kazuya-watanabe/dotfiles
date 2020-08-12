@@ -16,12 +16,12 @@ if type less >/dev/null 2>&1; then
 fi
 
 if type python >/dev/null 2>&1 || type python3 >/dev/null 2>&1; then
-    export PYTHONUSERBASE=$HOME/.local
+    export PYTHONUSERBASE=~/.local
     PATH=$PYTHONUSERBASE/bin:$PATH
 fi
 
 if type zsh >/dev/null 2>&1; then
-    export ZDOTDIR=$HOME/.zsh
+    export ZDOTDIR=~/.zsh
 fi
 
 if [ $(uname) = Darwin ]; then
@@ -58,4 +58,4 @@ export LC_ALL=ja_JP.UTF-8
 
 export TZ=Asia/Tokyo
 
-export PATH=$HOME/bin:$PATH
+export PATH=~/bin:$PATH
