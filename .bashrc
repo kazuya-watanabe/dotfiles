@@ -50,7 +50,7 @@ _hostname_color='\[\e[00;32m\]'
 _dirname_color='\[\e[00;33m\]'
 _shellname_color='\[\e[00;34m\]'
 _prompt_color=''
-_reset_color='\e[m\]'
+_reset_color='\[\e[m\]'
 export PS1="$_username_color\u$_reset_color@$_hostname_color\h$_reset_color:$_dirname_color[\w]$_reset_color\n$_shellname_color(\s)$_reset_color \$ "
 unset _username_color
 unset _hostname_color
