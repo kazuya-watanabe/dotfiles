@@ -85,7 +85,7 @@ endif
 
 set hidden
 
-set history=1000
+set history=10000
 
 set laststatus=2
 
@@ -304,86 +304,68 @@ if has('macunix') && executable('open') " {{{2
 endif
 
 " Packages {{{1
-if ! filereadable(expand(s:user_dir . '/autoload/plug.vim')) && executable('curl')
+if ! filereadable(expand(s:user_dir . '/autoload/plug.vim')) && executable('curl') " {{{2
     let s:vimplug_url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    execute '! curl -fLo ' . expand(s:user_dir . '/autoload/plug.vim') . ' --create-dirs ' . s:vimplug_url
-    autocmd VimEnter * PlugInstall
+    silent execute '! curl -fLo ' . expand(s:user_dir . '/autoload/plug.vim') . ' --create-dirs ' . s:vimplug_url
+    autocmd vimrc VimEnter *
+                \  PlugInstall --sync
+                \| if filereadable(expand(s:user_dir . '/coc-install.vim'))
+                \|     execute 'source ' . expand(s:user_dir . '/coc-install.vim')
+                \| endif
+                \| quitall
 endif
 
-if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
+if filereadable(expand(s:user_dir . '/autoload/plug.vim')) " {{{2
+    function! s:is_plugged(name) " {{{2
+        return exists('g:plugs') && has_key(g:plugs, a:name) && has_key(g:plugs[a:name], 'dir')
+                    \ ? isdirectory(g:plugs[a:name]['dir'])
+                    \ : 0
+    endfunction
+
     " Plug {{{2
     call plug#begin(s:user_dir . '/plugged')
 
     Plug 'rafi/awesome-vim-colorschemes'
-
     if executable('yarn')
         Plug 'neoclide/coc.nvim', { 'do': 'yarn install --frozen-lockfile' }
-
         Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
     endif
-
     if executable('fzf')
         Plug 'junegunn/fzf', { 'do': './install --all' }
-
         Plug 'junegunn/fzf.vim'
     endif
-
-    Plug 'scrooloose/nerdcommenter'
-
-    Plug 'scrooloose/nerdtree'
-
-    Plug 'jistr/vim-nerdtree-tabs'
-
+    Plug 'preservim/nerdcommenter'
+    Plug 'preservim/nerdtree'
+    Plug 'junegunn/vim-plug'
     Plug 'godlygeek/tabular'
-
     if executable('ctags') || executable('exctags')
         Plug 'majutsushi/tagbar'
     endif
-
     if ! has('win32') && executable('curl')
         Plug 'echuraev/translate-shell.vim', { 'do': 'curl -o ~/bin/trans https://git.io/trans && chmod +x ~/bin/trans' }
     endif
-
     Plug 'mbbill/undotree'
-
     if executable('git')
         Plug 'tpope/vim-fugitive'
-
         Plug 'junegunn/gv.vim'
-
         Plug 'airblade/vim-gitgutter'
-
         Plug 'idanarye/vim-merginal'
     endif
-
     Plug 'vim-airline/vim-airline'
-
     Plug 'vim-airline/vim-airline-themes'
-
     Plug 'jeetsukumaran/vim-buffergator'
-
     Plug 'easymotion/vim-easymotion'
-
     Plug 'tpope/vim-eunuch'
-
     Plug 'terryma/vim-expand-region'
-
     Plug 'drmikehenry/vim-fontsize'
-
     Plug 'sheerun/vim-polyglot'
-
     Plug 'tpope/vim-repeat'
-
     Plug 'honza/vim-snippets'
-
     Plug 'tpope/vim-speeddating'
-
     Plug 'tpope/vim-surround'
-
     if has('python3')
         Plug 'vim-vdebug/vdebug', { 'for': [ 'php', 'python' ] }
     endif
-
     Plug 'idanarye/vim-vebugger', { 'for': [ 'c', 'cpp', 'java' ] }
     if has('win32')
         Plug 'Shougo/vimproc.vim'
@@ -392,7 +374,6 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     elseif executable('make')
         Plug 'Shougo/vimproc.vim', { 'do': 'make' }
     endif
-
     Plug 'vim-jp/vimdoc-ja'
 
     call plug#end()
@@ -404,7 +385,7 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     endif
 
     " coc.nvim {{{2
-    if exists('g:plugs["coc.nvim"]')
+    if s:is_plugged('coc.nvim')
         " if hidden is not set, TextEdit might fail.
         set hidden
 
@@ -552,7 +533,7 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     endif
 
     " fzf.vim {{{2
-    if exists('g:plugs["fzf.vim"]')
+    if s:is_plugged('fzf.vim')
         nnoremap <silent> <Leader>fb :Buffers<CR>
         nnoremap <silent> <Leader>ff :Files<CR>
         nnoremap <silent> <Leader>fh :History<CR>
@@ -560,25 +541,20 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     endif
 
     " markdown-preview.nvim {{{2
-    let g:mkdp_auto_start = 1
-    let g:mkdp_preview_options = { 'sync_scroll_type': 'relative' }
-    let g:mkdp_page_title = '${name}'
+    if s:is_plugged('markdown-preview.nvim')
+        let g:mkdp_auto_start = 1
+        let g:mkdp_preview_options = { 'sync_scroll_type': 'relative' }
+        let g:mkdp_page_title = '${name}'
+    endif
 
     " nerdtree {{{2
-    if exists('g:plugs["nerdtree"]')
-        nnoremap <Leader>N :Cd<CR>:NERDTreeCWD<CR>
+    if s:is_plugged('nerdtree')
+        nnoremap <Leader>n :Cd<CR>:NERDTreeCWD<CR>
         let NERDTreeBookmarksFile = s:user_dir . '/NERDTreeBookmarks'
     endif
 
-    " nerdtree/vim-nerdtree-tabs {{{2
-    if exists('g:plugs["vim-nerdtree-tabs"]')
-        let g:nerdtree_tabs_open_on_gui_startup = 0
-
-        map <Leader>n <plug>NERDTreeTabsToggle<CR>
-    endif
-
     " tagbar {{{2
-    if exists('g:plugs["tagbar"]')
+    if s:is_plugged('tagbar')
         if executable('exctags')
             let g:tagbar_ctags_bin = 'exctags'
         elseif executable('ctags')
@@ -589,18 +565,20 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     endif
 
     " undotree {{{2
-    if exists('g:plugs["undotree"]')
+    if s:is_plugged('undotree')
         let g:undotree_WindowLayout = 3
 
         nnoremap <silent> <Leader>u :UndotreeToggle<CR>
     endif
 
     " vim-airline {{{2
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#show_buffers = 0
+    if s:is_plugged('vim-airline')
+        let g:airline#extensions#tabline#enabled = 1
+        let g:airline#extensions#tabline#show_buffers = 0
+    endif
 
     " vim-buffergator {{{2
-    if exists('g:plugs["vim-buffergator"]')
+    if s:is_plugged('vim-buffergator')
         let g:buffergator_autoexpand_on_split = 0
         let g:buffergator_suppress_keymaps = 1
         let g:buffergator_viewport_split_policy = 'R'
@@ -609,7 +587,7 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
     endif
 
     " vim-easymotion {{{2
-    if exists('g:plugs["vim-easymotion"]')
+    if s:is_plugged('vim-easymotion')
         let g:EasyMotion_do_mapping = 0 " Disable default mappings
 
         " Jump to anywhere you want with minimal keystrokes, with just one key binding.
@@ -628,23 +606,23 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim'))
         map <Leader>k <Plug>(easymotion-k)
     endif
 
-    " vim-expand-region {{{2
-    if exists('g:plugs["vim-expand-region"]')
-        vmap v <Plug>(expand_region_expand)
-        vmap <C-v> <Plug>(expand_region_shrink)
-    endif
-
     " vim-markdown {{{2
-    let g:vim_markdown_folding_disabled = 1
+    if s:is_plugged('vim-markdown')
+        let g:vim_markdown_folding_disabled = 1
+    endif
 
     " vdebug {{{2
-    if ! exists('g:vdebug_options')
-        let g:vdebug_options = {}
+    if s:is_plugged('vdebug')
+        if ! exists('g:vdebug_options')
+            let g:vdebug_options = {}
+        endif
+        let g:vdebug_options.break_on_open = 0
     endif
-    let g:vdebug_options.break_on_open = 0
 
     " vimproc.vim {{{2
-    if has('win32')
-        let g:vimproc#download_windows_dll = 1
+    if s:is_plugged('vimproc.vim')
+        if has('win32')
+            let g:vimproc#download_windows_dll = 1
+        endif
     endif
 endif
