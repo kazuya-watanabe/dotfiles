@@ -1,4 +1,5 @@
 if exists(':CocInstall')
+    echomsg 'Installing coc extensions. Please wait a moment.'
     CocInstall -sync
                 \ coc-css
                 \ coc-highlight
