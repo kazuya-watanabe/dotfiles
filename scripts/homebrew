@@ -7,18 +7,12 @@ HOMEBREW_PREFIX=${HOMEBREW_PREFIX:=/opt/homebrew}
 test -r $(dirname $0)/subr.sh && source $(dirname $0)/subr.sh
 
 function print_usage() {
-    echo "使い方: $0 {install|update}" 1>&2
+    echo "Usage: $0 {install|update}" 1>&2
 }
 
 function setup_brew() {
     if ! which brew >/dev/null 2>&1; then
         if [ ! -d $HOMEBREW_PREFIX ]; then
-            read -p "ディレクトリ $HOMEBREW_PREFIX を作成します。 [Y/n]: " ans
-            if ! checkyesno ${ans:-Y}; then
-                warn '中断しました。'
-                exit 1
-            fi
-
             sudo mkdir -p $HOMEBREW_PREFIX
             sudo chown -R $(id -un):$(id -gn) $HOMEBREW_PREFIX
         fi

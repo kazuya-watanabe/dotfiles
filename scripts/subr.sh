@@ -71,18 +71,3 @@ function getpython() {
     fi
     return 0
 }
-
-function relpath() {
-    tgt="$1"
-    ref="$2"
-
-    py=$(getpython)
-
-    if [ -z "$py" ]; then
-        echo $1
-        return 0
-    fi
-
-    echo $($py -c "import os; print(os.path.relpath(\"$tgt\", \"$ref\"))")
-    return 0
-}

@@ -28,9 +28,15 @@ if [ $(uname) = Darwin ]; then
     export COPY_EXTENDED_ATTRIBUTES_DISABLE=1
     export COPYFILE_DISABLE=1
 
-    export HOMEBREW_PREFIX=/opt/homebrew
-    export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f
-    PATH=$HOMEBREW_PREFIX/bin:$PATH
+    if [ -d $HOMEBREW_PREFIX ]; then
+        export HOMEBREW_PREFIX=/opt/homebrew
+        export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f
+
+        if [ -d $HOMEBREW_PREFIX/opt/llvm/bin ]; then
+            PATH=$HOMEBREW_PREFIX/opt/llvm/bin:$PATH
+        fi
+        PATH=$HOMEBREW_PREFIX/bin:$PATH
+    fi
 
     export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 
