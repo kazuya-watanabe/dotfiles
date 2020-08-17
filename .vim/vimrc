@@ -316,7 +316,7 @@ if ! filereadable(expand(s:user_dir . '/autoload/plug.vim')) && executable('curl
 endif
 
 if filereadable(expand(s:user_dir . '/autoload/plug.vim')) " {{{2
-    function! s:is_plugged(name) " {{{2
+    function! s:is_plugged(name)
         return exists('g:plugs') && has_key(g:plugs, a:name) && has_key(g:plugs[a:name], 'dir')
                     \ ? isdirectory(g:plugs[a:name]['dir'])
                     \ : 0
@@ -549,7 +549,8 @@ if filereadable(expand(s:user_dir . '/autoload/plug.vim')) " {{{2
 
     " nerdtree {{{2
     if s:is_plugged('nerdtree')
-        nnoremap <Leader>n :Cd<CR>:NERDTreeCWD<CR>
+        nnoremap <Leader>n :NERDTreeToggle<CR>
+        nnoremap <Leader>N :Cd<CR>:NERDTreeCWD<CR>
         let NERDTreeBookmarksFile = s:user_dir . '/NERDTreeBookmarks'
     endif
 
