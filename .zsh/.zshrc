@@ -1,6 +1,6 @@
 # zplug {{{1
 export ZPLUG_HOME=~/.zplug
-if [ ! -d ~/.zplug -a type git >/dev/null 2>&1 ]; then
+if test ! -d ~/.zplug && type git >/dev/null 2>&1; then
     git clone https://github.com/zplug/zplug $ZPLUG_HOME
 fi
 
