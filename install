@@ -7,26 +7,44 @@ test -r $basedir/scripts/subr.sh && source $basedir/scripts/subr.sh
 
 pushd $basedir >/dev/null 2>&1
 
-for i in .??*; do
-    test $i = .git && continue
-    test $i = .gitignore && continue
-    test $i = .gitmodules && continue
+function symlink {
+    src=$(pwd)/$1
+    dst=~/$1
 
-    info "Installing ~/$i."
-    if [ -e ~/$i ]; then
-        read -p "Do you want to overwrite the file '~/$i'? [Y/n]: " -a ans
-        if ! checkyesno ${ans:-y}; then
-            info "-- Skipped."
-            continue
-        else
-            mv -f ~/$i ~/$i.$(date +%F)
-            info "-- Backupped."
-        fi
+    if [ -e $dst ]; then
+        bkdir=~/backups.$(date +%Y%m%d-%H%M%S)
+        mkdir -p $bkdir
+        mv -f $dst $bkdir
     fi
 
-    ln -s $(pwd)/$i ~/
-    info "-- Installed."
-done
+    mkdir -p $(dirname $dst)
+    ln -fs $src $dst
+}
+
+symlink .config/coc/ultisnips/all.snippets
+symlink .pip/pip.conf
+symlink .ssh/aws-keypair-1.pem
+symlink .ssh/config
+symlink .ssh/github-keypair-1.pem
+symlink .vim/coc-install.vim
+symlink .vim/coc-settings.json
+symlink .vim/gvimrc
+symlink .vim/vimrc
+symlink .zsh/.zprofile
+symlink .zsh/.zshrc
+symlink .bash_profile
+symlink .bashrc
+symlink .ctags
+symlink .curlrc
+symlink .gitconfig
+symlink .gitignore.global
+symlink .inputrc
+symlink .npmrc
+symlink .profile
+symlink .tigrc
+symlink .tmux.conf
+symlink .wgetrc
+symlink .zshenv
 
 if [ $(uname) = Darwin ]; then
     read -p 'Do you want to install the Homebrew packages? [Y/n]: ' -a ans
