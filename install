@@ -8,13 +8,15 @@ test -r $basedir/scripts/subr.sh && source $basedir/scripts/subr.sh
 pushd $basedir >/dev/null 2>&1
 
 function instdir {
-    dir=$(pwd)/$1
+    dir=~/$1
 
     if [ -h $dir ]; then
-        bkdir=~/backups.$(date +%Y%m%d-%H%M%S)
+        bkdir=~/backups.$(date +%Y%m%d-%H%M)
         mkdir -p $bkdir
         mv -f $dir $bkdir
     fi
+
+    mkdir -p $dir
 }
 
 function symlink {
@@ -22,7 +24,7 @@ function symlink {
     dst=~/$1
 
     if [ -e $dst ]; then
-        bkdir=~/backups.$(date +%Y%m%d-%H%M%S)
+        bkdir=~/backups.$(date +%Y%m%d-%H%M)
         mkdir -p $bkdir
         mv -f $dst $bkdir
     fi
@@ -68,6 +70,10 @@ if [ $(uname) = Darwin ]; then
     if checkyesno ${ans:-y}; then
         $basedir/scripts/homebrew install
     fi
+elif $(uname | grep MINGW >/dev/null 2>&1); then
+    instdir ~/vimfiles
+    rm -fr ~/vimfiles
+    ln -fs ~/.vim ~/vimfiles
 fi
 
 source $basedir/.profile
