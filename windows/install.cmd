@@ -5,6 +5,9 @@ SET TARGETDIR=%~dp0..\
 
 PUSHD "%USERPROFILE%"
 
+MKDIR   .config\coc\ultisnips
+MKLINK  .config\coc\ultisnips\all.snippets "%TARGETDIR%.config\coc\ultisnips\all.snippets"
+
 MKDIR   .pip
 MKLINK  .pip\pip.conf               "%TARGETDIR%.pip\pip.conf"
 
@@ -13,12 +16,12 @@ MKLINK  .ssh\aws-keypair-1.pem      "%TARGETDIR%.ssh\aws-keypair-1.pem"
 MKLINK  .ssh\config                 "%TARGETDIR%.ssh\config"
 MKLINK  .ssh\github-keypair-1.pem   "%TARGETDIR%.ssh\github-keypair-1.pem"
 
-MKDIR   vimfiles
-MKLINK  vimfiles\coc-insall.vim     "%TARGETDIR%.vim\coc-install.vim"
-MKLINK  vimfiles\coc-settings.json  "%TARGETDIR%.vim\coc-settings.json"
-MKLINK  vimfiles\gvimrc             "%TARGETDIR%.vim\gvimrc"
-MKLINK  vimfiles\vimrc              "%TARGETDIR%.vim\vimrc"
-MKLINK  /D  vimfiles  .vim
+MKDIR   .vim
+MKLINK  .vim\coc-insall.vim         "%TARGETDIR%.vim\coc-install.vim"
+MKLINK  .vim\coc-settings.json      "%TARGETDIR%.vim\coc-settings.json"
+MKLINK  .vim\gvimrc                 "%TARGETDIR%.vim\gvimrc"
+MKLINK  .vim\vimrc                  "%TARGETDIR%.vim\vimrc"
+MKLINK  /D vimfiles .vim
 
 MKLINK  .bash_profile               "%TARGETDIR%.bash_profile"
 MKLINK  .bashrc                     "%TARGETDIR%.bashrc"
