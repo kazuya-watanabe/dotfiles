@@ -46,6 +46,7 @@ function install_packages() {
     brew install composer
     brew install coreutils
     brew install ctags
+    brew install dmd
     brew install fasd
     brew install ffmpeg
     brew install fzf
@@ -62,7 +63,6 @@ function install_packages() {
     brew install ruby
     brew install tig
     brew install tmux
-    brew install w3m
     brew install wget
 }
 
