@@ -1,0 +1,78 @@
+" Initializing {{{1
+scriptencoding utf-8
+
+if has('vimscript-4')
+    scriptversion 4
+endif
+
+augroup gvimrc
+    autocmd!
+augroup END
+
+" Interface {{{1
+set linespace=1
+
+set t_vb=
+
+set visualbell
+
+function! s:exists_nerdfonts()
+    return false
+endfunction
+
+" System {{{1
+if has('win32') " {{{2
+    set ambiwidth=single
+
+    set guifont=DejaVuSansMono_NF:h11,Consolas:h11
+    set guifontwide=MS_Gothic:h11
+
+    if has('directx') && &encoding == 'utf-8'
+        set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
+
+        set renderoptions=type:directx
+    endif
+
+    function! s:exists_nerdfonts()
+        return stridx(getfontname(), '_NF') >= 0
+    endfunction
+
+    function! SetupNerdFonts()
+        let g:webdevicons_enable_nerdtree = 1
+        let g:webdevicons_conceal_nerdtree_brackets = 1
+        let g:webdevicons_enable_airline_tabline = 1
+        let g:webdevicons_enable_airline_statusline = 1
+
+        let g:airline_powerline_fonts = 1
+        let g:airline_left_sep = ''
+        let g:airline_left_alt_sep = ''
+        let g:airline_right_sep = ''
+        let g:airline_right_alt_sep = ''
+
+        if ! exists('g:airline_symbols')
+            let g:airline_symbols = {}
+        endif
+        let g:airline_symbols.branch = ''
+        let g:airline_symbols.readonly = ''
+        let g:airline_symbols.linenr = ''
+        let g:airline_symbols.maxlinenr = 'ﬀ'
+        let g:airline_symbols.dirty=''
+
+        let g:airline#extensions#tabline#tabs_label = ''
+    endfunction
+elseif has('gui_gtk2') " {{{2
+    set guifont=Monospace\ 12
+elseif has('macunix') " {{{2
+    set guifont=DejaVuSansMonoNerdFontComplete-Book:h13,Menlo:h13
+    set guifontwide=HiraginoSans-W4:h13
+
+    source $VIMRUNTIME/delmenu.vim
+    set langmenu=none
+    source $VIMRUNTIME/menu.vim
+
+    function! s:exists_nerdfonts()
+        return stridx(getfontname(), 'NerdFont') >= 0
+    endfunction
+endif
+
+autocmd gvimrc GUIEnter * if <SID>exists_nerdfonts() | call SetupNerdFonts() | endif

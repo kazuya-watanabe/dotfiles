@@ -1,0 +1,39 @@
+[branch]
+    autosetuprebase = always
+
+[color]
+    branch = auto
+    diff = auto
+    grep = auto
+    interactive = auto
+    status = auto
+    ui = auto
+
+[core]
+    autocrlf = false
+    excludesFile = ~/.gitignore.global
+    fscache = true
+    ignorecase = false
+    preloadIndex = true
+    quotepath = false
+
+[credential]
+    helper = cache --timeout=86400
+
+[diff]
+    compactionHeuristic = true
+
+[merge]
+    ff = false
+    tool = vimdiff
+
+[pull]
+    ff = only
+    rebase = false
+
+[push]
+    default = current
+
+[user]
+    name = Kazuya Watanabe
+    email = kazuya.watanabe@workram.com

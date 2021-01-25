@@ -1,0 +1,42 @@
+set auto_tag = yes
+set edit_headers = yes
+set editor = "$EDITOR"
+set header_cache = "$HOME/.mutt/cache/header_cache"
+set imap_check_subscribed
+set index_format = '%4C %Z %[%Y-%b-%d %H:%M] %-15.15L %s'
+set mail_check = 120
+set mailcap_path = "$HOME/.mailcap"
+set message_cachedir = "$HOME/.mutt/cache"
+set move = no
+set pager_index_lines = 12
+set send_charset = us-ascii:iso-2022-jp:utf-8
+set sidebar_divider_char = '⎪'
+set sidebar_folder_indent = yes
+set sidebar_format = '%B%?F? [%F]?%* %?N?%N/?%S'
+set sidebar_short_path = yes
+set sidebar_visible = yes
+set sort = threads
+set sort_aux = reverse-last-date-received
+set use_from = yes
+
+source .mutt/gmail.muttrc
+
+my_hdr Return-Path: $from
+
+bind index,pager ,x sidebar-toggle-visible
+bind index,pager \Cn sidebar-next
+bind index,pager \Cp sidebar-prev
+bind index,pager \Co sidebar-open
+bind generic,index,pager \Cb previous-page
+bind attach,index,pager \Cu previous-page
+bind generic,index,pager \Cf next-page
+bind attach,index,pager \Cd next-page
+bind attach,index gg first-entry
+bind pager gg top
+bind attach,index G last-entry
+bind pager G bottom
+bind index,pager R group-reply
+bind pager j  next-line
+bind pager k  previous-line
+
+auto_view text/enriched text/html

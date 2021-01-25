@@ -1,0 +1,608 @@
+" Initializing {{{1
+scriptencoding utf-8
+
+if has('vimscript-4')
+    scriptversion 4
+endif
+
+augroup vimrc
+    autocmd!
+augroup END
+
+filetype plugin indent on
+
+syntax enable
+
+" Japanese {{{1
+if ! has('gui_running')
+    let &termencoding = &encoding
+endif
+
+set encoding=utf-8
+
+set fileencodings=ucs-bom,utf-8
+set fileencodings+=iso-2022-jp-3,iso-2022-jp
+set fileencodings+=euc-jisx0213,euc-jp
+set fileencodings+=cp932,shift_jisx0213,shift_jis
+
+if exists('+spelllang')
+    set spelllang&
+    set spelllang+=cjk
+endif
+
+" System {{{1
+let s:user_dir = '$HOME/.vim'
+
+if has('win32') " {{{2
+    let s:user_dir = '$HOME/vimfiles'
+
+    set ambiwidth=double
+
+    if ! has('gui_running')
+        source $VIMRUNTIME/delmenu.vim
+        set langmenu=none
+        source $VIMRUNTIME/menu.vim
+
+        set t_Co=256
+
+        if exists('+termguicolors')
+            set termguicolors
+        endif
+    endif
+elseif has('macunix') " {{{2
+    if exists('+macmeta')
+        set macmeta
+    endif
+endif
+
+" Interface {{{1
+set clipboard&
+set clipboard+=unnamed
+
+set cmdheight=2
+
+if exists('+diffopt') && v:version > 801
+    set diffopt&
+    set diffopt+=vertical
+endif
+
+set display&
+set display+=lastline
+
+if has('folding')
+    set nofoldenable
+    set foldmethod=marker
+endif
+
+if exists('+guioptions')
+    set guioptions&
+    set guioptions+=c
+    set guioptions-=e
+    set guioptions-=m
+    set guioptions-=T
+    set guioptions+=h
+    set guioptions+=k
+endif
+
+set hidden
+
+set history=10000
+
+set laststatus=2
+
+set lazyredraw
+
+set list
+
+if &encoding == 'utf-8' && ! has('win32')
+    set listchars=tab:›\ ,trail:∙,extends:»,precedes:«
+else
+    set listchars=tab:>\ ,trail:-,extends:>,precedes:<
+endif
+
+set number
+
+if exists('+ruler')
+    set ruler
+endif
+
+set scrolloff=5
+
+set shortmess&
+set shortmess+=acI
+
+set sidescrolloff=5
+
+if exists('+signcolumn')
+    set signcolumn=yes
+    if has("patch-8.1.1564")
+        set signcolumn=number
+    endif
+endif
+
+if exists('+splitbelow')
+    set splitbelow
+endif
+
+if exists('+splitright')
+    set splitright
+endif
+
+if exists('+statusline')
+    set statusline=%<%f\ %m%r%=
+    set statusline+=%{'['..(&fileencoding!=''?&fileencoding:&encoding)..']['..&fileformat..']'}
+    set statusline+=%y\ %p\ %l:%v
+endif
+
+if exists('+tabpagemax')
+    set tabpagemax=50
+endif
+
+if exists('+virtualedit')
+    set virtualedit=block
+endif
+
+set visualbell t_vb=
+
+set whichwrap&
+set whichwrap+=<,>,~,[,]
+
+if exists('+wildmenu')
+    set wildmenu
+endif
+
+" Editing {{{1
+set autoindent
+
+set autoread
+
+set backspace=indent,eol,start
+
+set nobackup
+
+if exists('+completeopt')
+    set completeopt=menu,longest
+endif
+
+set expandtab
+
+set formatoptions&
+set formatoptions-=t
+set formatoptions-=c
+set formatoptions+=jmM
+
+set nrformats&
+set nrformats-=octal
+
+if exists('+smartindent')
+    set smartindent
+endif
+
+set smarttab
+
+set softtabstop=4
+
+set shiftwidth=4
+
+set noswapfile
+
+set tabstop=4
+
+set updatetime=300
+
+if exists('+undofile')
+    let &undodir = expand(s:user_dir..'/undo')
+
+    if exists('*mkdir')
+        call mkdir(&undodir, 'p', '0700')
+    endif
+
+    set undofile
+endif
+
+if exists('+viminfo') && ! has('nvim')
+    let &viminfo = &viminfo..',n'..expand(s:user_dir..'/viminfo')
+endif
+
+set wildmode=list:longest,full
+
+set nowritebackup
+
+" Search {{{1
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+
+    set grepformat&
+    set grepformat+=%f:%l:%c:%m
+elseif executable('ag')
+    set grepprg=ag\ --vimgrep
+
+    set grepformat&
+    set grepformat+=%f:%l:%c:%m
+endif
+
+command! -nargs=+ Grep silent grep! <args> | copen
+
+if exists('+hlsearch')
+    set hlsearch
+endif
+
+set ignorecase
+
+if exists('+incsearch')
+    set incsearch
+endif
+
+set smartcase
+
+" Printing {{{1
+if exists('+printheader')
+    set printheader=%{expand(\"%:t:r\")}%=Page\ %N
+endif
+
+" Keymapping {{{1
+let mapleader = ','
+let maplocalleader = ' '
+
+noremap <F1> <Esc>
+noremap! <F1> <Esc>
+
+noremap <silent> <Esc><Esc> :nohlsearch<CR>
+
+noremap <M-j> <Down>
+noremap! <M-j> <Down>
+noremap <M-k> <Up>
+noremap! <M-k> <Up>
+noremap <M-h> <Left>
+noremap! <M-h> <Left>
+noremap <M-l> <Right>
+noremap! <M-l> <Right>
+
+noremap n nzz
+noremap N Nzz
+
+noremap <silent> <M-t> :tabnew<CR>
+noremap! <silent> <M-t> <Esc>:tabnew<CR>
+noremap <silent> <Tab> :tabnext<CR>
+noremap <silent> <S-Tab> :tabprevious<CR>
+
+noremap <C-w>\| :vsplit<CR>
+noremap <C-w>- :split<CR>
+
+if has('terminal')
+    noremap <silent> <Leader>sh :vsplit +terminal\ ++curwin<CR>
+endif
+
+if exists(':Grep')
+    nnoremap <silent> <Leader>g :execute 'Grep '..expand('<cword>')<CR>
+    vnoremap <silent> <Leader>g "vy:execute 'Grep '..@v<CR>
+endif
+
+" Filetypes {{{1
+augroup vimrc
+    autocmd FileType help,netrw,qf noremap <buffer> q <C-w>c
+    autocmd FileType qf nnoremap <buffer> t <C-w><Enter><C-w>T
+augroup END
+
+" Utilities {{{1
+command! -nargs=? -complete=dir Cd call <SID>change_directory('<args>') " {{{2
+
+function s:change_directory(directory)
+    if a:directory == ''
+        lcd %:p:h
+    else
+        execute('lcd '..a:directory)
+    endif
+endfunction
+
+if has('macunix') && executable('open') " {{{2
+    command! -nargs=1 MacDictLookup call <SID>mac_dict_lookup(expand('<args>'))
+
+    function! s:mac_dict_lookup(word)
+        call system('open '..shellescape('dict://'..a:word))
+    endfunction
+
+    nnoremap <silent> <LocalLeader>d :MacDictLookup <cword><CR>
+    vnoremap <silent> <LocalLeader>d "vy:MacDictLookup <C-r>v<CR>
+endif
+
+" Packages {{{1
+let s:vimplug = expand(s:user_dir..'/autoload/plug.vim')
+
+if filereadable(s:vimplug) " {{{2
+    function! s:is_plugged(name)
+        return exists('g:plugs') && has_key(g:plugs, a:name) && has_key(g:plugs[a:name], 'dir') ? isdirectory(g:plugs[a:name]['dir']) : 0
+    endfunction
+
+    " Plug {{{2
+    call plug#begin(expand(s:user_dir..'/plugged'))
+
+    Plug 'rafi/awesome-vim-colorschemes'
+
+    if executable('yarn')
+        Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+        Plug 'iamcco/markdown-preview.nvim', {'do': 'cd app && yarn install'}
+    endif
+
+    if executable('fzf')
+        Plug 'junegunn/fzf', {'do': './install --all'}
+        Plug 'junegunn/fzf.vim'
+    endif
+
+    Plug 'preservim/nerdcommenter'
+    Plug 'preservim/nerdtree'
+    Plug 'junegunn/vim-plug'
+    Plug 'godlygeek/tabular'
+
+    if executable('ctags') || executable('exctags')
+        Plug 'majutsushi/tagbar'
+    endif
+
+    if ! has('win32') && executable('trans')
+        Plug 'echuraev/translate-shell.vim'
+    endif
+
+    Plug 'mbbill/undotree'
+
+    if executable('git')
+        Plug 'tpope/vim-fugitive'
+        Plug 'junegunn/gv.vim'
+        Plug 'airblade/vim-gitgutter'
+        Plug 'idanarye/vim-merginal'
+    endif
+
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    Plug 'jeetsukumaran/vim-buffergator'
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'tpope/vim-eunuch'
+    Plug 'terryma/vim-expand-region'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-repeat'
+    Plug 'honza/vim-snippets'
+    Plug 'tpope/vim-speeddating'
+    Plug 'tpope/vim-surround'
+    Plug 'dhruvasagar/vim-table-mode'
+
+    if has('python3')
+        Plug 'vim-vdebug/vdebug', {'for': ['php', 'python']}
+    endif
+
+    Plug 'idanarye/vim-vebugger', {'for': ['c', 'cpp', 'java']}
+
+    if has('win32')
+        Plug 'Shougo/vimproc.vim'
+    elseif executable('gmake')
+        Plug 'Shougo/vimproc.vim', {'do': 'gmake'}
+    elseif executable('make')
+        Plug 'Shougo/vimproc.vim', {'do': 'make'}
+    endif
+
+    Plug 'vim-jp/vimdoc-ja'
+
+    call plug#end()
+
+    " colorscheme {{{2
+    if count(getcompletion('', 'color'), 'PaperColor') == 1
+        set background=dark
+        colorscheme PaperColor
+    endif
+
+    " coc.nvim {{{2
+    if <SID>is_plugged('coc.nvim')
+        nmap <silent> [g <Plug>(coc-diagnostic-prev)
+        nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+        nmap <silent> gd <Plug>(coc-definition)
+        nmap <silent> gy <Plug>(coc-type-definition)
+        nmap <silent> gi <Plug>(coc-implementation)
+        nmap <silent> gr <Plug>(coc-references)
+
+        nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+        function! s:show_documentation()
+            if (index(['vim','help'], &filetype) >= 0)
+                execute 'h '..expand('<cword>')
+            elseif (coc#rpc#ready())
+                call CocActionAsync('doHover')
+            else
+                execute '!'..&keywordprg.." "..expand('<cword>')
+            endif
+        endfunction
+
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+
+        nmap <leader>rn <Plug>(coc-rename)
+
+        xmap <leader>f <Plug>(coc-format-selected)
+        nmap <leader>f <Plug>(coc-format-selected)
+
+        xmap <leader>a <Plug>(coc-codeaction-selected)
+        nmap <leader>a <Plug>(coc-codeaction-selected)
+
+        nmap <leader>ac <Plug>(coc-codeaction)
+        nmap <leader>qf <Plug>(coc-fix-current)
+
+        xmap if <Plug>(coc-funcobj-i)
+        omap if <Plug>(coc-funcobj-i)
+        xmap af <Plug>(coc-funcobj-a)
+        omap af <Plug>(coc-funcobj-a)
+        xmap ic <Plug>(coc-classobj-i)
+        omap ic <Plug>(coc-classobj-i)
+        xmap ac <Plug>(coc-classobj-a)
+        omap ac <Plug>(coc-classobj-a)
+
+        nnoremap <nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+        nnoremap <nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+        inoremap <nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+        inoremap <nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+
+        nmap <silent> <C-s> <Plug>(coc-range-select)
+        xmap <silent> <C-s> <Plug>(coc-range-select)
+
+        command! -nargs=0 Format :call CocAction('format')
+        command! -nargs=? Fold :call CocAction('fold', <f-args>)
+        command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+        nnoremap <silent><nowait> <LocalLeader>a :<C-u>CocList diagnostics<cr>
+        nnoremap <silent><nowait> <LocalLeader>e :<C-u>CocList extensions<cr>
+        nnoremap <silent><nowait> <LocalLeader>c :<C-u>CocList commands<cr>
+        nnoremap <silent><nowait> <LocalLeader>t :<C-u>CocList outline<cr>
+        nnoremap <silent><nowait> <LocalLeader>s :<C-u>CocList -I symbols<cr>
+        nnoremap <silent><nowait> <LocalLeader>j :<C-u>CocNext<CR>
+        nnoremap <silent><nowait> <LocalLeader>k :<C-u>CocPrev<CR>
+        nnoremap <silent><nowait> <LocalLeader>p :<C-u>CocListResume<CR>
+
+        inoremap <silent><expr> <TAB>
+                    \ pumvisible() ? coc#_select_confirm() :
+                    \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+                    \ <SID>check_back_space() ? "\<TAB>" :
+                    \ coc#refresh()
+
+        function! s:check_back_space() abort
+            let col = col('.') - 1
+            return !col || getline('.')[col - 1]  =~# '\s'
+        endfunction
+
+        let g:coc_snippet_next = '<tab>'
+    endif
+
+    " fzf.vim {{{2
+    if <SID>is_plugged('fzf.vim')
+        nnoremap <silent> <LocalLeader>b :Buffers<CR>
+        nnoremap <silent> <LocalLeader>f :Files<CR>
+        nnoremap <silent> <LocalLeader>h :History<CR>
+        nnoremap <silent> <LocalLeader>l :BLines<CR>
+    endif
+
+    " markdown-preview.nvim {{{2
+    if <SID>is_plugged('markdown-preview.nvim')
+        let g:mkdp_auto_start = 1
+        let g:mkdp_preview_options = {'sync_scroll_type': 'relative'}
+        let g:mkdp_page_title = '${name}'
+    endif
+
+    " nerdtree {{{2
+    if <SID>is_plugged('nerdtree')
+        noremap <silent> <Leader>x :NERDTreeVCS<CR>
+        let NERDTreeQuitOnOpen = 3
+        let NERDTreeShowHidden = 1
+        let NERDTreeIgnore = ['^\.git$', '^node_modules$']
+    endif
+
+    " tagbar {{{2
+    if <SID>is_plugged('tagbar')
+        if executable('exctags')
+            let g:tagbar_ctags_bin = 'exctags'
+        elseif executable('ctags')
+            let g:tagbar_ctags_bin = 'ctags'
+        endif
+        let g:tagbar_autofocus = 1
+
+        nnoremap <silent> <Leader>t :TagbarOpen j<CR>
+    endif
+
+    " translate-shell.vim {{{2
+    if <SID>is_plugged('translate-shell.vim')
+        let g:trans_default_direction = ':ja'
+        let g:trans_advanced_options = '-brief'
+        let g:trans_join_lines = 1
+
+        nnoremap <silent> <LocalLeader>t :Trans<CR>
+        vnoremap <silent> <LocalLeader>t :Trans<CR>
+    endif
+
+    " undotree {{{2
+    if <SID>is_plugged('undotree')
+        let g:undotree_WindowLayout = 3
+        let g:undotree_SetFocusWhenToggle = 1
+        let g:undotree_ShortIndicators = 1
+
+        nnoremap <silent> <Leader>u :UndotreeShow<CR>
+    endif
+
+    " vim-airline {{{2
+    if <SID>is_plugged('vim-airline')
+        let g:airline#extensions#tabline#enabled = 1
+        let g:airline#extensions#tabline#show_buffers = 0
+    endif
+
+    " vim-buffergator {{{2
+    if <SID>is_plugged('vim-buffergator')
+        let g:buffergator_autoexpand_on_split = 0
+        let g:buffergator_suppress_keymaps = 1
+        let g:buffergator_viewport_split_policy = 'R'
+
+        nnoremap <Leader>b :BuffergatorOpen<CR>
+    endif
+
+    " vim-devicons {{{2
+    function! SetupNerdFonts()
+        let g:webdevicons_enable_nerdtree = 1
+        let g:webdevicons_conceal_nerdtree_brackets = 1
+        let g:webdevicons_enable_airline_tabline = 1
+        let g:webdevicons_enable_airline_statusline = 1
+
+        let g:airline_powerline_fonts = 1
+        let g:airline_left_sep = ''
+        let g:airline_left_alt_sep = ''
+        let g:airline_right_sep = ''
+        let g:airline_right_alt_sep = ''
+
+        if ! exists('g:airline_symbols')
+            let g:airline_symbols = {}
+        endif
+        let g:airline_symbols.branch = ''
+        let g:airline_symbols.readonly = ''
+        let g:airline_symbols.linenr = ''
+        let g:airline_symbols.maxlinenr = 'ﬀ'
+        let g:airline_symbols.dirty=''
+
+        let g:airline#extensions#tabline#tabs_label = ''
+    endfunction
+
+    if <SID>is_plugged('vim-devicons')
+        if exists('$NERDFONTS') && $NERDFONTS
+            call SetupNerdFonts()
+        elseif ! has('gui')
+            let g:webdevicons_enable = 0
+        endif
+    endif
+
+    " vim-markdown {{{2
+    if <SID>is_plugged('vim-markdown')
+        let g:vim_markdown_folding_disabled = 1
+    endif
+
+    " vim-polyglot {{{2
+    if <SID>is_plugged('vim-polyglot')
+        autocmd vimrc BufRead,BufNewFile *.json set filetype=json5
+    endif
+
+    " vim-table-mode {{{2
+    if <SID>is_plugged('vim-table-mode')
+        function! s:isAtStartOfLine(mapping)
+            let text_before_cursor = getline('.')[0 : col('.')-1]
+            let mapping_pattern = '\V'..escape(a:mapping, '\')
+            let comment_pattern = '\V'..escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+            return (text_before_cursor =~? '^'..('\v('..comment_pattern..'\v)?')..'\s*\v'..mapping_pattern..'\v$')
+        endfunction
+
+        inoreabbrev <expr> <Bar><Bar> <SID>isAtStartOfLine('\|\|') ? '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+        inoreabbrev <expr> __ <SID>isAtStartOfLine('__') ? '<c-o>:silent! TableModeDisable<cr>' : '__'
+    endif
+
+    " vdebug {{{2
+    if <SID>is_plugged('vdebug')
+        if ! exists('g:vdebug_options')
+            let g:vdebug_options = {}
+        endif
+        let g:vdebug_options.break_on_open = 0
+    endif
+
+    " vimproc.vim {{{2
+    if <SID>is_plugged('vimproc.vim') && has('win32')
+        let g:vimproc#download_windows_dll = 1
+    endif
+endif

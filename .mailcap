@@ -1,0 +1,4 @@
+text/html; w3m -I %{charset} -T text/html ; copiousoutput
+text/markdown; pandoc -o - %s -t html ; x-htmloutput
+application/pdf; pdftohtml -stdout %s ; x-htmloutput
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; pandoc -f docx -t html -o - %s; x-htmloutput

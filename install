@@ -1,0 +1,498 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Global variables {{{1
+
+# Script version
+readonly VERSION=0.1.0
+
+# List of required tools
+readonly REQUIRED_TOOLS=(dirname)
+
+# Script name
+readonly SCRIPT_NAME="${0##*/}"
+readonly SCRIPT_DIR="$(pushd $(dirname $0) >/dev/null && pwd && popd >/dev/null)"
+
+# Script configurations
+log_warn=${log_warn:=yes}
+log_info=${log_info:=yes}
+log_debug=${log_debug:=no}
+
+backupdir="$SCRIPT_DIR/backup/$(date +%Y%m%d-%H%M%S)"
+
+# List data
+dotfiles=$(cat <<END
+    .aws/config
+    .bash_profile
+    .bashrc
+    .ctags
+    .curlrc
+    .gitconfig
+    .gitignore.global
+    .inputrc
+    .mailcap
+    .mutt/muttrc
+    .npmrc
+    .pip/pip.conf
+    .profile
+    .tigrc
+    .tmux.conf
+    .vim/after/plugin/speeddating.vim
+    .vim/coc-settings.json
+    .vim/gvimrc
+    .vim/vimrc
+    .w3m/config
+    .w3m/keymap
+    .wgetrc
+    .zsh/.zprofile
+    .zsh/.zshrc
+    .zsh/prompt.zsh
+    .zsh/prompt-nerdfonts.zsh
+    .zshenv
+END
+)
+
+ubuntu_packages=$(cat <<END
+    clangd
+    cmake
+    colordiff
+    composer
+    default-jdk
+    docker
+    fasd
+    fd-find
+    ffmpeg
+    fzf
+    golang
+    jq
+    llvm
+    locales-all
+    mutt
+    neovim
+    npm
+    p7zip
+    pandoc
+    php-xml
+    poppler-utils
+    python3-pip
+    ripgrep
+    tig
+    translate-shell
+    universal-ctags
+    vifm
+    w3m
+    zplug
+END
+)
+
+homebrew_caskpackages=$(cat <<END
+    1password
+    acronis-true-image
+    adguard
+    cloudmounter
+    drawio
+    firefox
+    font-dejavu-sans-mono-nerd-font
+    gimp
+    google-chrome
+    inkscape
+    karabiner-elements
+    macvim
+    microsoft-office
+    skype
+END
+)
+
+homebrew_packages=$(cat <<END
+    aria2
+    cmake
+    colordiff
+    composer
+    coreutils
+    ctags
+    dmd
+    docker
+    docker-compose
+    fasd
+    fd
+    ffmpeg
+    fzf
+    gawk
+    git
+    go
+    imagemagick
+    jq
+    lesspipe
+    llvm
+    mutt
+    npm
+    nvim
+    openjdk
+    p7zip
+    pandoc
+    poppler
+    pygments
+    ripgrep
+    ruby
+    tig
+    tmux
+    translate-shell
+    vifm
+    w3m
+    wget
+    zplug
+END
+)
+
+python_packages=$(cat <<END
+    autopep8
+    pylint
+    neovim
+    virtualenv
+END
+)
+
+nodejs_packages=$(cat <<END
+    eslint
+    neovim
+    yarn
+END
+)
+
+php_packages=$(cat <<END
+END
+)
+
+# Common functions {{{1
+function checkyesno() {
+    case "$1" in
+        [Yy][Ee][Ss]|[Tt][Rr][Uu][Ee]|[Oo][Nn]|[Yy])
+            return 0
+            ;;
+        [Nn][Oo]|[Ff][Aa][Ll][Ss][Ee]|[Oo][Ff][Ff]|[Nn])
+            return 1
+            ;;
+        '')
+            return 2
+            ;;
+        *)
+            return 3
+            ;;
+    esac
+}
+
+function send_logger() {
+    pri=$1
+    shift
+    if type logger >/dev/null 2>&1; then
+        logger -p $pri "$*"
+    fi
+}
+
+function err() {
+    send_logger user.err "ERROR: $*"
+    echo 1>&2 "ERROR: $*"
+    return 0
+}
+
+function warn() {
+    if checkyesno $log_warn; then
+        send_logger user.warn "WARN: $*"
+        echo 1>&2 "WARN: $*"
+    fi
+    return 0
+}
+
+function info() {
+    if checkyesno $log_info; then
+        send_logger user.info "INFO: $*"
+        echo "INFO: $*"
+    fi
+    return 0
+}
+
+function debug() {
+    if checkyesno $log_debug; then
+        send_logger user.debug "DEBUG: $*"
+        echo 1>&2 "DEBUG: $*"
+    fi
+    return 0
+}
+
+function required {
+    local e=0
+    for tool in "$@"; do
+        if ! type $tool >/dev/null 2>&1; then
+            e=1
+            err "$tool is required for running this script. Please install $tool and try again."
+        fi
+    done
+    [[ $e < 1 ]] || exit 2
+}
+
+# Script functions {{{1
+function show_help() {
+    cat <<END
+USAGE:
+  $SCRIPT_NAME [options]
+
+OPTIONS:
+  -d    install dotfiles
+  -u    install ubuntu packages
+  -b    install homebrew packages
+  -p    install python3 packages
+  -n    install nodejs packages
+  -P    install php packages
+  -t    install tmux plugins
+  -V    install vim plugins
+  -h    display detailed help
+  -v    print version information
+
+END
+    exit 1
+}
+
+function show_version() {
+    echo "$SCRIPT_NAME version $VERSION"
+    exit 2
+}
+
+function install_dotfiles() {
+    info "Installing dotfiles."
+    required mkdir mv ln
+    for i in $dotfiles; do
+        local src="$SCRIPT_DIR/$i"
+        local dst="$HOME/$i"
+
+        if [ -L "$dst" -a "$(readlink "$dst")" = "$src" ]; then
+            rm -f "$dst"
+        fi
+        if [ -e "$dst" -o -L "$dst" ]; then
+            mkdir -p "$backupdir/$(dirname $i)"
+            mv -fv "$dst" "$backupdir/$(dirname $i)"
+        fi
+
+        subdir=$(dirname $dst)
+        mkdir -pv "$subdir"
+        ln -fsv "$src" "$dst"
+
+        if [ "$i" = '.vim/vimrc' ]; then
+            if [ -L "$HOME/.config/nvim" -a $(readlink "$HOME/.config/nvim") = "$HOME/.vim" ]; then
+                rm -f "$HOME/.config/nvim"
+            fi
+            if [ -e "$HOME/.config/nvim" -o -d "$HOME/.config/nvim" ]; then
+                mkdir -p "$backupdir/.config"
+                mv -fv "$HOME/.config/nvim" "$backupdir/.config/nvim"
+            fi
+
+            if [ -L "$HOME/.vim/init.vim" -a $(readlink "$HOME/.vim/init.vim") = "$HOME/.vim/vimrc" ]; then
+                rm -f "$HOME/.vim/init.vim"
+            fi
+            if [ -e "$HOME/.vim/init.vim" ]; then
+                mkdir -p "$backupdir/.vim"
+                mv -fv "$HOME/.vim/init.vim" "$backupdir/.vim/init.vim"
+            fi
+
+            mkdir -pv "$HOME/.config"
+            ln -fsv "$HOME/.vim" "$HOME/.config/nvim"
+            ln -fsv "$HOME/.vim/vimrc" "$HOME/.vim/init.vim"
+        fi
+    done
+    case $(uname) in
+        MSYS* | MINGW* | CYGWIN* )
+            if [ -L "$HOME/vimfiles" ]; then
+                rm -f "$HOME/vimfiles"
+            elif [ -d "$HOME/vimfiles" ]; then
+                mv -f "$HOME/vimfiles" "$HOME/vimfiles.bak"
+            fi
+            ln -s "$HOME/.vim" "$HOME/vimfiles"
+            ;;
+    esac
+    info "    done."
+}
+
+function install_ubuntu() {
+    info "Installing ubuntu packages."
+    required sudo apt-get
+    sudo apt-get update
+    sudo apt-get install $ubuntu_packages
+    info "    done."
+}
+
+function install_homebrew() {
+    if ! type brew >/dev/null 2>&1; then
+        info 'Installing homebrew.'
+        required git xcodebuild xcode-select
+        bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+        info '    done.'
+    fi
+
+    info 'Installing homebrew packages.'
+    required sudo brew
+    brew tap homebrew/cask
+    brew tap homebrew/cask-fonts
+    for i in $homebrew_caskpackages; do
+        brew install --cask $i
+    done
+    for i in $homebrew_packages; do
+        brew install $i
+    done
+    info '    done.'
+}
+
+function install_python3() {
+    info 'Installing python3 packages.'
+    required pip3
+    for i in $python_packages; do
+        pip3 install --user $i
+    done
+    info '    done.'
+}
+
+function install_nodejs() {
+    info 'Installing nodejs packages.'
+    required npm
+    for i in $nodejs_packages; do
+        npm install -g $i
+    done
+    info '    done.'
+}
+
+function install_php() {
+    info 'Installing php packages.'
+    required composer
+    for i in $php_packages; do
+        composer global require $i
+    done
+    info '    done.'
+}
+
+function install_tmux() {
+    if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
+        info 'Installing tpm.'
+        required git
+        git clone https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
+        info '    done.'
+    fi
+
+    info 'Installing tmux packages.'
+    "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+    info '    done.'
+}
+
+function install_vim() {
+    if [ ! -e "$HOME/.vim/autoload/plug.vim" ]; then
+        info 'Installing vim-plug.'
+        required curl
+        curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        info '    done.'
+    fi
+
+    info 'Installing vim plugins.'
+    vim -S "$SCRIPT_DIR/.vim/install-vimplugins.vim"
+    vim -S "$SCRIPT_DIR/.vim/install-cocextensions.vim"
+    info '    done.'
+}
+
+# Main function {{{1
+function main() {
+    # Required tools
+    required $REQUIRED_TOOLS
+
+    # Local variables
+    local optdotfiles=false
+    local optubntu=false
+    local opthomebrew=false
+    local optpython3=false
+    local optnodejs=false
+    local optphp=false
+    local opttmux=false
+    local optvim=false
+    local useopt=false
+
+    # Parse options
+    while getopts dubpnPtVhv opt; do
+        case $opt in
+            d)
+                optdotfiles=true
+                useopt=true
+                ;;
+            u)
+                optubuntu=true
+                useopt=true
+                ;;
+            b)
+                opthomebrew=true
+                useopt=true
+                ;;
+            p)
+                optpython3=true
+                useopt=true
+                ;;
+            n)
+                optnodejs=true
+                useopt=true
+                ;;
+            P)
+                optphp=true
+                useopt=true
+                ;;
+            t)
+                opttmux=true
+                useopt=true
+                ;;
+            V)
+                optvim=true
+                useopt=true
+                ;;
+            v)
+                show_version
+                ;;
+            h | ?)
+                show_help
+                ;;
+        esac
+    done
+    shift $(($OPTIND -1))
+
+    if ! checkyesno $useopt; then
+        optdotfiles=true
+        optubuntu=true
+        opthomebrew=true
+        optpython3=true
+        optnodejs=true
+        optphp=true
+        opttmux=true
+        optvim=true
+    fi
+
+    # dotfiles
+    if checkyesno $optdotfiles; then
+        install_dotfiles
+        source "$HOME/.profile"
+    fi
+
+    # ubuntu
+    checkyesno $optubuntu && type apt-get >/dev/null 2>&1 && install_ubuntu
+
+    # homebrew
+    checkyesno $opthomebrew && test $(uname) = Darwin && install_homebrew
+
+    # python3
+    checkyesno $optpython3 && type python3 >/dev/null 2>&1 && install_python3
+
+    # nodejs
+    checkyesno $optnodejs && type node >/dev/null 2>&1 && install_nodejs
+
+    # php
+    checkyesno $optphp && type php >/dev/null 2>&1 && install_php
+
+    # tmux
+    checkyesno $opttmux && type tmux >/dev/null 2>&1 && install_tmux
+
+    # vim
+    checkyesno $optvim && type vim >/dev/null 2>&1 && install_vim
+}
+
+main "$@"
