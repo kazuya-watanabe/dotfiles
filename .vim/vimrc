@@ -166,6 +166,8 @@ endif
 
 set expandtab
 
+set fileformats=unix,dos
+
 set formatoptions&
 set formatoptions-=t
 set formatoptions-=c

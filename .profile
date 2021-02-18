@@ -50,8 +50,8 @@ if [ $(uname) = Darwin ]; then
     export COPYFILE_DISABLE=1
     export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
     export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
-    export HOMEBREW_GITHUB_API_TOKEN=4f533f43c271368630b1616e27ac7b199192966f
-    PATH=/usr/local/opt/llvm/bin:/usr/local/opt/ruby/bin:$PATH
+    export HOMEBREW_GITHUB_API_TOKEN=0829119282e606df8c3b0fe8e59ce8705cd4e4e6
+    export PATH=/usr/local/opt/llvm/bin:/usr/local/opt/ruby/bin:$PATH
     stty discard undef
 fi
 
