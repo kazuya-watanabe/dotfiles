@@ -18,7 +18,7 @@
     quotepath = false
 
 [credential]
-    helper = cache --timeout=86400
+	helper = manager-core
 
 [diff]
     compactionHeuristic = true

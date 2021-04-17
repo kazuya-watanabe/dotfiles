@@ -7,7 +7,6 @@ if exists(':CocInstall')
                 \ coc-html
                 \ coc-json
                 \ coc-markdownlint
-                \ coc-perl
                 \ coc-sh
                 \ coc-snippets
                 \ coc-sql
@@ -19,6 +18,12 @@ if exists(':CocInstall')
                 \ coc-yaml
     redraw
     quit
+
+    if executable('bash')
+        CocInstall -sync coc-sh
+        redraw
+        quit
+    endif
 
     if executable('clangd')
         CocInstall -sync coc-clangd
@@ -38,20 +43,26 @@ if exists(':CocInstall')
         quit
     endif
 
+    if executable('perl')
+        CocInstall -sync coc-perl
+        redraw
+        quit
+    endif
+
     if executable('php')
         CocInstall -sync coc-phpls
         redraw
         quit
     endif
 
-    if executable('python') || executable('python3')
-        CocInstall -sync coc-python
+    if executable('pwsh') || executable('powershell')
+        CocInstall -sync coc-powershell
         redraw
         quit
     endif
 
-    if executable('bash')
-        CocInstall -sync coc-sh
+    if executable('python') || executable('python3')
+        CocInstall -sync coc-python
         redraw
         quit
     endif
