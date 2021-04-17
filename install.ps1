@@ -1,21 +1,4 @@
 $ScriptDir = Split-Path $MyInvocation.MyCommand.Path -Parent
-Push-Location -Path $ScriptDir
-
-$env:DOCKER_HOST = 'tcp://nas40a97e.local:2376'
-[System.Environment]::SetEnvironmentVariable('DOCKER_HOST', $env:DOCKER_HOST, 'User')
-
-$env:DOCKER_TLS_VERIFY = 1
-[System.Environment]::SetEnvironmentVariable('DOCKER_TLS_VERIFY', $env:DOCKER_TLS_VERIFY, 'User')
-
-$env:MSYS = 'winsymlinks:nativestrict'
-[System.Environment]::SetEnvironmentVariable('MSYS', $env:MSYS, 'User')
-
-$env:PYTHONUSERBASE = '%USERPROFILE%\.local'
-[System.Environment]::SetEnvironmentVariable('PYTHONUSERBASE', $env:PYTHONUSERBASE, 'User')
-
-$USER_PATH = [System.Environment]::GetEnvironmentVariable('PATH', 'User')
-$USER_PATH = ";" + $env:USERPROFILE + ".\.npm"
-[System.Environment]::SetEnvironmentVariable('PATH', $USER_PATH, 'User')
 
 scoop bucket add extras
 scoop bucket add java
@@ -44,26 +27,23 @@ scoop install python
 scoop install ripgrep
 scoop install unzip
 scoop install vim
-scoop install windows-terminal
 scoop install zip
 
-$BASH = scoop prefix git
-$BASH += "\bin\bash.exe ./install -d"
-Invoke-Expression -Command $bash
+python3 -m pip install autopep8
+python3 -m pip install pylint
 
-pip3 install autopep8
-pip3 install pylint
-pip3 install virtualenv
-
-mkdir $env:USERPROFILE\.npm
-$env:PATH += ';'
-$env:PATH += $env:USERPROFILE + ".\.npm"
 npm install -g eslint
 npm install -g yarn
 
-mkdir $env:USERPROFILE\vimfiles\autoload
+New-Item -ItemType Directory -Path $env:USERPROFILE\vimfiles\autoload
 Invoke-WebRequest -Uri https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -OutFile $env:USERPROFILE\vimfiles\autoload\plug.vim
-vim -S .vim\install-vimplugins.vim
-vim -S .vim\install-cocextensions.vim
+New-Item -ItemType Junction -Path $env:USERPROFILE\vimfiles\after -Value $ScriptDir\.vim\after
+New-Item -ItemType Junction -Path $env:USERPROFILE\vimfiles\UltiSnips -Value $ScriptDir\.vim\UltiSnips
+New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\coc-settings.json -Value $ScriptDir\.vim\coc-settings.json
+New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\gvimrc -Value $ScriptDir\.vim\gvimrc
+New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\vimrc -Value $ScriptDir\.vim\vimrc
+New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitconfig -Value $ScriptDir\.gitconfig
+New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitignore.global -Value $ScriptDir\.gitignore.global
 
-Pop-Location
+vim -S $ScriptDir\.vim\install-vimplugins.vim
+vim -S $ScriptDir\.vim\install-cocextensions.vim

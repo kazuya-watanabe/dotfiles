@@ -53,39 +53,6 @@ dotfiles=$(cat <<END
 END
 )
 
-ubuntu_packages=$(cat <<END
-    clangd
-    cmake
-    colordiff
-    composer
-    default-jdk
-    docker
-    fasd
-    fd-find
-    ffmpeg
-    fzf
-    golang
-    jq
-    llvm
-    locales-all
-    mutt
-    neovim
-    npm
-    p7zip
-    pandoc
-    php-xml
-    poppler-utils
-    python3-pip
-    ripgrep
-    tig
-    translate-shell
-    universal-ctags
-    vifm
-    w3m
-    zplug
-END
-)
-
 homebrew_caskpackages=$(cat <<END
     1password
     acronis-true-image
@@ -127,7 +94,6 @@ homebrew_packages=$(cat <<END
     llvm
     mutt
     npm
-    nvim
     openjdk
     p7zip
     pandoc
@@ -148,14 +114,11 @@ END
 python_packages=$(cat <<END
     autopep8
     pylint
-    neovim
-    virtualenv
 END
 )
 
 nodejs_packages=$(cat <<END
     eslint
-    neovim
     yarn
 END
 )
@@ -239,7 +202,6 @@ USAGE:
 
 OPTIONS:
   -d    install dotfiles
-  -u    install ubuntu packages
   -b    install homebrew packages
   -p    install python3 packages
   -n    install nodejs packages
@@ -309,14 +271,6 @@ function install_dotfiles() {
             ln -s "$HOME/.vim" "$HOME/vimfiles"
             ;;
     esac
-    info "    done."
-}
-
-function install_ubuntu() {
-    info "Installing ubuntu packages."
-    required sudo apt-get
-    sudo apt-get update
-    sudo apt-get install $ubuntu_packages
     info "    done."
 }
 
@@ -402,7 +356,6 @@ function main() {
 
     # Local variables
     local optdotfiles=false
-    local optubntu=false
     local opthomebrew=false
     local optpython3=false
     local optnodejs=false
@@ -412,14 +365,10 @@ function main() {
     local useopt=false
 
     # Parse options
-    while getopts dubpnPtVhv opt; do
+    while getopts dbpnPtVhv opt; do
         case $opt in
             d)
                 optdotfiles=true
-                useopt=true
-                ;;
-            u)
-                optubuntu=true
                 useopt=true
                 ;;
             b)
@@ -458,7 +407,6 @@ function main() {
 
     if ! checkyesno $useopt; then
         optdotfiles=true
-        optubuntu=true
         opthomebrew=true
         optpython3=true
         optnodejs=true
@@ -472,9 +420,6 @@ function main() {
         install_dotfiles
         source "$HOME/.profile"
     fi
-
-    # ubuntu
-    checkyesno $optubuntu && type apt-get >/dev/null 2>&1 && install_ubuntu
 
     # homebrew
     checkyesno $opthomebrew && test $(uname) = Darwin && install_homebrew
