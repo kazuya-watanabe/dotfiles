@@ -35,15 +35,15 @@ python3 -m pip install pylint
 npm install -g eslint
 npm install -g yarn
 
+New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitconfig -Value $ScriptDir\.gitconfig
+New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitignore.global -Value $ScriptDir\.gitignore.global
+
 New-Item -ItemType Directory -Path $env:USERPROFILE\vimfiles\autoload
-Invoke-WebRequest -Uri https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -OutFile $env:USERPROFILE\vimfiles\autoload\plug.vim
 New-Item -ItemType Junction -Path $env:USERPROFILE\vimfiles\after -Value $ScriptDir\.vim\after
 New-Item -ItemType Junction -Path $env:USERPROFILE\vimfiles\UltiSnips -Value $ScriptDir\.vim\UltiSnips
 New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\coc-settings.json -Value $ScriptDir\.vim\coc-settings.json
 New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\gvimrc -Value $ScriptDir\.vim\gvimrc
 New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\vimrc -Value $ScriptDir\.vim\vimrc
-New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitconfig -Value $ScriptDir\.gitconfig
-New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitignore.global -Value $ScriptDir\.gitignore.global
-
+Invoke-WebRequest -Uri https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -OutFile $env:USERPROFILE\vimfiles\autoload\plug.vim
 vim -S $ScriptDir\.vim\install-vimplugins.vim
 vim -S $ScriptDir\.vim\install-cocextensions.vim
