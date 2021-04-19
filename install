@@ -93,6 +93,7 @@ homebrew_packages=$(cat <<END
     lesspipe
     llvm
     mutt
+    neovim
     npm
     openjdk
     p7zip
@@ -113,12 +114,14 @@ END
 
 python_packages=$(cat <<END
     autopep8
+    neovim
     pylint
 END
 )
 
 nodejs_packages=$(cat <<END
     eslint
+    neovim
     yarn
 END
 )
@@ -261,16 +264,6 @@ function install_dotfiles() {
             ln -fsv "$HOME/.vim/vimrc" "$HOME/.vim/init.vim"
         fi
     done
-    case $(uname) in
-        MSYS* | MINGW* | CYGWIN* )
-            if [ -L "$HOME/vimfiles" ]; then
-                rm -f "$HOME/vimfiles"
-            elif [ -d "$HOME/vimfiles" ]; then
-                mv -f "$HOME/vimfiles" "$HOME/vimfiles.bak"
-            fi
-            ln -s "$HOME/.vim" "$HOME/vimfiles"
-            ;;
-    esac
     info "    done."
 }
 
