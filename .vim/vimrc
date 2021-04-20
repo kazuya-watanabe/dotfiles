@@ -267,9 +267,14 @@ noremap <silent> <M-t> :tabnew<CR>
 noremap! <silent> <M-t> <Esc>:tabnew<CR>
 noremap <silent> <Tab> :tabnext<CR>
 noremap <silent> <S-Tab> :tabprevious<CR>
+noremap <silent> <M-w> :tabclose<CR>
+noremap! <silent> <M-w> <Esc>:tabclose<CR>
 
 noremap <C-w>\| :vsplit<CR>
 noremap <C-w>- :split<CR>
+
+cnoremap <C-x> <C-r>=expand('%:p:h')<CR>
+cnoremap <C-z> <C-r>=expand('%:p:r')<CR>
 
 if has('terminal')
     noremap <silent> <Leader>sh :vsplit +terminal\ ++curwin<CR>
