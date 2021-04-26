@@ -38,11 +38,11 @@ if has('win32') " {{{2
 
     set ambiwidth=double
 
-    if ! has('gui_running')
-        source $VIMRUNTIME/delmenu.vim
-        set langmenu=none
-        source $VIMRUNTIME/menu.vim
+    source $VIMRUNTIME/delmenu.vim
+    set langmenu=none
+    source $VIMRUNTIME/menu.vim
 
+    if ! has('gui_running')
         set t_Co=256
 
         if exists('+termguicolors')
@@ -392,7 +392,11 @@ if filereadable(s:vimplug) " {{{2
 
     " colorscheme {{{2
     if count(getcompletion('', 'color'), 'PaperColor') == 1
-        set background=dark
+        if has('gui_running')
+            set background=light
+        else
+            set background=dark
+        endif
         colorscheme PaperColor
     endif
 
@@ -572,7 +576,7 @@ if filereadable(s:vimplug) " {{{2
     if <SID>is_plugged('vim-devicons')
         if exists('$NERDFONTS') && $NERDFONTS
             call SetupNerdFonts()
-        elseif ! has('gui')
+        elseif ! has('gui_running')
             let g:webdevicons_enable = 0
         endif
     endif

@@ -16,55 +16,38 @@ if exists(':CocInstall')
                 \ coc-vimlsp
                 \ coc-xml
                 \ coc-yaml
-    redraw
-    quit
 
     if executable('bash')
         CocInstall -sync coc-sh
-        redraw
-        quit
     endif
 
     if executable('clangd')
         CocInstall -sync coc-clangd
-        redraw
-        quit
     endif
 
     if executable('cmake')
         CocInstall -sync coc-cmake
-        redraw
-        quit
     endif
 
     if executable('java')
         CocInstall -sync coc-java
-        redraw
-        quit
     endif
 
     if executable('perl')
         CocInstall -sync coc-perl
-        redraw
-        quit
     endif
 
     if executable('php')
         CocInstall -sync coc-phpls
-        redraw
-        quit
     endif
 
     if executable('pwsh') || executable('powershell')
         CocInstall -sync coc-powershell
-        redraw
-        quit
     endif
 
     if executable('python') || executable('python3')
-        CocInstall -sync coc-python
-        redraw
-        quit
+        CocInstall -sync coc-pyright
+
     endif
 endif
 quitall
