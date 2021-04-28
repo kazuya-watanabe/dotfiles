@@ -26,6 +26,8 @@ scoop install openjdk
 scoop install php
 scoop install python
 scoop install ripgrep
+scoop install tesseract
+scoop install tesseract-languages
 scoop install unzip
 scoop install vim-nightly
 scoop install zip
@@ -41,18 +43,21 @@ npm install -g eslint
 npm install -g neovim
 npm install -g yarn
 
-New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitconfig -Value $ScriptDir\.gitconfig
-New-Item -ItemType HardLink -Path $env:USERPROFILE\.gitignore.global -Value $ScriptDir\.gitignore.global
+New-Item -ItemType HardLink -Value $ScriptDir\.gitconfig             -Path $env:USERPROFILE\.gitconfig
+New-Item -ItemType HardLink -Value $ScriptDir\.gitignore.global      -Path $env:USERPROFILE\.gitignore.global
 
 New-Item -ItemType Directory -Path $env:USERPROFILE\vimfiles\autoload
-New-Item -ItemType Junction -Path $env:USERPROFILE\vimfiles\after -Value $ScriptDir\.vim\after
-New-Item -ItemType Junction -Path $env:USERPROFILE\vimfiles\UltiSnips -Value $ScriptDir\.vim\UltiSnips
-New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\coc-settings.json -Value $ScriptDir\.vim\coc-settings.json
-New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\gvimrc -Value $ScriptDir\.vim\gvimrc
-New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\vimrc -Value $ScriptDir\.vim\vimrc
+New-Item -ItemType Junction -Value $ScriptDir\.vim\after             -Path $env:USERPROFILE\vimfiles\after
+New-Item -ItemType Junction -Value $ScriptDir\.vim\UltiSnips         -Path $env:USERPROFILE\vimfiles\UltiSnips
+New-Item -ItemType HardLink -Value $ScriptDir\.vim\coc-settings.json -Path $env:USERPROFILE\vimfiles\coc-settings.json
+New-Item -ItemType HardLink -Value $ScriptDir\.vim\gvimrc            -Path $env:USERPROFILE\vimfiles\gvimrc
+New-Item -ItemType HardLink -Value $ScriptDir\.vim\vimrc             -Path $env:USERPROFILE\vimfiles\vimrc
+
 Invoke-WebRequest -Uri https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -OutFile $env:USERPROFILE\vimfiles\autoload\plug.vim
 vim -S $ScriptDir\.vim\install-vimplugins.vim
 vim -S $ScriptDir\.vim\install-cocextensions.vim
 
-New-Item -ItemType Junction -Path $env:LOCALAPPDATA\nvim -Value $env:USERPROFILE\vimfiles
-New-Item -ItemType HardLink -Path $env:USERPROFILE\vimfiles\init.vim -Value $env:USERPROFILE\vimfiles\vimrc
+New-Item -ItemType Junction -Value $env:USERPROFILE\vimfiles         -Path $env:LOCALAPPDATA\nvim
+New-Item -ItemType HardLink -Value $env:USERPROFILE\vimfiles\vimrc   -Path $env:USERPROFILE\vimfiles\init.vim
+
+New-Item -ItemType Junction -Value $ScriptDir\windows\WindowsPowerShell -Path $env:USERPROFILE\Documents\WindowsPowerShell
