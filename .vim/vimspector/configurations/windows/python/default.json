@@ -1,0 +1,22 @@
+{
+  "$schema": "https://puremourning.github.io/vimspector/schema/vimspector.schema.json",
+
+  "configurations": {
+    "Python: Launch": {
+      "adapter": "debugpy",
+      "breakpoints": {
+        "exception": {
+          "caught": "Y",
+          "uncaught": "Y"
+        }
+      },
+      "configuration": {
+        "program": "${file}",
+        "python": "${workspaceRoot}\\.venv\\Scripts\\python.exe",
+        "cwd": "${workspaceRoot}",
+        "type": "python",
+        "request": "launch"
+      }
+    }
+  }
+}

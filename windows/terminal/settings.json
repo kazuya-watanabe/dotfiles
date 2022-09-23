@@ -1,0 +1,38 @@
+{
+  "actions":
+  [
+    {
+      "command": "unbound",
+      "keys": "ctrl+shift+c"
+    },
+    {
+      "command": "unbound",
+      "keys": "ctrl+shift+v"
+    },
+    {
+      "command": "unbound",
+      "keys": "ctrl+c"
+    },
+    {
+      "command": "unbound",
+      "keys": "ctrl+v"
+    }
+  ],
+  "copyFormatting": "none",
+  "copyOnSelect": true,
+  "trimBlockSelection": true,
+  "largePasteWarning": false,
+  "multiLinePasteWarning": false,
+  "profiles": {
+    "defaults": {
+      "bellStyle": "none",
+      "cursorShape": "filledBox",
+      "font": {
+        "face": "Hack Nerd Font Mono",
+        "size": 11
+      },
+      "startingDirectory": "%USERPROFILE%",
+      "suppressApplicationTitle": true
+    }
+  }
+}

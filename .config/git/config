@@ -1,0 +1,58 @@
+[alias]
+	br = branch
+	bra = branch -a
+	ca = commit --amend
+	cc = commit
+	co = checkout
+	cob = checkout -b
+	df = diff
+	ff = flow feature
+	fh = flow hotfix
+	fr = flow release
+	la = log --oneline --decorate --graph --branches --tags --remotes --all
+	pl = pull
+	ps = push
+	st = status
+	stb = status -bs
+
+[branch]
+	autoSetupRebase = always
+
+[core]
+	autocrlf = false
+	editor = vim
+	ignoreCase = false
+	quotePath = false
+
+[credential]
+	helper = manager
+	helper = ~/.dotnet/tools/git-credential-manager
+	helper = /usr/local/share/gcm-core/git-credential-manager
+	helper = cache
+	helper = store --file ~/.config/git/store
+
+[credential "helperselector"]
+	selected = manager
+
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+
+[diff]
+	algorithm = histogram
+
+[fetch]
+	prune = true
+
+[merge]
+	tool = vimdiff
+
+[pull]
+	ff = only
+	rebase = true
+
+[push]
+	default = current
+
+[user]
+	name = Kazuya Watanabe
+	email = kazuya.watanabe@workram.com

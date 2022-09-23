@@ -1,0 +1,13 @@
+set editor-line-number = true
+set ignore-case = true
+set tab-size = 4
+
+bind generic <C-b> move-page-up
+bind generic <C-f> move-page-down
+bind generic G move-last-line
+bind generic g  none
+bind generic gg move-first-line
+bind generic j move-down
+bind generic k move-up
+
+bind main    G move-last-line
