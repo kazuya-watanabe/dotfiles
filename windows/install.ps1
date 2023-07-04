@@ -1,16 +1,3 @@
-function Test-Executable() {
-  Param (
-    [String]
-    $Name
-  )
-
-  Process {
-    Get-Command -Name $Name >$Null 2>&1
-
-    Return $?
-  }
-}
-
 function Set-EnvVar() {
   Param (
     [String]
@@ -24,6 +11,8 @@ function Set-EnvVar() {
   )
 
   Process {
+    Write-Host -Object "env: $Name"
+
     Set-Item -Path Env:\$Name -Value $Value
 
     [System.Environment]::SetEnvironmentVariable($Name, $Value, $Scope)
@@ -55,6 +44,8 @@ function Add-ScoopBucket() {
   )
 
   Process {
+    Write-Host -Object "bucket: $Name"
+
     If (-Not (scoop bucket list).Name.Contains($Name)) {
       scoop bucket add "$Name"
     }
@@ -68,7 +59,9 @@ function Add-ScoopApp() {
   )
 
   Process {
-    if (-Not (scoop info "$Name" | Select-String -Pattern 'Installed')) {
+    Write-Host -Object "app: $Name"
+
+    if (-Not (scoop list).Name.Contains("$Name")) {
       scoop install "$Name"
     }
   }
@@ -77,37 +70,21 @@ function Add-ScoopApp() {
 function Add-PythonModule() {
   Param (
     [String]
-    $Name,
-
-    [String]
-    $BinDir,
-
-    [String]
-    $ExeFile = $Null,
-
-    [String]
-    $VenvsDir = (Join-Path -Path $HOME -ChildPath '.venvs')
+    $Name
   )
 
   Process {
-    New-Item -Force -ItemType Directory -Path $VenvsDir >$Null 2>&1
+    Write-Host -Object "python: $Name"
 
-    $VenvDir = (Join-Path -Path $VenvsDir -ChildPath $Name)
-    $PipPath = (Join-Path -Path $VenvDir -ChildPath 'Scripts\pip3.exe')
-
-    If (-Not (Test-Path -Path $PipPath)) {
-      python3 -m venv $VenvDir
-
-      Start-Process -FilePath $PipPath -ArgumentList 'install',$Name -Wait -WindowStyle Hidden
-
-      If ($ExeFile -Ne $Null) {
-        New-Item -Force -ItemType HardLink -Path (Join-Path -Path $BinDir -ChildPath $ExeFile) -Value (Join-Path -Path $VenvDir -ChildPath $ExeFile) >$Null 2>&1
-      }
+    If (pip3 show "$Name" 2>&1 | Select-String -Pattern 'not found') {
+      pip3 install $Name
     }
   }
 }
 
-If (-Not (Test-Executable -Name 'scoop')) {
+If (-Not (Get-Command -Name 'scoop')) {
+  Write-Host -Object 'scoop'
+
   Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
 }
 
@@ -125,15 +102,20 @@ Add-ScoopBucket -Name 'versions'
 # gui apps
 Add-ScoopApp -Name '7zip'
 Add-ScoopApp -Name 'autohotkey'
+Add-ScoopApp -Name 'ueli'
 Add-ScoopApp -Name 'vim-nightly'
 
 # console utils
 Add-ScoopApp -Name 'bat'
 Add-ScoopApp -Name 'coreutils'
+Add-ScoopApp -Name 'everything-cli'
 Add-ScoopApp -Name 'fd'
 Add-ScoopApp -Name 'fzf'
 Add-ScoopApp -Name 'less'
+Add-ScoopApp -Name 'lsd'
+Add-ScoopApp -Name 'navi'
 Add-ScoopApp -Name 'starship'
+Add-ScoopApp -Name 'tldr'
 Add-ScoopApp -Name 'zoxide'
 
 # compression/archive
@@ -149,6 +131,7 @@ Add-ScoopApp -Name 'curl'
 Add-ScoopApp -Name 'wget'
 
 # text utils
+Add-ScoopApp -Name 'delta'
 Add-ScoopApp -Name 'diffutils'
 Add-ScoopApp -Name 'gawk'
 Add-ScoopApp -Name 'jq'
@@ -169,43 +152,31 @@ Add-ScoopApp -Name 'python'
 
 # development tools
 Add-ScoopApp -Name 'cmake'
+Add-ScoopApp -Name 'composer'
+Add-ScoopApp -Name 'mysql'
+Add-ScoopApp -Name 'postgresql'
+Add-ScoopApp -Name 'redis'
+Add-ScoopApp -Name 'sqlite'
 
-# vim
-Set-EnvVar -Name 'EDITOR' -Value 'vim'
-Set-EnvVar -Name 'VISUAL' -Value 'vim'
+# media
+Add-ScoopApp -Name 'ffmpeg-shared'
+Add-ScoopApp -Name 'imagemagick'
 
 # fzf
-Set-EnvVar -Name 'FZF_DEFAULT_COMMAND' -Value 'powershell.exe -NoLogo -NoProfile -Noninteractive -Command "Get-ChildItem -File -Recurse -Name"'
-Set-EnvVar -Name 'FZF_DEFAULT_OPTS' -Value '--layout=reverse --info=inline --preview-window=hidden'
-
-# less
-Set-EnvVar -Name 'PAGER' -Value 'less'
-Set-EnvVar -Name 'LESS' -Value '-iJMRX'
+Set-EnvVar -Name 'FZF_DEFAULT_COMMAND' -Value 'fd --hidden --follow --type f --exclude .git/'
 
 # node
-Add-Path -Path (Join-Path -Path $HOME -ChildPath .npm)
+Add-Path -Path (Split-Path -Path (npm root -g) -Parent)
 
 # python
 Set-EnvVar -Name 'PYTHONHOME' -Value (scoop prefix python)
-Set-EnvVar -Name 'PYTHONUSERBASE' -Value (Join-Path -Path $HOME -ChildPath '.local')
 
-$BinDir = (Join-Path -Path (Split-Path -Path (python3 -m site --user-site) -Parent) -ChildPath 'Scripts')
-
-New-Item -Force -ItemType Directory -Path $BinDir >$Null 2>&1
-
-Add-Path -Path $BinDir
-
-Add-PythonModule -Name 'pip_search' -BinDir $BinDir -ExeFile 'pip_search.exe'
-Add-PythonModule -Name 'yt-dlp' -BinDir $BinDir -ExeFile 'yt-dlp.exe'
-
-# xdg
-Set-EnvVar -Name 'XDG_CONFIG_HOME' -Value (Join-Path -Path $HOME -ChildPath .config)
-Set-EnvVar -Name 'XDG_CACHE_HOME' -Value (Join-Path -Path $HOME -ChildPath .cache)
-Set-EnvVar -Name 'XDG_DATA_HOME' -Value (Join-Path -Path $HOME -ChildPath '.local\share')
-Set-EnvVar -Name 'XDG_STATE_HOME' -Value (Join-Path -Path $HOME -ChildPath '.local\state')
+Add-PythonModule -Name 'pip3-autoremove'
+Add-PythonModule -Name 'pip_search'
+Add-PythonModule -Name 'httpie'
 
 # dotfiles
-$GitDir = (Join-Path -Path $HOME -ChildPath '.conceal')
+$GitDir = (Join-Path -Path $HOME -ChildPath 'Documents\Conceal')
 
 If (-Not (Test-Path -Path $GitDir)) {
   git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$GitDir"
@@ -216,7 +187,7 @@ If (-Not (Test-Path -Path $GitDir)) {
   Pop-Location
 }
 
-$GitDir = (Join-Path -Path $HOME -ChildPath '.dotfiles')
+$GitDir = (Join-Path -Path $HOME -ChildPath 'Documents\Dotfiles')
 
 If (-Not (Test-Path -Path $GitDir)) {
   git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$GitDir"
@@ -231,7 +202,9 @@ $OriginFile = (Join-Path -Path "$HOME" -ChildPath 'AppData\Local\Packages\Micros
 $PatchFile = (Join-Path -Path $GitDir -ChildPath 'windows\terminal\settings.json')
 $TempFile = 'tmp.json'
 
-jq -as '.[0] * .[1]' "$OriginFile" "$PatchFile" | Out-File -Encoding utf8 -FilePath $TempFile
-
-Copy-Item -Force -Path $TempFile -Destination $OriginFile
-Remove-Item -Force -Path $TempFile
+if (Test-Path -Path $OriginFile)
+{
+  jq -as '.[0] * .[1]' "$OriginFile" "$PatchFile" | Out-File -Encoding utf8 -FilePath $TempFile
+  Copy-Item -Force -Path $TempFile -Destination $OriginFile
+  Remove-Item -Force -Path $TempFile
+}

@@ -18,34 +18,12 @@ Set-PSReadLineKeyHandler -Key Ctrl+m -Function ValidateAndAcceptLine
 Set-PSReadLineKeyHandler -Key Ctrl+l -Function ClearScreen
 Set-PSReadLineKeyHandler -Key Ctrl+[ -Function ViCommandMode
 
-function which() {
-  Param (
-    [String]
-    $Name
-  )
-
-  $Command = Get-Command -Name $Name
-  $Result = $?
-
-  Write-Output ($Name + ": " + $Command.CommandType + " " + $Command.Source)
-
-  return $Result >$Null
-}
-
-If (which('zoxide')) {
-  Invoke-Expression (& {
-    $hook = if ($PSVersionTable.PSVersion.Major -lt 6) { 'prompt' } else { 'pwd' }
-    (zoxide init --hook $hook powershell | Out-String)
-  })
-}
-
 Remove-Item alias:cat
 Remove-Item alias:cp
 Remove-Item alias:curl
 Remove-Item alias:diff -Force
 Remove-Item alias:echo
 Remove-Item alias:ls
-Remove-Item alias:md
 Remove-Item alias:mv
 Remove-Item alias:ps
 Remove-Item alias:pwd
@@ -57,7 +35,46 @@ Remove-Item alias:tee -Force
 Remove-Item alias:type
 Remove-Item alias:wget
 
-function ls() {
+if (Get-Command -Name bat)
+{
+  function cat()
+  {
+    bat.exe $args
+  }
+
+  function less()
+  {
+    bat.exe $args
+  }
+}
+
+if (Get-Command -Name delta)
+{
+  function diff()
+  {
+    delta.exe $args
+  }
+}
+elseif (Get-Command -Name colordiff)
+{
+  function diff()
+  {
+    colordiff.exe $args
+  }
+}
+
+function fd()
+{
+  fd.exe --follow --hidden --exclude .git/ $args
+}
+
+function fda()
+{
+  fd.exe --follow --hidden --no-ignore $args
+}
+
+function ls()
+{
   ls.exe --color=auto --classify --quoting-style=literal --show-control-chars $args
 }
 
@@ -73,7 +90,27 @@ function ll() {
   ls -Al $args
 }
 
-Set-Alias -Name md -Value 'mkdir.exe'
-Set-Alias -Name type -Value which
+If ($Env:WT_SESSION) {
+  $Env:NERDFONT = 1
+
+  if (Get-Command -Name lsd)
+  {
+    function ls()
+    {
+        lsd.exe --color auto --classify --group-directories-first $args
+    }
+  }
+}
+
+function rg()
+{
+  rg.exe --follow --hidden --smart-case $args
+}
+
+function rga()
+{
+  rg.exe --follow --hidden --smart-case --no-ignore $args
+}
 
 Invoke-Expression (&starship init powershell)
+Invoke-Expression (& { (zoxide init powershell | Out-String) })

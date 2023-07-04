@@ -31,6 +31,7 @@
         "face": "Hack Nerd Font Mono",
         "size": 11
       },
+      "opacity": 82,
       "startingDirectory": "%USERPROFILE%",
       "suppressApplicationTitle": true
     }

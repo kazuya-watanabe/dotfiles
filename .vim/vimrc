@@ -1,23 +1,26 @@
 " PREPARATIONS {{{
 scriptencoding utf-8
 
+set encoding=utf-8
+
 augroup vimrc
   autocmd!
-augroup end
+augroup END
 
 syntax enable
 
 filetype plugin indent on
 
-"let g:loaded_2html_plugin = 1
 let g:loaded_getscriptPlugin = 1
 "let g:loaded_gzip = 1
 let g:loaded_logiPat = 1
+let g:loaded_manpager_plugin = 1
 "let g:loaded_matchparen = 1
 let g:loaded_netrwPlugin = 1
 let g:loaded_rrhelper = 1
 let g:loaded_spellfile_plugin = 1
 let g:loaded_tarPlugin = 1
+"let g:loaded_2html_plugin = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_zipPlugin = 1
 " }}}
@@ -46,7 +49,6 @@ set belloff=all
 set cmdheight=2
 set display=lastline
 set fileignorecase
-set fillchars& | set fillchars+=vert:\ 
 set foldlevelstart=2
 set foldmethod=marker
 set langmenu=none
@@ -69,17 +71,13 @@ set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
 set ttimeout
 set ttimeoutlen=100
+set updatetime=300
 set virtualedit=block
 set whichwrap& | set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
-
-if version >= 900
-  set wildoptions=fuzzy,pum,tagfile
-else
-  set wildoptions=tagfile
-endif
+set wildoptions=fuzzy,pum,tagfile
 
 if has('gui_running')
   set guioptions& | set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
@@ -96,52 +94,29 @@ set expandtab
 set formatoptions& | set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
 set history=10000
 set nrformats& | set nrformats-=octal
+set nobackup
+set nowritebackup
 set shiftwidth=2
 set smartindent
 set smarttab
 set softtabstop=-1
 set undofile
 
-let &directory = expand(g:user_vim_dir . '/swap')
-let &undodir = expand(g:user_vim_dir . '/undo')
-let &viewdir = expand(g:user_vim_dir . '/view')
 let &viminfofile = expand(g:user_vim_dir . '/viminfo')
 
-call mkdir(&directory, 'p')
-call mkdir(&undodir, 'p')
-call mkdir(&viewdir, 'p')
+packadd! matchit
 " }}}
 
 " SEARCH AND DIFF {{{
+set diffopt& | set diffopt+=vertical,algorithm:histogram
 set hlsearch
 set ignorecase
 set incsearch
 set smartcase
 
-if version >= 900
-  set diffopt& | set diffopt+=vertical,algorithm:histogram
-else
-  set diffopt& | set diffopt+=vertical
-endif
-
 if executable('rg')
   set grepformat& | set grepformat+=%f:%l:%c:%m
-  set grepprg=rg\ --vimgrep\ --hidden
-endif
-" }}}
-
-" PRINTING {{{
-set printheader=%{expand(\"%:t:r\")}%=%N
-
-if has('win32')
-  set printfont=:h8
-elseif has('osx')
-  set printencoding=utf-8
-  set printfont=:h8
-  set printmbcharset=UniJIS2004
-  set printmbfont=r:YuGo-Medium,b:YuGo-Bold,c:yes,a:yes
-
-  let &printexpr = 'system("open -a Preview " . shellescape(fname_in))'
+  set grepprg=rg\ --follow\ --hidden\ --smart-case\ --vimgrep
 endif
 " }}}
 
@@ -154,7 +129,7 @@ augroup vimrc
   endif
 
   autocmd BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
-augroup end
+augroup END
 " }}}
 
 " KEY MAPPINGS {{{
@@ -185,98 +160,77 @@ inoremap <C-f> <Right>
 inoremap <C-n> <Down>
 inoremap <C-p> <Up>
 
+nnoremap <C-w>- <C-w>s
+nnoremap <C-w>\| <C-w>v
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
 nnoremap <silent> <S-Tab> :<C-u>tabprevious<CR>
 nnoremap <silent> <Tab> :<C-u>tabnext<CR>
 nnoremap Y y$
+nnoremap [q :<C-u>cprevious<CR>
+nnoremap ]q :<C-u>cnext<CR>
 
-nnoremap <silent> <M-1> :<C-u>1tabnext<CR>
-nnoremap <silent> <M-2> :<C-u>2tabnext<CR>
-nnoremap <silent> <M-3> :<C-u>3tabnext<CR>
-nnoremap <silent> <M-4> :<C-u>4tabnext<CR>
-nnoremap <silent> <M-5> :<C-u>5tabnext<CR>
-nnoremap <silent> <M-6> :<C-u>6tabnext<CR>
-nnoremap <silent> <M-7> :<C-u>7tabnext<CR>
-nnoremap <silent> <M-8> :<C-u>8tabnext<CR>
-nnoremap <silent> <M-9> :<C-u>9tabnext<CR>
-nnoremap <silent> <M-0> :<C-u>$tabnext<CR>
+nnoremap <silent> <LocalLeader>1 :<C-u>1tabnext<CR>
+nnoremap <silent> <LocalLeader>2 :<C-u>2tabnext<CR>
+nnoremap <silent> <LocalLeader>3 :<C-u>3tabnext<CR>
+nnoremap <silent> <LocalLeader>4 :<C-u>4tabnext<CR>
+nnoremap <silent> <LocalLeader>5 :<C-u>5tabnext<CR>
+nnoremap <silent> <LocalLeader>6 :<C-u>6tabnext<CR>
+nnoremap <silent> <LocalLeader>7 :<C-u>7tabnext<CR>
+nnoremap <silent> <LocalLeader>8 :<C-u>8tabnext<CR>
+nnoremap <silent> <LocalLeader>9 :<C-u>9tabnext<CR>
+nnoremap <silent> <LocalLeader>0 :<C-u>$tabnext<CR>
 
-nnoremap <M-b> <C-b>
-nnoremap <M-d> <C-d>
-nnoremap <M-f> <C-f>
-nnoremap <M-h> <C-w>h
-nnoremap <M-j> <C-w>j
-nnoremap <M-k> <C-w>k
-nnoremap <M-l> <C-w>l
-nnoremap <M-u> <C-u>
+nnoremap <LocalLeader>h <C-w>h
+nnoremap <LocalLeader>j <C-w>j
+nnoremap <LocalLeader>k <C-w>k
+nnoremap <LocalLeader>l <C-w>l
 
 augroup vimrc
   autocmd FileType fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
-augroup end
+augroup END
 " }}}
 
 " UTILS {{{
-" :Cd {{{
-function! s:ChangeDirectory(path)
-  if exists('*FugitiveIsGitDir') && FugitiveIsGitDir('.')
-    if empty(a:path)
-      execute 'Glcd'
-    else
-      execute 'Glcd ' . a:path
-    endif
-  else
-    if empty(a:path)
-      execute 'lcd %:p:h'
-    else
-      execute 'lcd ' . a:path
-    endif
-  endif
-endfunction
-
-command! -nargs=? -complete=dir Cd call s:ChangeDirectory(<q-args>)
-" }}}
-
-" :LookupMacDict {{{
-if has('osx') && executable('open')
-  function! s:LookupMacDict(word)
-    return system('open ' . shellescape('dict://' . a:word))
-  endfunction
-
-  command! -nargs=1 LookupMacDict call s:LookupMacDict(<q-args>)
-
-  nnoremap <silent> <Leader>d :<C-u>LookupMacDict <cword><CR>
-  vnoremap <silent> <Leader>d "vy:LookupMacDict <C-r>v<CR>
-endif
+" :Grep {{{
+command! -nargs=* Grep grep <args> | cwindow
 " }}}
 
 " :PrintPDF {{{
-if executable('wkhtmltopdf')
-  function! s:PrintPDF(path, line1, line2, bang)
-    let tmpfile = tempname() . '.html'
-    let pdffile = empty(a:path) ? (expand('%') . '.pdf') : a:path
-    let args = get(g:, 'pdf_wkhtmltopdf_options', '--no-background --footer-font-size 6 --footer-right "[page] / [topage]"')
+function! s:PrintPDF(path, line1, line2, bang)
+  if ! executable('wkhtmltopdf')
+    echomsg 'wkhtmltopdf is required for PrintPDF.'
 
-    if ! empty(glob(expand(pdffile)))
-      if empty(a:bang)
-        echoerr 'File exists (add ! to override)'
-        return 0
-      else
-        call delete(expand(pdffile))
-      endif
+    return 0
+  endif
+
+  let tmpfile = tempname() . '.html'
+  let pdffile = empty(a:path) ? (expand('%') . '.pdf') : a:path
+  let args = get(g:, 'printpdf_options', '--no-background --footer-font-size 6 --footer-right "[page] / [topage]"')
+
+  if ! empty(glob(expand(pdffile)))
+    if empty(a:bang)
+      echoerr 'File exists (add ! to override)'
+
+      return 0
+    else
+      call delete(expand(pdffile))
     endif
+  endif
 
-    execute a:line1 . ',' . a:line2 . 'TOhtml'
-    execute 'write ' . expand(tmpfile)
-    execute 'bdelete!'
-    call system('wkhtmltopdf ' . args . ' ' . shellescape(expand(tmpfile)) . ' ' . shellescape(expand(pdffile)))
-    call delete(expand(tmpfile))
+  execute a:line1 . ',' . a:line2 . 'TOhtml'
+  execute 'write ' . expand(tmpfile)
+  execute 'bdelete!'
 
-    return 1
-  endfunction
+  call system('wkhtmltopdf ' . args . ' ' . shellescape(expand(tmpfile)) . ' ' . shellescape(expand(pdffile)))
+  call delete(expand(tmpfile))
 
-  " g:pdf_wkhtmltopdf_options = '--no-background --footer-font-size 7 --footer-right "[page] / [topage]"'
-  command! -nargs=? -complete=file -range=% -bang PrintPDF call s:PrintPDF(<q-args>, <line1>, <line2>, <q-bang>)
-endif
+  return 1
+endfunction
+
+let g:html_ignore_folding = 1
+"let g:printpdf_options = '--no-background --footer-font-size 7 --footer-right "[page] / [topage]"'
+
+command! -nargs=? -complete=file -range=% -bang PrintPDF call s:PrintPDF(<q-args>, <line1>, <line2>, <q-bang>)
 " }}}
 
 " :Tig {{{
@@ -285,7 +239,7 @@ if executable('tig')
 endif
 " }}}
 
-function! s:DownloadFile(url, savepath) " {{{
+function! DownloadFile(url, savepath) " {{{
   call mkdir(fnamemodify(a:savepath, ':p:h'), 'p')
 
   if executable('curl')
@@ -300,6 +254,14 @@ function! s:DownloadFile(url, savepath) " {{{
 
   return filereadable(a:savepath)
 endfunction " }}}
+
+function! RemoveBackgroundHighlight() " {{{
+  highlight EndOfBuffer ctermbg=NONE guibg=NONE
+  highlight Folded ctermbg=NONE guibg=NONE
+  highlight LineNr ctermbg=NONE guibg=NONE
+  highlight NonText ctermbg=NONE guibg=NONE
+  highlight Normal ctermbg=NONE guibg=NONE
+endfunction " }}}
 " }}}
 
 " EXTERNAL PLUGINS {{{
@@ -308,97 +270,94 @@ function! s:LazyLoadPlug(timer)
   let s:vimplug = expand(g:user_vim_dir . '/autoload/plug.vim')
 
   if ! executable('git')
-    echomsg 'git is required for vim-plug. vim-plug are not loaded.'
+    echomsg 'git is required for vim-plug.'
+
     return
   endif
 
   if ! filereadable(s:vimplug)
-    echomsg 'Download and install the plugin manager vim-plug.'
+    if ! DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', s:vimplug)
+      echoerr 'Unable to download vim-plug.'
 
-    if ! s:DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', s:vimplug)
-      echoerr 'Download failed. vim-plug are not loaded.'
       return
     endif
 
-    echomsg 'Installation is completed.'
+    echomsg 'vim-plug is installed.'
   endif
-  " }}}
-
-  " Settings before loading plugins. {{{
-  " vim-airline
-  let g:airline_extensions = [ 'branch', 'coc', 'ctrlp', 'quickfix', 'tabline', 'term', 'undotree', 'vista', 'whitespace', 'wordcount' ]
-
-  " vim-polyglot
-  let g:polyglot_disabled = [ 'ftdetect', 'autoindent', 'sensible' ]
   " }}}
 
   " Initialize vim-plug and list the plugins to be used. {{{
   call plug#begin(g:user_vim_dir . '/plugged')
 
-  if executable('node') && version > 801
-    Plug 'neoclide/coc.nvim', {'branch': 'release'}
-    Plug 'honza/vim-snippets'
-  endif
-
-  Plug 'airblade/vim-gitgutter'
-  Plug 'ctrlpvim/ctrlp.vim' | Plug 'mattn/ctrlp-matchfuzzy'
-  Plug 'easymotion/vim-easymotion'
-  Plug 'editorconfig/editorconfig-vim'
-  Plug 'godlygeek/tabular'
-  Plug 'jeetsukumaran/vim-buffergator'
-  Plug 'liuchengxu/vista.vim'
-  Plug 'mbbill/undotree'
-  Plug 'preservim/nerdcommenter'
   Plug 'rafi/awesome-vim-colorschemes'
-  Plug 'sheerun/vim-polyglot'
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
+  Plug 'editorconfig/editorconfig-vim'
+  Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
+  Plug 'preservim/nerdcommenter'
+  Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'godlygeek/tabular'
+  Plug 'echuraev/translate-shell.vim'
+  Plug 'mbbill/undotree'
+  Plug 'jeetsukumaran/vim-buffergator'
   Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui'
+  Plug 'easymotion/vim-easymotion'
   Plug 'tpope/vim-fugitive'
+  Plug 'airblade/vim-gitgutter'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating'
   Plug 'tpope/vim-surround'
   Plug 'vim-jp/vimdoc-ja'
-  Plug 'vim-scripts/matchit.zip'
+  Plug 'puremourning/vimspector'
+  Plug 'liuchengxu/vista.vim'
+  Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
 
-  if has('python3')
-    Plug 'vim-vdebug/vdebug'
-  endif
-
-  if executable('trans')
-    Plug 'echuraev/translate-shell.vim'
-  endif
-
-  if has('python3') && executable('node')
-    Plug 'puremourning/vimspector'
-  endif
-
-  if &encoding == 'utf-8'
+  if &encoding == 'utf-8' && (has('gui_running') || exists('$NERDFONT'))
     Plug 'ryanoasis/vim-devicons'
   endif
-
-  Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
-  Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 
   call plug#end()
   " }}}
 
   function! s:IsPlugged(plug) " {{{
-    return has_key(g:plugs, a:plug) && has_key(g:plugs[a:plug], 'dir') && ! empty(glob(g:plugs[a:plug]['dir'] . '/*'))
+    return has_key(g:plugs, a:plug) && has_key(g:plugs[a:plug], 'dir') && isdirectory(g:plugs[a:plug]['dir'])
   endfunction " }}}
 
-  " Download and install missing plugins. {{{
+  " Download and install the missing plugins. {{{
   for i in keys(g:plugs)
     if ! s:IsPlugged(i)
-      echomsg 'Download and install missing plugins. After installation you must restart vim. Otherwise some plugins will not work properly.'
-
       silent PlugInstall --sync
 
       echohl WarningMsg
-        echomsg 'Installation is completed. Please restart the vim.'
+        echomsg 'PlugInstall is complete. Please restart vim.'
       echohl None
 
       return
     endif
   endfor
+  " }}}
+
+  if s:IsPlugged('awesome-vim-colorschemes') " {{{
+    if has('gui_running')
+      set background=light
+    else
+      set background=dark
+    endif
+
+    colorscheme PaperColor
+
+    highlight! link CocFloatDividingLine CocFloating
+    highlight! link CocMenuSel PmenuSel
+    highlight! link Terminal Normal
+    highlight! link VertSplit StatusLine
+
+    if ! has('gui_running')
+      "augroup vimrc
+        "autocmd ColorScheme * call RemoveBackgroundHighlight()
+      "augroup END
+
+      call RemoveBackgroundHighlight()
+    endif
+  endif
   " }}}
 
   if s:IsPlugged('coc.nvim') " {{{
@@ -413,7 +372,7 @@ function! s:LazyLoadPlug(timer)
           \ 'coc-webview', 'coc-markdown-preview-enhanced'
           \ ]
 
-    if has('python3')
+    if has('python3') && s:IsPlugged('vim-snippets')
       call add(g:coc_global_extensions, 'coc-snippets')
     endif
 
@@ -504,225 +463,192 @@ function! s:LazyLoadPlug(timer)
       call add(g:coc_global_extensions, 'coc-sourcekit')
     endif
 
-    " May need for Vim (not Neovim) since coc.nvim calculates byte offset by count
-    " utf-8 byte sequence
-    set encoding=utf-8
-    " Some servers have issues with backup files, see #649
-    set nobackup
-    set nowritebackup
+    augroup vimrc
+      autocmd CursorHold * call CocActionAsync('highlight')
+      autocmd FileType markdown nnoremap <silent> <buffer> <LocalLeader>m :<C-u>CocCommand markdown-preview-enhanced.openPreview<CR>
+    augroup END
 
-    " Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
-    " delays and poor user experience
-    set updatetime=300
-
-    " Always show the signcolumn, otherwise it would shift the text each time
-    " diagnostics appear/become resolved
-    set signcolumn=yes
-
-    " Use tab for trigger completion with characters ahead and navigate
-    " NOTE: There's always complete item selected by default, you may want to enable
-    " no select by `"suggest.noselect": true` in your configuration file
-    " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-    " other plugin before putting this into your config
-    inoremap <silent><expr> <TAB>
-          \ coc#pum#visible() ? coc#pum#next(1) :
-          \ CheckBackspace() ? "\<Tab>" :
-          \ coc#refresh()
-    inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-    " Make <CR> to accept selected completion item or notify coc.nvim to format
-    " <C-g>u breaks current undo, please make your own choice
-    inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-          \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
-    function! CheckBackspace() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
-    " Use <c-space> to trigger completion
-    if has('nvim')
-      inoremap <silent><expr> <c-space> coc#refresh()
-    else
-      inoremap <silent><expr> <c-@> coc#refresh()
-    endif
-
-    " Use `[g` and `]g` to navigate diagnostics
-    " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list
-    nmap <silent> [g <Plug>(coc-diagnostic-prev)
-    nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-    " GoTo code navigation
-    nmap <silent> gd <Plug>(coc-definition)
-    nmap <silent> gy <Plug>(coc-type-definition)
-    nmap <silent> gi <Plug>(coc-implementation)
-    nmap <silent> gr <Plug>(coc-references)
-
-    " Use K to show documentation in preview window
-    nnoremap <silent> K :call ShowDocumentation()<CR>
-
-    function! ShowDocumentation()
+    " coc-hover
+    function! s:ShowDocumentation()
       if CocAction('hasProvider', 'hover')
-        call CocActionAsync('doHover')
+        call CocActionAsync('definitionHover')
       else
         call feedkeys('K', 'in')
       endif
     endfunction
 
-    " Highlight the symbol and its references when holding the cursor
-    autocmd CursorHold * silent call CocActionAsync('highlight')
+    nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
 
-    " Symbol renaming
-    nmap <leader>rn <Plug>(coc-rename)
+    " coc-completion
+    inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
+    inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
+    inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : '<C-j>'
+    inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : '<C-k>'
+    inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
+    inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
 
-    " Formatting selected code
-    xmap <leader>f  <Plug>(coc-format-selected)
-    nmap <leader>f  <Plug>(coc-format-selected)
+    inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<C-f>'
+    inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<C-b>'
+    inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
+    inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
 
-    augroup mygroup
-      autocmd!
-      " Setup formatexpr specified filetype(s)
-      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-      " Update signature help on jump placeholder
-      autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    augroup end
+    inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<C-e>'
+    inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
 
-    " Applying code actions to the selected code block
-    " Example: `<leader>aap` for current paragraph
-    xmap <leader>a  <Plug>(coc-codeaction-selected)
-    nmap <leader>a  <Plug>(coc-codeaction-selected)
+    function! s:CheckBackspace() abort
+      let col = col('.') - 1
 
-    " Remap keys for applying code actions at the cursor position
-    nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-    " Remap keys for apply code actions affect whole buffer
-    nmap <leader>as  <Plug>(coc-codeaction-source)
-    " Apply the most preferred quickfix action to fix diagnostic on the current line
-    nmap <leader>qf  <Plug>(coc-fix-current)
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
 
-    " Remap keys for applying refactor code actions
-    nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-    xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-    nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+    inoremap <silent><expr> <Tab>
+          \ coc#pum#visible() ? coc#pum#next(1):
+          \ <SID>CheckBackspace() ? '<Tab>' :
+          \ coc#refresh()
+    inoremap <expr><S-Tab> coc#pum#visible() ? coc#pum#prev(1) : '<S-Tab>'
 
-    " Run the Code Lens action on the current line
-    nmap <leader>cl  <Plug>(coc-codelens-action)
+    inoremap <silent><expr> <C-.> coc#refresh()
+    inoremap <expr> <CR> coc#pum#visible() ? coc#_select_confirm() : '<CR>'
 
-    " Map function and class text objects
-    " NOTE: Requires 'textDocument.documentSymbol' support from the language server
-    xmap if <Plug>(coc-funcobj-i)
-    omap if <Plug>(coc-funcobj-i)
-    xmap af <Plug>(coc-funcobj-a)
-    omap af <Plug>(coc-funcobj-a)
-    xmap ic <Plug>(coc-classobj-i)
-    omap ic <Plug>(coc-classobj-i)
-    xmap ac <Plug>(coc-classobj-a)
-    omap ac <Plug>(coc-classobj-a)
+    " coc-diagnostics
+    nmap <silent> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-    " Remap <C-f> and <C-b> to scroll float windows/popups
-    if has('nvim-0.4.0') || has('patch-8.2.0750')
-      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-    endif
+    " coc-locations
+    nmap <silent> gd <Plug>(coc-definition)
+    nmap <silent> gy <Plug>(coc-type-definition)
+    nmap <silent> gi <Plug>(coc-implementation)
+    nmap <silent> gr <Plug>(coc-references)
 
-    " Use CTRL-S for selections ranges
-    " Requires 'textDocument/selectionRange' support of language server
-    nmap <silent> <C-s> <Plug>(coc-range-select)
-    xmap <silent> <C-s> <Plug>(coc-range-select)
+    " coc-rename
+    nmap <Leader>rn <Plug>(coc-rename)
+    nmap <Leader>re <Plug>(coc-refactor)
 
-    " Add `:Format` command to format current buffer
+    " coc-format
+    xmap <Leader>f <Plug>(coc-format-selected)
+    nmap <Leader>f <Plug>(coc-format-selected)
+
+    " coc-codeLens
+    nmap <Leader>l <Plug>(coc-codelens-action)
+
+    command! -nargs=? Fold :call CocAction('fold', <f-args>)
     command! -nargs=0 Format :call CocActionAsync('format')
-
-    " Add `:Fold` command to fold current buffer
-    command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-    " Add `:OR` command for organize imports of the current buffer
-    command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
-
-    " Add (Neo)Vim's native statusline support
-    " NOTE: Please see `:h coc-status` for integrations with external plugins that
-    " provide custom statusline: lightline.vim, vim-airline
-    set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-    " Mappings for CoCList
-    " Show all diagnostics
-    nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-    " Manage extensions
-    nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-    " Show commands
-    nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-    " Find symbol of current document
-    nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-    " Search workspace symbols
-    nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-    " Do default action for next item
-    nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-    " Do default action for previous item
-    nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-    " Resume latest coc list
-    nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
-    command! -nargs=0 MarkdownPreview CocCommand markdown-preview-enhanced.openPreview
-
-    inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : "\<C-j>"
-    inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-k>"
-    inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : "\<Down>"
-    inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : "\<Up>"
+    command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
     if g:coc_service_initialized == 0
       CocStart
     endif
   endif " }}}
 
-  if s:IsPlugged('awesome-vim-colorschemes') " {{{
-    if has('gui_running')
-      set background=light
-    else
-      set background=dark
-    endif
+  "if s:IsPlugged('editorconfig-vim') " {{{
+  "endif " }}}
 
-    colorscheme PaperColor
+  if s:IsPlugged('fzf.vim') " {{{
+    let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
+    let g:fzf_layout = { 'down': '40%' }
+    let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
 
-    highlight! link CocFloatDividingLine CocFloating
-    highlight! link CocMenuSel PmenuSel
-    highlight! link VertSplit StatusLine
-    highlight! link Terminal Normal
-  endif
-  " }}}
+    command! -bang -nargs=* Grep call fzf#vim#grep('rg --hidden --follow --smart-case --column --line-number --no-heading --color=always -- ' . shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
+
+    nnoremap <silent> <C-p> :<C-u>Files<CR>
+    nnoremap <silent> <LocalLeader>pb :<C-u>Buffers<CR>
+    nnoremap <silent> <LocalLeader>pf :<C-u>Files<CR>
+    nnoremap <silent> <LocalLeader>pg :<C-u>GFiles<CR>
+    nnoremap <silent> <LocalLeader>ph :<C-u>History<CR>
+    nnoremap <silent> <LocalLeader>pl :<C-u>BLines<CR>
+    nnoremap <silent> <LocalLeader>pt :<C-u>BTags<CR>
+  endif " }}}
+
+  "if s:IsPlugged('nerdcommenter') " {{{
+  "endif " }}}
+
+  if s:IsPlugged('nerdtree') " {{{
+    let g:NERDTreeBookmarksFile = expand(g:user_vim_dir . '/NERDTreeBookmarksFile')
+    let g:NERDTreeIgnore=['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$']
+    let g:NERDTreeWinSize = 30
+
+    function! s:NERDTreeToggleVCS()
+      try
+        BuffergatorClose
+      catch
+      endtry
+
+      NERDTreeToggleVCS
+    endfunction
+
+    nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+  endif " }}}
+
+  "if s:IsPlugged('tabular') " {{{
+  "endif " }}}
+
+  if s:IsPlugged('translate-shell.vim') " {{{
+    let g:trans_default_direction = ':ja'
+    let g:trans_advanced_options = '-brief'
+    let g:trans_join_lines = 1
+  endif " }}}
+
+  if s:IsPlugged('undotree') " {{{
+    let g:undotree_SetFocusWhenToggle = 1
+    let g:undotree_SplitWidth = 30
+    let g:undotree_WindowLayout = 3
+
+    function s:UndotreeToggle()
+      try
+        Vista!
+      catch
+      endtry
+
+      UndotreeToggle
+    endfunction
+
+    nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
+  endif " }}}
+
+  if s:IsPlugged('vim-airline') " {{{
+    let g:airline_experimental = 1
+    let g:airline#extensions#tabline#fnamemod = ':t'
+    let g:airline#extensions#tabline#show_buffers = 0
+    let g:airline#extensions#tabline#show_close_button = 0
+
+    AirlineRefresh
+  endif " }}}
+
+  if s:IsPlugged('vim-buffergator') " {{{
+    let g:buffergator_autodismiss_on_select = 0
+    let g:buffergator_autoexpand_on_split = 0
+    let g:buffergator_autoupdate = 1
+    let g:buffergator_suppress_keymaps = 1
+    let g:buffergator_vsplit_size = 30
+
+    function s:BuffergatorToggle()
+      try
+        NERDTreeClose
+      endtry
+
+      BuffergatorToggle
+    endfunction
+
+    nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+  endif " }}}
+
+  "if s:IsPlugged('vim-dadbod') " {{{
+  "endif " }}}
 
   if s:IsPlugged('vim-devicons') " {{{
     if has('win32')
       set ambiwidth=single
     endif
 
-    set listchars=tab:›-,trail:∙,extends:»,precedes:«
-
-    if has('linebreak')
-      set showbreak=↪\ \ 
-    endif
-
     let g:webdevicons_enable = 1
+    let g:webdevicons_enable_airline_statusline = 1
+    let g:webdevicons_enable_airline_tabline = 1
     let g:webdevicons_enable_nerdtree = 1
     let g:webdevicons_conceal_nerdtree_brackets = 1
-    let g:webdevicons_enable_airline_tabline = 1
-    let g:webdevicons_enable_airline_statusline = 1
 
-    let g:NERDTreeGitStatusIndicatorMapCustom = {
-          \ 'Modified'  :'󰧟',
-          \ 'Staged'    :'󰐕',
-          \ 'Untracked' :'󰓎',
-          \ 'Renamed'   :'󰁔',
-          \ 'Unmerged'  :'󰦎',
-          \ 'Deleted'   :'󰆴',
-          \ 'Dirty'     :'󰂚',
-          \ 'Ignored'   :'󰅖',
-          \ 'Clean'     :'󰄬',
-          \ 'Unknown'   :'?',
-          \ }
-    let g:NERDTreeGitStatusUseNerdFonts = 1
+    set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:
+    set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+    set showbreak=↪\ \ 
 
     if ! exists('g:airline_symbols')
       let g:airline_symbols = {}
@@ -748,6 +674,27 @@ function! s:LazyLoadPlug(timer)
     let g:airline#extensions#tabline#close_symbol = '󰅖'
     let g:airline#extensions#tabline#overflow_marker = '…'
     let g:airline#extensions#tabline#tabs_label = '󰓩'
+
+    try
+      AirlineRefresh
+    catch
+    endtry
+
+    let g:NERDTreeDirArrowCollapsible = ''
+    let g:NERDTreeDirArrowExpandable = ''
+    let g:NERDTreeGitStatusIndicatorMapCustom = {
+          \ 'Modified'  :'󰧟',
+          \ 'Staged'    :'󰐕',
+          \ 'Untracked' :'󰓎',
+          \ 'Renamed'   :'󰁔',
+          \ 'Unmerged'  :'󰦎',
+          \ 'Deleted'   :'󰆴',
+          \ 'Dirty'     :'󰂚',
+          \ 'Ignored'   :'󰅖',
+          \ 'Clean'     :'󰄬',
+          \ 'Unknown'   :'?',
+          \ }
+    let g:NERDTreeGitStatusUseNerdFonts = 1
 
     let g:vista_icon_indent = ['└ ', '├ ']
     let g:vista_fold_toggle_icons = ['', '']
@@ -825,92 +772,27 @@ function! s:LazyLoadPlug(timer)
     endtry
   endif " }}}
 
-  if s:IsPlugged('ctrlp.vim') " {{{
-    let g:ctrlp_map = '<C-p>'
-    let g:ctrlp_match_func = {'match': 'ctrlp_matchfuzzy#matcher'}
+  "if s:IsPlugged('vim-easymotion') " {{{
+  "endif " }}}
 
-    if executable('fd')
-      let g:ctrlp_user_command = 'fd --hidden --type f --color never "" "%s" .'
-    endif
+  "if s:IsPlugged('vim-fugitive') " {{{
+  "endif " }}}
 
-    nnoremap <silent> <M-p><M-b> :<C-u>CtrlPBuffer<CR>
-    nnoremap <silent> <M-p><M-f> :<C-u>CtrlPCurFile<CR>
-    nnoremap <silent> <M-p><M-m> :<C-u>CtrlPMRUFiles<CR>
-    nnoremap <silent> <M-p><M-q> :<C-u>CtrlPQuickfix<CR>
-  endif " }}}
+  "if s:IsPlugged('vim-gitgutter') " {{{
+  "endif " }}}
 
-  if s:IsPlugged('nerdtree') " {{{
-    let g:NERDTreeBookmarksFile = expand(g:user_vim_dir . '/NERDTreeBookmarksFile')
-    let g:NERDTreeWinSize = 30
-
-    function! s:NERDTreeToggleVCS()
-      try
-        BuffergatorClose
-      catch
-      endtry
-
-      NERDTreeToggleVCS
-    endfunction
-
-    nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
-  endif " }}}
-
-  if s:IsPlugged('translate-shell.vim') " {{{
-    let g:trans_default_direction = ':ja'
-    let g:trans_advanced_options = '-brief'
-    let g:trans_join_lines = 1
-
-    nnoremap <silent> <LocalLeader>t :<C-u>Trans<CR>
-    vnoremap <silent> <LocalLeader>t :<C-u>Trans<CR>
-  endif " }}}
-
-  if s:IsPlugged('undotree') " {{{
-    let g:undotree_SetFocusWhenToggle = 1
-    let g:undotree_SplitWidth = 30
-    let g:undotree_WindowLayout = 3
-
-    function s:UndotreeToggle()
-      try
-        Vista!
-      catch
-      endtry
-
-      UndotreeToggle
-    endfunction
-
-    nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
-  endif " }}}
-
-  if s:IsPlugged('vim-airline') " {{{
-    let g:airline_experimental = 1
-    let g:airline#extensions#tabline#fnamemod = ':t'
-    let g:airline#extensions#tabline#show_buffers = 0
-    let g:airline#extensions#tabline#show_close_button = 0
-
-    call airline#update_statusline()
-  endif " }}}
-
-  if s:IsPlugged('vim-buffergator') " {{{
-    let g:buffergator_autodismiss_on_select = 0
-    let g:buffergator_autoexpand_on_split = 0
-    let g:buffergator_autoupdate = 1
-    let g:buffergator_suppress_keymaps = 1
-    let g:buffergator_vsplit_size = 30
-
-    function s:BuffergatorToggle()
-      try
-        NERDTreeClose
-      endtry
-
-      BuffergatorToggle
-    endfunction
-
-    nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
-  endif " }}}
+  "if s:IsPlugged('vim-repeat') " {{{
+  "endif " }}}
 
   if s:IsPlugged('vim-speeddating') " {{{
     SpeedDatingFormat %Y/%m/%d
   endif " }}}
+
+  "if s:IsPlugged('vim-surround') " {{{
+  "endif " }}}
+
+  "if s:IsPlugged('vimdoc-ja') " {{{
+  "endif " }}}
 
   if s:IsPlugged('vimspector') " {{{
     let g:vimspector_install_gadgets = []
@@ -943,9 +825,9 @@ function! s:LazyLoadPlug(timer)
       call add(g:vimspector_install_gadgets, 'local-lua-debugger-vscode')
     endif
 
-    if str2nr(substitute(split(system('node --version'), '\.')[0], 'v', '', '')) >= 18
+    "if executable('node')
       call add(g:vimspector_install_gadgets, 'vscode-js-debug')
-    endif
+    "endif
 
     if executable('javac')
       call add(g:vimspector_install_gadgets, 'vscode-java-debug')
@@ -989,5 +871,5 @@ endfunction
 
 augroup vimrc
   autocmd VimEnter * call timer_start(1, function('s:LazyLoadPlug'))
-augroup end
+augroup END
 " }}}

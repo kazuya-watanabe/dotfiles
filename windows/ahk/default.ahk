@@ -1,3 +1,4 @@
+vk1D::Send "{vk1D}"
 vk1D & Tab::AltTab
 vk1D & Up::Send "{PgUp}"
 vk1D & Down::Send "{PgDn}"

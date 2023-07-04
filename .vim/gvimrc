@@ -3,7 +3,7 @@ scriptencoding utf-8
 
 augroup gvimrc
   autocmd!
-augroup end
+augroup END
 " }}}
 
 " ENVIRONMENTS {{{
@@ -24,7 +24,13 @@ endif
 " }}}
 
 " UTILS {{{
-" :Fullscreen {{{
+function! IncreaseFontSize(inc) " {{{
+  let size = str2nr(matchstr(&guifont, '\d\+'))
+  let &guifont = substitute(&guifont, size, size + a:inc, 'g')
+  let &guifontwide = substitute(&guifontwide, size, size + a:inc, 'g')
+endfunction " }}}
+
+" :ToggleFullscreen {{{
 function! s:Fullscreen()
   if ! s:IsFullscreen()
     if exists('&fullscreen')
@@ -35,10 +41,6 @@ function! s:Fullscreen()
   endif
 endfunction
 
-command! -nargs=0 Fullscreen call s:Fullscreen()
- "}}}
-
- " :QuitFullscreen {{{
 function! s:QuitFullscreen()
   if s:IsFullscreen()
     if exists('&fullscreen')
@@ -49,10 +51,6 @@ function! s:QuitFullscreen()
   endif
 endfunction
 
-command! -nargs=0 QuitFullscreen call s:QuitFullscreen()
-" }}}
-
-" :ToggleFullscreen {{{
 function! s:IsFullscreen()
   if exists('&fullscreen')
     return &fullscreen
@@ -68,30 +66,30 @@ command! -nargs=0 ToggleFullscreen if s:IsFullscreen() | call s:QuitFullscreen()
 nnoremap <M-CR> :ToggleFullscreen<CR>
 " }}}
 
-" s:LoadWinstat() / s:SaveWinstat() {{{
+" s:LoadWindowState() / s:SaveWindowState() {{{
 let s:winstat_file = expand(g:user_vim_dir . '/winstat')
 
-function! s:SaveWinstat()
+function! s:SaveWindowState()
   if ! s:IsFullscreen()
-    call writefile([ &columns, &lines, getwinposx(), getwinposy() ], s:winstat_file)
+    call writefile([getwinposx(), getwinposy(), &columns, &lines], s:winstat_file)
   endif
 endfunction
 
-function! s:LoadWinstat()
+function! s:LoadWindowState()
   if filereadable(s:winstat_file)
     let lines = readfile(s:winstat_file, '', 4)
 
-    execute 'winpos ' . get(lines, 2) . ' ' . get(lines, 3)
+    execute 'winpos ' . get(lines, 0) . ' ' . get(lines, 1)
 
-    let &columns = get(lines, 0, 80)
-    let &lines = get(lines, 1, 20)
+    let &columns = get(lines, 2, 80)
+    let &lines = get(lines, 3, 20)
   endif
 endfunction
 
 augroup gvimrc
-  autocmd GUIEnter * call s:LoadWinstat()
-  autocmd VimLeavePre * call s:SaveWinstat()
-augroup end
+  autocmd GUIEnter * call s:LoadWindowState()
+  autocmd VimLeavePre * call s:SaveWindowState()
+augroup END
 " }}}
 
 " s:ChangeBackground() {{{
@@ -112,7 +110,7 @@ if exists('##OSAppearanceChanged')
 
   augroup gvimrc
     autocmd OSAppearanceChanged * call s:ChangeBackground()
-  augroup end
+  augroup END
 endif
 " }}}
 " }}}

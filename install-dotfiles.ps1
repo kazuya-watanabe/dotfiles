@@ -4,7 +4,6 @@ $DotFiles = @(
   '.config\tig'
   '.config\starship.toml'
   '.curlrc'
-  '.npmrc'
 )
 
 function Link-Dotfile() {
@@ -57,4 +56,3 @@ Foreach ($i in $DotFiles) {
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\bat') -Path (Join-Path -Path $env:APPDATA -ChildPath 'bat')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.vim') -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath 'windows\posh') -Path (Join-Path $HOME -ChildPath 'Documents\WindowsPowerShell')
-

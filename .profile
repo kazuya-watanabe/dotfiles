@@ -11,37 +11,30 @@ export PATH="$HOME/.cargo/bin":"$HOME/.dotnet/tools":"$HOME/.local/bin":"$HOME/.
 
 umask 0022
 
-# bat
-type bat >/dev/null 2>&1 && export MANPAGER='sh -c "col -bx | bat -l man -p"'
-
 # fzf
-if type fzf >/dev/null 2>&1; then
-  export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f --exclude .git --exclude node_modules'
-  export FZF_DEFAULT_OPTS='--layout=reverse --preview "bat --color=always --line-range :500 {}"'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-fi
+export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f --exclude .git/'
 
 # less
-if type less >/dev/null 2>&1; then
-  export PAGER=less
-  export LESS=-iFJMRX
-  export LESSOPEN="| lesspipe.sh %s"
-  export LESS_ADVANCED_PREPROCESSOR=1
+export PAGER=less
+export LESS=-iFJMRX
+export LESSOPEN="| lesspipe.sh %s"
+export LESS_ADVANCED_PREPROCESSOR=1
+
+if type bat >/dev/null 2>&1; then
+  # bat
+  export MANPAGER='sh -c "col -bx | bat -l man -p"'
+  export PAGER=bat
 fi
 
 # python
-if type python3 >/dev/null 2>&1; then
-  export PYTHONUSERBASE="$HOME/.local"
-fi
+export PYTHONUSERBASE="$HOME/.local"
 
 # vim
-if type vim >/dev/null 2>&1; then
-  export EDITOR=vim
-  export VISUAL=vim
-fi
+export EDITOR=vim
+export VISUAL=vim
 
 # zsh
-test ${SHELL: -3}=='zsh' >/dev/null 2>&1 && export ZDOTDIR="$HOME/.zsh"
+export ZDOTDIR="$HOME/.zsh"
 
 # macos
 if [ $(uname)='Darwin' ]; then

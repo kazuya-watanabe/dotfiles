@@ -6,32 +6,32 @@ function dnf_install() {
   if ! rpm -q "$1"; then
     sudo dnf install -y "$1"
   fi
+
+  return 0
 }
 
 function cargo_install() {
   cargo install "$1"
+
+  return 0
 }
 
 function npm_install() {
   mkdir -p "$HOME/.npm/lib"
+
   if ! npm -g list "$1"; then
     npm -g install "$1"
   fi
+
+  return 0
 }
 
 function pip_install() {
-  venvsdir="$HOME/.venvs"
-  mkdir -p "$venvsdir"
+  echo "installing $1"
 
-  venvdir="$venvsdir/$1"
-  if [ ! -f "$venvdir/bin/pip3" ]; then
-    python3 -m venv "$venvdir"
-    "$venvdir/bin/pip3" install $1
+  pip3 show "$1" 2>&1 | grep 'not found' && pip3 install "$1"
 
-    if [ -f "$venvdir/bin/$1" ]; then
-      ln -fs "$venvdir/bin/$1" "$HOME/.local/bin/$1"
-    fi
-  fi
+  return 0
 }
 
 # console utils
@@ -39,8 +39,13 @@ dnf_install bat
 dnf_install coreutils
 dnf_install fd-find
 dnf_install fzf
+dnf_install langpacks-ja
 dnf_install less
+dnf_install lsd
+dnf_install navi
+dnf_install tldr
 dnf_install tmux
+dnf_install util-linux-user
 dnf_install vim-enhanced
 dnf_install zoxide
 dnf_install zsh
@@ -56,6 +61,7 @@ dnf_install zip
 
 # network
 dnf_install curl
+dnf_install httpie
 dnf_install w3m
 dnf_install wget
 
@@ -63,6 +69,7 @@ dnf_install wget
 dnf_install colordiff
 dnf_install ctags
 dnf_install gawk
+dnf_install git-delta
 dnf_install jq
 dnf_install odt2txt
 dnf_install pandoc
@@ -79,19 +86,26 @@ dnf_install nodejs
 dnf_install perl
 dnf_install php
 dnf_install python3
+dnf_install python3-devel
 dnf_install python3-setuptools
 
 # development tools
 dnf_install cargo
 dnf_install cmake
 dnf_install git
+dnf_install postgresql
+dnf_install redis
+dnf_install sqlite
 dnf_install tig
 
 # development libraries
 dnf_install openssl-devel
 
+sudo chsh -s /bin/zsh "$(whoami)"
+
 # dotfiles
 gitdir="$HOME/.conceal"
+
 if [ ! -d "$gitdir" ]; then
   git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$gitdir"
   pushd "$gitdir"
@@ -101,6 +115,7 @@ if [ ! -d "$gitdir" ]; then
 fi
 
 gitdir="$HOME/.dotfiles"
+
 if [ ! -d "$gitdir" ]; then
   git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$gitdir"
   pushd "$gitdir"
@@ -116,8 +131,8 @@ cargo_install starship
 npm_install corepack
 
 # python modules
+pip_install pip3-autoremove
 pip_install pip_search
-pip_install yt-dlp
 
 # tmux
 if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then

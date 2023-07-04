@@ -23,19 +23,12 @@
 	editor = vim
 	ignoreCase = false
 	quotePath = false
+	pager = delta
 
 [credential]
 	helper = manager
-	helper = ~/.dotnet/tools/git-credential-manager
-	helper = /usr/local/share/gcm-core/git-credential-manager
 	helper = cache
 	helper = store --file ~/.config/git/store
-
-[credential "helperselector"]
-	selected = manager
-
-[credential "https://dev.azure.com"]
-	useHttpPath = true
 
 [diff]
 	algorithm = histogram
@@ -43,8 +36,18 @@
 [fetch]
 	prune = true
 
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+
 [merge]
-	tool = vimdiff
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
 
 [pull]
 	ff = only

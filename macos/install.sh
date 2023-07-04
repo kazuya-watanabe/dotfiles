@@ -6,6 +6,7 @@ function brew_tap() {
   echo "tapping $1"
 
   brew tap-info "$1" | grep 'Not installed' && brew tap "$1"
+
   return 0
 }
 
@@ -13,24 +14,16 @@ function brew_install() {
   echo "installing $2"
 
   brew info "$1" "$2" | grep 'Not installed' && brew install "$1" "$2"
+
   return 0
 }
 
 function pip_install() {
   echo "installing $1"
 
-  venvsdir="$HOME/.venvs"
-  mkdir -p "$venvsdir"
+  pip3 show "$1" 2>&1 | grep 'not found' && pip3 install "$1"
 
-  venvdir="$venvsdir/$1"
-  if [ ! -f "$venvdir/bin/pip3" ]; then
-    python3 -m venv "$venvdir"
-    "$venvdir/bin/pip3" install $1
-
-    if [ -f "$venvdir/bin/$1" ]; then
-      ln -fs "$venvdir/bin/$1" "$HOME/.local/bin/$1"
-    fi
-  fi
+  return 0
 }
 
 if ! type brew; then
@@ -51,8 +44,10 @@ brew_install --cask cloudmounter
 brew_install --cask iterm2
 brew_install --cask karabiner-elements
 brew_install --cask macvim
+brew_install --cask microsoft-edge
 brew_install --cask microsoft-office
 brew_install --cask scroll-reverser
+brew_install --cask ueli
 
 # fonts
 brew_install --cask font-hack-nerd-font
@@ -64,9 +59,13 @@ brew_install --formula fd
 brew_install --formula fzf
 brew_install --formula less
 brew_install --formula lesspipe
+brew_install --formula lsd
+brew_install --formula navi
 brew_install --formula sheldon
 brew_install --formula starship
+brew_install --formula tldr
 brew_install --formula tmux
+brew_install --formula wkhtmltopdf
 brew_install --formula zoxide
 
 # compression/archivers
@@ -80,12 +79,14 @@ brew_install --formula zip
 
 # network
 brew_install --formula curl
+brew_install --formula httpie
 brew_install --formula w3m
 brew_install --formula wget
 
 # text utils
 brew_install --formula colordiff
 brew_install --formula gawk
+brew_install --formula git-delta
 brew_install --formula gnu-sed
 brew_install --formula jq
 brew_install --formula odt2txt
@@ -102,18 +103,26 @@ brew_install --formula node
 brew_install --formula openjdk
 brew_install --formula perl
 brew_install --formula php
-brew_install --formula python@3.10
+brew_install --formula python@3.11
 
 # development tools
-brew_install --cask git-credential-manager-core
 brew_install --formula cmake
 brew_install --formula composer
 brew_install --formula corepack
 brew_install --formula git
+brew_install --formula mysql
+brew_install --formula postgresql@15
+brew_install --formula redis
+brew_install --formula sqlite
 brew_install --formula tig
 
+# media
+brew_install --formula ffmpeg
+brew_install --formula imagemagick
+
 # dotfiles
-gitdir="$HOME/.conceal"
+gitdir="$HOME/Documents/Conceal"
+
 if [ ! -d "$gitdir" ]; then
   git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$gitdir"
   pushd "$gitdir"
@@ -122,7 +131,8 @@ if [ ! -d "$gitdir" ]; then
   popd
 fi
 
-gitdir="$HOME/.dotfiles"
+gitdir="$HOME/Documents/Dotfiles"
+
 if [ ! -d "$gitdir" ]; then
   git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$gitdir"
   pushd "$gitdir"
@@ -131,8 +141,8 @@ if [ ! -d "$gitdir" ]; then
 fi
 
 # python modules
+pip_install pip3-autoremove
 pip_install pip_search
-pip_install yt-dlp
 
 # tmux
 if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then

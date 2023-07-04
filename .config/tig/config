@@ -1,6 +1,9 @@
 set editor-line-number = true
 set ignore-case = true
+set main-view = id:yes date:default author:yes commit-title:yes,graph,refs
 set tab-size = 4
+
+bind branch  B ?git checkout -b "%(prompt Enter new branch name:)" %(branch)
 
 bind generic <C-b> move-page-up
 bind generic <C-f> move-page-down
@@ -10,4 +13,7 @@ bind generic gg move-first-line
 bind generic j move-down
 bind generic k move-up
 
+bind main    B ?git checkout -b "%(prompt Enter new branch name: )"
 bind main    G move-last-line
+
+bind status <Ctrl-r> ?git reset --hard HEAD
