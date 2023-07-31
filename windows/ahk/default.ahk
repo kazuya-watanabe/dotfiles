@@ -1,10 +1,16 @@
-vk1D::Send "{vk1D}"
+#include .\ime\IMEv2.ahk
+
+~Esc::IME_SET(0)
+~^[::IME_SET(0)
+~vk1C::IME_SET(1)
+~vk1D::IME_SET(0)
+
+vk1D & [::Send "{Esc}"
 vk1D & Tab::AltTab
 vk1D & Up::Send "{PgUp}"
 vk1D & Down::Send "{PgDn}"
 vk1D & Left::Send "{Home}"
 vk1D & Right::Send "{End}"
-vk1D & [::Send "{Esc}"
 vk1D & 1::Send "{F1}"
 vk1D & 2::Send "{F2}"
 vk1D & 3::Send "{F3}"
