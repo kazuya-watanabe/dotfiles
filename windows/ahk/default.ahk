@@ -47,3 +47,58 @@ vk1D & w::Send "^w"
 vk1D & x::Send "^x"
 vk1D & y::Send "^y"
 vk1D & z::Send "^z"
+
+#HotIf WinActive("- Outlook") and WinActive("ahk_class rctrl_renwnd32")
+  f::HandleOutlook("^f", "f")
+  j::HandleOutlook("{Down}", "j")
+  +j::HandleOutlook("+{Down}", "+j")
+  k::HandleOutlook("{Up}", "k")
+  +k::HandleOutlook("+{Up}", "+k")
+  h::HandleOutlook("{Left}", "h")
+  l::HandleOutlook("{Right}", "l")
+  i::HandleOutlook("^q", "i")
+  n::HandleOutlook("^n", "n")
+  o::HandleOutlook("+{Enter}", "o")
+  r::HandleOutlook("^r", "r")
+  +r::HandleOutlook("^+r", "+r")
+  /::HandleOutlook("^e", "/")
+  ^b::HandleOutlook("+{Space}", "^b")
+  ^f::HandleOutlook("{space}", "^f")
+  +g::HandleOutlook("{End}", "+g")
+  :*b0:dd::HandleOutlook("{Del}", "dd")
+  :*b0:gg::HandleOutlook("{Home}", "gg")
+  :*b0:gy::HandleOutlook("^y", "gy")
+#HotIf
+
+#HotIf WinActive("ahk_exe OUTLOOK.EXE") and WinActive("ahk_class #32770")
+  j::HandleOutlook("{Down}", "j")
+  +j::HandleOutlook("+{Down}", "+j")
+  k::HandleOutlook("{Up}", "k")
+  +k::HandleOutlook("+{Up}", "+k")
+  h::HandleOutlook("{Left}", "h")
+  l::HandleOutlook("{Right}", "l")
+  ^b::HandleOutlook("{PgUp}", "^b")
+  ^f::HandleOutlook("{PgDn}", "^f")
+  ^m::HandleOutlook("+{Enter}", "^m")
+  :*b0:gg::HandleOutlook("{Home}", "gg")
+  +g::HandleOutlook("{End}", "+g")
+#HotIf
+
+HandleOutlook(specialKey, normalKey)
+{
+  if (WinActive("- Outlook") and WinActive("ahk_class rctrl_renwnd32")) or (WinActive("ahk_exe OUTLOOK.EXE") and WinActive("ahk_class #32770"))
+  {
+    currentCtrl := ControlGetClassNN(ControlGetFocus("A"))
+    ctrlList := ["Acrobat Preview Window1", "AfxWndW5", "AfxWndW6", "EXCEL71", "MsoCommandBar1", "OlkPicturePreviewer1", "paneClassDC1", "OutlookGrid1", "OutlookGrid2", "RichEdit20WPT2", "RichEdit20WPT4", "RichEdit20WPT5", "RICHEDIT50W1", "SUPERGRID2", "SUPERGRID1", "_WwG1", "SysTreeView321"]
+    For ctrl in ctrlList
+    {
+      if currentCtrl = ctrl
+      {
+        Send specialKey
+        return
+      }
+    }
+    Send normalKey
+  }
+  return
+}
