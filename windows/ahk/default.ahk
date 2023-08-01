@@ -1,3 +1,30 @@
+#HotIf WinActive("- Outlook") and WinActive("ahk_exe OUTLOOK.EXE") and WinActive("ahk_class rctrl_renwnd32")
+  f::Send "^f"
+  j::Send "{Down}"
+  +j::Send "+{Down}"
+  k::Send "{Up}"
+  +k::Send "+{Up}"
+  n::Send "^n"
+  o::Send "+{Enter}"
+  r::Send "^r"
+  +r::Send "^+r"
+  /::Send "^e"
+  ^b::Send "+{Space}"
+  ^f::Send "{Space}"
+
+  :*:dd::Send "{Del}"
+  :*:g$::Send "{End}"
+  :*:g0::Send "{Home}"
+  :*:gy::Send "^y"
+#HotIf
+
+#HotIf WinActive("ahk_exe OUTLOOK.EXE") and WinActive("ahk_class #32770")
+  j::Send "{Down}"
+  k::Send "{Up}"
+  o::Send "{Enter}"
+  ^m::Send "{Enter}"
+#HotIf
+
 #include .\ime\IMEv2.ahk
 
 ~Esc::IME_SET(0)
