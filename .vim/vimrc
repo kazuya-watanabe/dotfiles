@@ -301,7 +301,7 @@ function! s:LazyLoadPlug(timer)
   Plug 'jeetsukumaran/vim-buffergator'
   Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui'
   Plug 'easymotion/vim-easymotion'
-  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
   Plug 'airblade/vim-gitgutter'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-speeddating'
