@@ -48,7 +48,7 @@ vk1D & x::Send "^x"
 vk1D & y::Send "^y"
 vk1D & z::Send "^z"
 
-#HotIf WinActive("- Outlook") and WinActive("ahk_class rctrl_renwnd32")
+#HotIf WinActive("ahk_exe OUTLOOK.EXE") and WinActive("ahk_class rctrl_renwnd32") and WinActive("- Outlook")
   f::HandleOutlook("^f", "f")
   j::HandleOutlook("{Down}", "j")
   +j::HandleOutlook("+{Down}", "+j")
