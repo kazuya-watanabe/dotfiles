@@ -12,7 +12,9 @@ else
 fi
 
 alias fd='fd --follow --hidden'
-alias fda='fd --follow --no-ignore'
+alias fda='fd --no-ignore'
+alias d='fd --max-depth 1 --type d .'
+alias da='fda --max-depth 1 --type d .'
 
 if type lsd >/dev/null 2>&1 && ! test -z "$NERDFONT"; then
   alias ls='lsd --group-directories-first'

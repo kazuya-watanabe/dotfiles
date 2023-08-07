@@ -80,6 +80,16 @@ function fda()
   fd.exe --follow --hidden --no-ignore $args
 }
 
+function d()
+{
+  fd --max-depth 1 --type d . $args
+}
+
+function da()
+{
+  fda --max-depth 1 --type d . $args
+}
+
 function ls()
 {
   ls.exe --color=auto --classify --quoting-style=literal --show-control-chars $args
