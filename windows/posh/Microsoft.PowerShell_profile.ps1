@@ -1,7 +1,14 @@
+$PSReadLineVersion = (Get-Module -Name PSReadLine).Version
+
+If ($PSReadLineVersion -Lt 2.1) {
+  Install-Module -Name PSReadLine -Scope CurrentUser -Force
+}
+
 Import-Module PSReadLine
 
 Set-PSReadLineOption -EditMode Vi
 Set-PSReadLineOption -HistorySearchCursorMovesToEnd:$True
+Set-PSReadLineOption -PredictionSource History
 Set-PSReadLineKeyHandler -Key Tab -Function MenuComplete
 Set-PSReadLineKeyHandler -Key Ctrl+a -Function BeginningOfLine
 Set-PSReadLineKeyHandler -Key Ctrl+e -Function EndOfLine
