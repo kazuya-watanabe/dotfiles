@@ -291,6 +291,7 @@ function! s:LazyLoadPlug(timer)
 
   Plug 'rafi/awesome-vim-colorschemes'
   Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
+  Plug 'github/copilot.vim'
   Plug 'editorconfig/editorconfig-vim'
   Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
   Plug 'preservim/nerdcommenter'
@@ -374,6 +375,10 @@ function! s:LazyLoadPlug(timer)
 
     if has('python3') && s:IsPlugged('vim-snippets')
       call add(g:coc_global_extensions, 'coc-snippets')
+    endif
+
+    if s:IsPlugged('copilot.vim')
+      call add(g:coc_global_extensions, 'coc-copilot')
     endif
 
     " tools
@@ -498,7 +503,7 @@ function! s:LazyLoadPlug(timer)
     function! s:CheckBackspace() abort
       let col = col('.') - 1
 
-      return !col || getline('.')[col - 1]  =~ '\s'
+      return ! col || getline('.')[col - 1]  =~ '\s'
     endfunction
 
     inoremap <silent><expr> <Tab>
@@ -538,6 +543,12 @@ function! s:LazyLoadPlug(timer)
     if g:coc_service_initialized == 0
       CocStart
     endif
+  endif " }}}
+
+  if s:IsPlugged('copilot.vim') " {{{
+    inoremap <silent><script><expr> <C-j> copilot#Accept("\<CR>")
+
+    let g:copilot_no_tab_map = v:true
   endif " }}}
 
   "if s:IsPlugged('editorconfig-vim') " {{{
