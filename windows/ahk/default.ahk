@@ -80,6 +80,7 @@ vk1D & z::Send "^z"
   ^b::HandleOutlook("{PgUp}", "^b")
   ^f::HandleOutlook("{PgDn}", "^f")
   ^m::HandleOutlook("+{Enter}", "^m")
+  o::HandleOutlook("+{Enter}", "^m")
   :*b0:gg::HandleOutlook("{Home}", "gg")
   +g::HandleOutlook("{End}", "+g")
 #HotIf
