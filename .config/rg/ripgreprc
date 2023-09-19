@@ -1,0 +1,3 @@
+--follow
+--hidden
+--smart-case
