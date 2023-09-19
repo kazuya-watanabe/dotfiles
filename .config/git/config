@@ -1,0 +1,57 @@
+[alias]
+	br = branch
+	bra = branch -a
+	ca = commit --amend
+	cc = commit
+	co = checkout
+	cob = checkout -b
+	df = diff
+	ff = flow feature
+	fh = flow hotfix
+	fr = flow release
+	la = log --oneline --decorate --graph --branches --tags --remotes --all
+	pl = pull
+	ps = push
+	st = status
+	stb = status -bs
+
+[branch]
+	autoSetupRebase = always
+
+[core]
+	autocrlf = false
+	editor = vim
+	ignoreCase = false
+	pager = delta
+	quotePath = false
+
+[credential]
+	helper = cache
+
+[delta]
+	navigate = true
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[fetch]
+	prune = true
+
+[interactive]
+	diffFilter = delta --color-only
+
+[merge]
+	conflictstyle = diff3
+
+[pull]
+	ff = only
+	rebase = true
+	autostash = true
+
+[push]
+	default = current
+
+[user]
+	name = Kazuya Watanabe
+	email = kazuya.watanabe@workram.com

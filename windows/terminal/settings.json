@@ -1,0 +1,85 @@
+{
+  "actions":
+  [
+    {
+      "command": "unbound",
+      "keys": "ctrl+shift+c"
+    },
+    {
+      "command": "unbound",
+      "keys": "ctrl+shift+v"
+    },
+    {
+      "command": "unbound",
+      "keys": "ctrl+c"
+    },
+    {
+      "command": "unbound",
+      "keys": "ctrl+v"
+    }
+  ],
+  "copyFormatting": "none",
+  "copyOnSelect": true,
+  "trimBlockSelection": true,
+  "largePasteWarning": false,
+  "multiLinePasteWarning": false,
+  "profiles": {
+    "defaults": {
+      "bellStyle": "none",
+      "colorScheme": "PaperColor Dark",
+      "cursorShape": "filledBox",
+      "font": {
+        "face": "Hack Nerd Font Mono",
+        "size": 11
+      },
+      "startingDirectory": "%USERPROFILE%",
+      "suppressApplicationTitle": true
+    }
+  },
+  "schemes": [
+    {
+      "name": "PaperColor Light",
+      "cursorColor": "#25C3DC",
+      "foreground": "#3c3c3b",
+      "background": "#eeeeee",
+      "black": "#2c2c2c",
+      "red": "#d7005f",
+      "green": "#718c00",
+      "yellow":"#ff8f01",
+      "blue": "#005f87",
+      "purple": "#6a1e9a",
+      "cyan": "#3e999f",
+      "white": "#f8f8f8",
+      "brightBlack": "#2c2c2c",
+      "brightRed": "#ef5251",
+      "brightGreen": "#90c94d",
+      "brightYellow": "#ffa000",
+      "brightBlue": "#4271ae",
+      "brightPurple": "#c774c1",
+      "brightCyan": "#3e999f",
+      "brightWhite": "#f5f5f5"
+    },
+    {
+      "name": "PaperColor Dark",
+      "cursorColor": "#25C3DC",
+      "foreground": "#f2f2f2",
+      "background": "#2e2e2d",
+      "black": "#2c2c2c",
+      "red": "#c62828",
+      "green": "#558b2e",
+      "yellow":"#f9a825",
+      "blue": "#1565c1",
+      "purple": "#6a1e9a",
+      "cyan": "#00838f",
+      "white": "#ffffff",
+      "brightBlack": "#969694",
+      "brightRed": "#f15250",
+      "brightGreen": "#86bd47",
+      "brightYellow": "#f8e63a",
+      "brightBlue": "#77b2f6",
+      "brightPurple": "#b963c8",
+      "brightCyan": "#25c3dc",
+      "brightWhite": "#ffffff"
+    }
+  ]
+}

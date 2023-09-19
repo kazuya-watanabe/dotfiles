@@ -1,0 +1,112 @@
+" PREPARATIONS {{{
+scriptencoding utf-8
+
+augroup gvimrc
+  autocmd!
+augroup END
+" }}}
+
+" ENVIRONMENTS {{{
+if has('win32')
+  set guifont=Hack_Nerd_Font_Mono:h12,Consolas:h12
+  set guifontwide=MS_Gothic:h12
+
+  if exists('&renderoptions')
+    set renderoptions=type:directx,geom:1,renmode:5
+  endif
+elseif has('gui_gtk')
+  set guifont=Hack\ Nerd\ Font\ Mono\ 11,Monospace\ 11
+elseif has('osx')
+  set guifont=Hack\ Nerd\ Font\ Mono:h13,Menlo:h13
+  set guifontwide=YuGo-Medium:h13
+  set linespace=1
+endif
+" }}}
+
+" UTILS {{{
+function! IncreaseFontSize(inc) " {{{
+  let size = matchstr(&guifont, '\d\+')
+  let &guifont = substitute(&guifont, '\d\+', str2nr(size) + a:inc, 'g')
+  let &guifontwide = substitute(&guifontwide, '\d\+', str2nr(size) + a:inc, 'g')
+endfunction " }}}
+
+" :ToggleFullscreen {{{
+function! s:Fullscreen()
+  if ! s:IsFullscreen()
+    if exists('&fullscreen')
+      set fullscreen
+    elseif has('win32')
+      simalt ~x
+    endif
+  endif
+endfunction
+
+function! s:QuitFullscreen()
+  if s:IsFullscreen()
+    if exists('&fullscreen')
+      set nofullscreen
+    elseif has('win32')
+      simalt ~r
+    endif
+  endif
+endfunction
+
+function! s:IsFullscreen()
+  if exists('&fullscreen')
+    return &fullscreen
+  elseif has('win32')
+    return getwinposy() < 0
+  endif
+
+  return 0
+endfunction
+
+command! -nargs=0 ToggleFullscreen if s:IsFullscreen() | call s:QuitFullscreen() | else | call s:Fullscreen() | endif
+
+nnoremap <M-CR> :ToggleFullscreen<CR>
+" }}}
+
+" s:LoadWindowState() / s:SaveWindowState() {{{
+let s:winstat_file = expand(g:user_vim_dir . '/winstat')
+
+function! s:SaveWindowState()
+  if ! s:IsFullscreen()
+    call writefile([getwinposx(), getwinposy(), &columns, &lines], s:winstat_file)
+  endif
+endfunction
+
+function! s:LoadWindowState()
+  if filereadable(s:winstat_file)
+    let lines = readfile(s:winstat_file, '', 4)
+
+    execute 'winpos ' . get(lines, 0) . ' ' . get(lines, 1)
+
+    let &columns = get(lines, 2, 80)
+    let &lines = get(lines, 3, 20)
+  endif
+endfunction
+
+autocmd gvimrc GUIEnter * call s:LoadWindowState()
+autocmd gvimrc VimLeavePre * call s:SaveWindowState()
+" }}}
+
+" s:ChangeBackground() {{{
+if exists('##OSAppearanceChanged')
+  function! s:ChangeBackground()
+    if (v:os_appearance)
+      set background=dark
+    else
+      set background=light
+    endif
+
+    if exists(':AirlineRefresh')
+      AirlineRefresh
+    endif
+
+    redraw!
+  endfunction
+
+  autocmd gvimrc OSAppearanceChanged * call s:ChangeBackground()
+endif
+" }}}
+" }}}
