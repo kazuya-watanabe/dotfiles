@@ -1,0 +1,61 @@
+[alias]
+	br = branch
+	bra = branch -a
+	ca = commit --amend
+	cc = commit
+	co = checkout
+	cob = checkout -b
+	df = diff
+	ff = flow feature
+	fh = flow hotfix
+	fr = flow release
+	la = log --oneline --decorate --graph --branches --tags --remotes --all
+	pl = pull
+	ps = push
+	st = status
+	stb = status -bs
+
+[branch]
+	autoSetupRebase = always
+
+[core]
+	autocrlf = false
+	editor = vim
+	ignoreCase = false
+	quotePath = false
+	pager = delta
+
+[credential]
+	helper = manager
+	helper = cache
+	helper = store --file ~/.config/git/store
+
+[diff]
+	algorithm = histogram
+
+[fetch]
+	prune = true
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
+[pull]
+	ff = only
+	rebase = true
+
+[push]
+	default = current
+
+[user]
+	name = Kazuya Watanabe
+	email = kazuya.watanabe@workram.com

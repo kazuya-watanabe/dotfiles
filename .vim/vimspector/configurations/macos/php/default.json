@@ -1,0 +1,39 @@
+{
+  "$schema": "https://puremourning.github.io/vimspector/schema/vimspector.schema.json",
+
+  "configurations": {
+    "Listen for XDebug": {
+      "adapter": "vscode-php-debug",
+      "breakpoints": {
+        "exception": {
+          "caught": "Y",
+          "uncaught": "Y"
+        }
+      },
+      "configuration": {
+        "type": "php",
+        "request": "launch",
+        "port": 9003,
+        "pathMappings": {
+          "/var/www/html": "${cwd}"
+        }
+      }
+    },
+    "Launch currently open script": {
+      "adapter": "vscode-php-debug",
+      "breakpoints": {
+        "exception": {
+          "caught": "Y",
+          "uncaught": "Y"
+        }
+      },
+      "configuration": {
+        "type": "php",
+        "request": "launch",
+        "port": 9003,
+        "program": "${file}",
+        "cwd": "${workspaceRoot}"
+      }
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "codeLens.enable": true,
+  "colors.enable": true,
+  "powershell.integratedConsole.showOnStartup": false,
+  "snippets.snipmate.enable": false,
+  "snippets.ultisnips.enable": true,
+  "suggest.removeDuplicateItems": true
+}

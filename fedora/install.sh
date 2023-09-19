@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+
+set -eu
+
+function dnf_install() {
+  if ! rpm -q "$1"; then
+    sudo dnf install -y "$1"
+  fi
+
+  return 0
+}
+
+function cargo_install() {
+  cargo install "$1"
+
+  return 0
+}
+
+function npm_install() {
+  mkdir -p "$HOME/.npm/lib"
+
+  if ! npm -g list "$1"; then
+    npm -g install "$1"
+  fi
+
+  return 0
+}
+
+function pip_install() {
+  echo "installing $1"
+
+  pip3 show "$1" 2>&1 | grep 'not found' && pip3 install "$1"
+
+  return 0
+}
+
+# console utils
+dnf_install bat
+dnf_install coreutils
+dnf_install fd-find
+dnf_install fzf
+dnf_install langpacks-ja
+dnf_install less
+dnf_install lsd
+dnf_install navi
+dnf_install tldr
+dnf_install tmux
+dnf_install util-linux-user
+dnf_install vim-enhanced
+dnf_install wkhtmltopdf
+dnf_install zoxide
+dnf_install zsh
+
+# compression/archivers
+dnf_install bzip2
+dnf_install gzip
+dnf_install p7zip
+dnf_install tar
+dnf_install unzip
+dnf_install xz
+dnf_install zip
+
+# network
+dnf_install curl
+dnf_install httpie
+dnf_install w3m
+dnf_install wget
+
+# text utils
+dnf_install colordiff
+dnf_install ctags
+dnf_install gawk
+dnf_install git-delta
+dnf_install jq
+dnf_install odt2txt
+dnf_install pandoc
+dnf_install poppler-utils
+dnf_install ripgrep
+dnf_install sed
+dnf_install translate-shell
+
+# program languages
+dnf_install nodejs
+dnf_install perl
+dnf_install php
+dnf_install python3
+dnf_install python3-devel
+dnf_install python3-setuptools
+
+# development tools
+dnf_install cargo
+dnf_install cmake
+dnf_install git
+dnf_install postgresql
+dnf_install redis
+dnf_install sqlite
+dnf_install tig
+
+# development libraries
+dnf_install openssl-devel
+
+# media
+dnf_install ffmpeg-free
+dnf_install ImageMagick
+
+sudo chsh -s /bin/zsh "$(whoami)"
+
+# dotfiles
+concdir="$HOME/.conceal"
+
+if [ ! -d "$concdir" ]; then
+  git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$concdir"
+  pushd "$concdir"
+  git remote set-url origin git@github.com:kazuya-watanabe/dotfiles.conceal.git
+  ./install-dotfiles.sh
+  popd
+fi
+
+dotdir="$HOME/.dotfiles"
+
+if [ ! -d "$dotdir" ]; then
+  git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$dotdir"
+  pushd "$dotdir"
+  ./install-dotfiles.sh
+  popd
+fi
+
+# cargo
+cargo_install sheldon
+cargo_install starship
+
+# npm
+npm_install corepack
+
+# python modules
+pip_install pip3-autoremove
+pip_install pip_search
+
+# tmux
+if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
+  git clone https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
+
+  "$HOME/.tmux/plugins/tpm/bin/install_plugins"
+fi

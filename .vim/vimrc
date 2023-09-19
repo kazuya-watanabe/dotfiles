@@ -1,0 +1,869 @@
+" PREPARATIONS {{{
+scriptencoding utf-8
+
+set encoding=utf-8
+
+augroup vimrc
+  autocmd!
+augroup END
+
+syntax enable
+
+filetype plugin indent on
+
+let g:loaded_getscriptPlugin = 1
+"let g:loaded_gzip = 1
+let g:loaded_logiPat = 1
+let g:loaded_manpager_plugin = 1
+"let g:loaded_matchparen = 1
+let g:loaded_netrwPlugin = 1
+let g:loaded_rrhelper = 1
+let g:loaded_spellfile_plugin = 1
+let g:loaded_tarPlugin = 1
+"let g:loaded_2html_plugin = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_zipPlugin = 1
+" }}}
+
+" ENVIRONMENTS {{{
+let g:user_vim_dir = '~/.vim'
+
+if has('win32')
+  let g:user_vim_dir = '~/vimfiles'
+
+  set ambiwidth=double
+  set completeslash=slash
+  set fileformats=unix,dos
+  set makeencoding=char
+
+  if has('vcon')
+    set termguicolors
+  endif
+elseif has('osx')
+  set macmeta
+endif
+
+let &directory = expand(g:user_vim_dir . '/swap')
+let &backupdir = expand(g:user_vim_dir . '/backup')
+let &undodir = expand(g:user_vim_dir . '/undo')
+let &viewdir = expand(g:user_vim_dir . '/view')
+
+call mkdir(&directory, 'p')
+call mkdir(&backupdir, 'p')
+call mkdir(&undodir, 'p')
+call mkdir(&viewdir, 'p')
+" }}}
+
+" UI {{{
+set belloff=all
+set cmdheight=2
+set display=lastline
+set fileignorecase
+set foldlevelstart=2
+set foldmethod=marker
+set langmenu=none
+set laststatus=2
+set langmenu=none
+set lazyredraw
+set list
+set listchars=tab:>-,trail:-,extends:>,precedes:<
+set nolangremap
+set number
+set ruler
+set scrolloff=5
+set shortmess& | set shortmess+=acI
+set showbreak=>\ 
+set showcmd
+set showmatch
+set sidescrolloff=5
+set splitbelow
+set splitright
+set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
+set ttimeout
+set ttimeoutlen=100
+set updatetime=300
+set virtualedit=block
+set whichwrap& | set whichwrap+=<,>,~,[,]
+set wildignorecase
+set wildmenu
+set wildmode=longest:full,full
+set wildoptions=fuzzy,pum,tagfile
+
+if has('gui_running')
+  set guioptions& | set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
+endif
+" }}}
+
+" EDITING {{{
+set autoindent
+set autoread
+set backspace=indent,eol,start
+set clipboard& | set clipboard+=unnamed
+set completeopt=menuone,longest,preview
+set expandtab
+set formatoptions& | set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
+set history=10000
+set nrformats& | set nrformats-=octal
+set nobackup
+set nowritebackup
+set shiftwidth=2
+set smartindent
+set smarttab
+set softtabstop=-1
+set undofile
+
+let &viminfofile = expand(g:user_vim_dir . '/viminfo')
+
+packadd! matchit
+" }}}
+
+" SEARCH AND DIFF {{{
+set diffopt& | set diffopt+=vertical,algorithm:histogram
+set hlsearch
+set ignorecase
+set incsearch
+set smartcase
+
+if executable('rg')
+  set grepformat& | set grepformat+=%f:%l:%c:%m
+  set grepprg=rg\ --vimgrep
+endif
+" }}}
+
+" FILETYPES {{{
+augroup vimrc
+  autocmd BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932
+
+  if has('win32')
+    autocmd BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal completeslash=backslash
+  endif
+
+  autocmd BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
+augroup END
+" }}}
+
+" KEY MAPPINGS {{{
+let g:mapleader = ','
+let g:maplocalleader = ' '
+
+noremap <F1> <Esc>
+noremap! <F1> <Esc>
+
+noremap j gj
+noremap k gk
+noremap n nzz
+noremap N Nzz
+
+cnoremap <C-a> <Home>
+cnoremap <C-b> <Left>
+cnoremap <C-d> <Del>
+cnoremap <C-e> <End>
+cnoremap <C-f> <Right>
+cnoremap <C-n> <Down>
+cnoremap <C-p> <Up>
+
+inoremap <C-a> <Home>
+inoremap <C-b> <Left>
+inoremap <C-d> <Del>
+inoremap <C-e> <End>
+inoremap <C-f> <Right>
+inoremap <C-n> <Down>
+inoremap <C-p> <Up>
+
+nnoremap <C-w>- <C-w>s
+nnoremap <C-w>\| <C-w>v
+nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
+nnoremap <silent> <S-Tab> :<C-u>tabprevious<CR>
+nnoremap <silent> <Tab> :<C-u>tabnext<CR>
+nnoremap Y y$
+nnoremap [q :<C-u>cprevious<CR>
+nnoremap ]q :<C-u>cnext<CR>
+
+nnoremap <silent> <LocalLeader>1 :<C-u>1tabnext<CR>
+nnoremap <silent> <LocalLeader>2 :<C-u>2tabnext<CR>
+nnoremap <silent> <LocalLeader>3 :<C-u>3tabnext<CR>
+nnoremap <silent> <LocalLeader>4 :<C-u>4tabnext<CR>
+nnoremap <silent> <LocalLeader>5 :<C-u>5tabnext<CR>
+nnoremap <silent> <LocalLeader>6 :<C-u>6tabnext<CR>
+nnoremap <silent> <LocalLeader>7 :<C-u>7tabnext<CR>
+nnoremap <silent> <LocalLeader>8 :<C-u>8tabnext<CR>
+nnoremap <silent> <LocalLeader>9 :<C-u>9tabnext<CR>
+nnoremap <silent> <LocalLeader>0 :<C-u>$tabnext<CR>
+
+nnoremap <LocalLeader>h <C-w>h
+nnoremap <LocalLeader>j <C-w>j
+nnoremap <LocalLeader>k <C-w>k
+nnoremap <LocalLeader>l <C-w>l
+
+augroup vimrc
+  autocmd FileType fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
+augroup END
+" }}}
+
+" UTILS {{{
+" :Grep {{{
+command! -nargs=* Grep grep <args> | cwindow
+" }}}
+
+" :PrintPDF {{{
+function! s:PrintPDF(path, line1, line2, bang)
+  if ! executable('wkhtmltopdf')
+    echomsg 'wkhtmltopdf is required for PrintPDF.'
+
+    return v:false
+  endif
+
+  let tmp_path = tempname() . '.html'
+  let pdf_path = empty(a:path) ? (expand('%') . '.pdf') : a:path
+  let args = get(g:, 'printpdf_options', '--no-background --footer-font-size 6 --footer-right "[page] / [topage]"')
+
+  if ! empty(glob(expand(pdf_path)))
+    if empty(a:bang)
+      echoerr 'PrintPDF: File exists (add ! to override)'
+
+      return v:false
+    else
+      call delete(expand(pdf_path))
+    endif
+  endif
+
+  let html_ignore_folding = get(g:, 'html_ignore_folding', 0)
+  let g:html_ignore_folding = 1
+
+  execute a:line1 . ',' . a:line2 . 'TOhtml'
+  execute 'write ' . expand(tmp_path)
+  execute 'bdelete!'
+
+  let g:html_ignore_folding = html_ignore_folding
+  let command = 'wkhtmltopdf ' . args . ' ' . shellescape(expand(tmp_path)) . ' ' . shellescape(expand(pdf_path))
+  let output = system(command)
+
+  if v:shell_error
+    echoerr 'PrintPDF: Failed to convert to pdf.'
+
+    return v:false
+  endif
+
+  call delete(expand(tmp_path))
+
+  echomsg 'PrintPDF: Successfully converted to pdf.'
+
+  return v:true
+endfunction
+
+command! -nargs=? -complete=file -range=% -bang PrintPDF call s:PrintPDF(<q-args>, <line1>, <line2>, <q-bang>)
+" }}}
+
+" :Tig {{{
+if executable('tig')
+  command! -nargs=* Tig terminal ++close tig <f-args>
+endif
+" }}}
+
+function! DownloadFile(url, savepath) " {{{
+  call mkdir(fnamemodify(a:savepath, ':p:h'), 'p')
+
+  let cmd = ''
+  if executable('curl')
+    let cmd = 'curl -fLo ' . shellescape(a:savepath) . ' ' . shellescape(a:url)
+  elseif executable('wget')
+    let cmd = 'wget -O ' . shellescape(a:savepath) . ' ' . shellescape(a:url)
+  elseif executable('bitsadmin')
+    let cmd = 'bitsadmin /transfer vimrc ' . shellescape(a:url) . ' ' . shellescape(a:savepath)
+  else
+    return v:false
+  endif
+
+  if cmd != ''
+    call system(cmd)
+  endif
+
+  return filereadable(a:savepath)
+endfunction " }}}
+
+function! RemoveBackgroundHighlight() " {{{
+  highlight EndOfBuffer ctermbg=NONE guibg=NONE
+  highlight Folded ctermbg=NONE guibg=NONE
+  highlight LineNr ctermbg=NONE guibg=NONE
+  highlight NonText ctermbg=NONE guibg=NONE
+  highlight Normal ctermbg=NONE guibg=NONE
+endfunction " }}}
+" }}}
+
+" EXTERNAL PLUGINS {{{
+" Install vim-plug automatically {{{
+let s:vimplug = expand(g:user_vim_dir . '/autoload/plug.vim')
+
+if ! executable('git')
+  echomsg 'git is required for vim-plug.'
+  finish
+endif
+
+if ! filereadable(s:vimplug)
+  if ! DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', s:vimplug)
+    echoerr 'Unable to download vim-plug.'
+    finish
+  endif
+
+  echomsg 'vim-plug is installed.'
+endif
+" }}}
+
+" Initialize vim-plug and list the plugins to be used. {{{
+call plug#begin(g:user_vim_dir . '/plugged')
+
+if executable('npm')
+  Plug 'dense-analysis/ale', { 'do': 'npm install -g textlint textlint-rule-preset-ja-technical-writing' }
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
+endif
+
+if executable('pip3')
+  Plug 'madox2/vim-ai'
+endif
+
+Plug 'rafi/awesome-vim-colorschemes'
+Plug 'github/copilot.vim'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
+Plug 'preservim/nerdcommenter'
+Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown'
+Plug 'echuraev/translate-shell.vim'
+Plug 'mbbill/undotree'
+Plug 'jeetsukumaran/vim-buffergator'
+Plug 'easymotion/vim-easymotion'
+Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-surround'
+Plug 'vim-jp/vimdoc-ja'
+Plug 'puremourning/vimspector'
+Plug 'liuchengxu/vista.vim'
+Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
+
+if &encoding == 'utf-8' && (has('gui_running') || exists('$NERDFONT'))
+  Plug 'ryanoasis/vim-devicons'
+endif
+
+call plug#end()
+" }}}
+
+function! s:IsPlugged(plug) " {{{
+  return has_key(g:plugs, a:plug) && has_key(g:plugs[a:plug], 'dir') && isdirectory(g:plugs[a:plug]['dir'])
+endfunction " }}}
+
+" Download and install the missing plugins. {{{
+for i in keys(g:plugs)
+  if ! s:IsPlugged(i)
+    silent PlugInstall --sync
+
+    echohl WarningMsg
+      echomsg 'PlugInstall is complete. Please restart vim.'
+    echohl None
+
+    finish
+  endif
+endfor
+" }}}
+
+if s:IsPlugged('ale') " {{{
+  let g:ale_completion_enabled = 1
+  let g:ale_linters = {
+        \ 'markdown': [ 'textlint' ],
+        \ 'text': [ 'textlint' ]
+        \ }
+endif " }}}
+
+if s:IsPlugged('awesome-vim-colorschemes') " {{{
+  if has('gui_running')
+    set background=light
+  else
+    set background=dark
+  endif
+
+  colorscheme PaperColor
+
+  highlight! link CocFloatDividingLine CocFloating
+  highlight! link CocMenuSel PmenuSel
+  highlight! link Terminal Normal
+  highlight! link VertSplit StatusLine
+
+  if ! has('gui_running')
+    "augroup vimrc
+      "autocmd ColorScheme * call RemoveBackgroundHighlight()
+    "augroup END
+
+    call RemoveBackgroundHighlight()
+  endif
+endif
+" }}}
+
+if s:IsPlugged('coc.nvim') " {{{
+  let g:coc_global_extensions = [
+        \ 'coc-highlight',
+        \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
+        \ 'coc-html', 'coc-css', 'coc-svg',
+        \ 'coc-tsserver',
+        \ 'coc-vimlsp',
+        \ 'coc-webview', 'coc-markdown-preview-enhanced'
+        \ ]
+
+  if has('python3') && s:IsPlugged('vim-snippets')
+    call add(g:coc_global_extensions, 'coc-snippets')
+  endif
+
+  " languages
+  if executable('bash') && ! has('win32')
+    call add(g:coc_global_extensions, 'coc-sh')
+  endif
+
+  if executable('php')
+    call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade'])
+  endif
+
+  if executable('powershell') || executable('posh')
+    call add(g:coc_global_extensions,  'coc-powershell')
+  endif
+
+  if executable('python3')
+    call add(g:coc_global_extensions, 'coc-pyright')
+  endif
+
+  " coc-markdown-preview-enhanced
+  command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
+
+  " coc-highlight
+  augroup vimrc
+    autocmd CursorHold * call CocActionAsync('highlight')
+  augroup END
+
+  " coc-hover
+  function! s:ShowDocumentation()
+    if CocAction('hasProvider', 'hover')
+      call CocActionAsync('definitionHover')
+    else
+      call feedkeys('K', 'in')
+    endif
+  endfunction
+
+  nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
+
+  " coc-completion
+  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<Down>'
+  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<Up>'
+  inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : '<C-j>'
+  inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : '<C-k>'
+  inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
+  inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
+
+  inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<Right>'
+  inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<Left>'
+  inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
+  inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
+
+  inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
+  inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
+  inoremap <silent><expr> <C-.> coc#refresh()
+
+  " coc-diagnostics
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+  " coc-locations
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+
+  " coc-rename
+  nmap <Leader>rn <Plug>(coc-rename)
+  nmap <Leader>re <Plug>(coc-refactor)
+
+  " coc-format
+  xmap <Leader>f <Plug>(coc-format-selected)
+  nmap <Leader>f <Plug>(coc-format-selected)
+
+  " coc-codeLens
+  nmap <Leader>l <Plug>(coc-codelens-action)
+
+  command! -nargs=? Fold :call CocAction('fold', <f-args>)
+  command! -nargs=0 Format :call CocActionAsync('format')
+  command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+  if (get(g:, 'coc_service_initialized', 0) == 0) && exists(':CocStart')
+    CocStart
+  endif
+endif " }}}
+
+"if s:IsPlugged('copilot.vim') " {{{
+"endif " }}}
+
+"if s:IsPlugged('editorconfig-vim') " {{{
+"endif " }}}
+
+if s:IsPlugged('fzf.vim') " {{{
+  let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
+  let g:fzf_layout = { 'down': '40%' }
+  let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
+
+  command! -bang -nargs=* Grep call fzf#vim#grep('rg --hidden --follow --smart-case --column --line-number --no-heading --color=always -- ' . shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
+
+  nnoremap <silent> <C-p> :<C-u>Files<CR>
+endif " }}}
+
+"if s:IsPlugged('nerdcommenter') " {{{
+"endif " }}}
+
+if s:IsPlugged('nerdtree') " {{{
+  let g:NERDTreeBookmarksFile = expand(g:user_vim_dir . '/NERDTreeBookmarksFile')
+  let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$']
+  let g:NERDTreeWinSize = 30
+
+  function! s:NERDTreeToggleVCS()
+    try
+      BuffergatorClose
+    catch
+    endtry
+
+    NERDTreeToggleVCS
+  endfunction
+
+  nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+endif " }}}
+
+"if s:IsPlugged('tabular') " {{{
+"endif " }}}
+
+if s:IsPlugged('translate-shell.vim') " {{{
+  let g:trans_default_direction = ':ja'
+  let g:trans_advanced_options = '-brief'
+  let g:trans_join_lines = 1
+endif " }}}
+
+if s:IsPlugged('undotree') " {{{
+  let g:undotree_SetFocusWhenToggle = 1
+  let g:undotree_SplitWidth = 30
+  let g:undotree_WindowLayout = 3
+
+  function! s:UndotreeToggle()
+    try
+      Vista!
+    catch
+    endtry
+
+    UndotreeToggle
+  endfunction
+
+  nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
+endif " }}}
+
+if s:IsPlugged('vim-ai') " {{{
+  let g:vim_ai_complete = {
+        \   "engine": "complete",
+        \   "options": {
+        \     "model": "gpt-3.5-turbo-instruct",
+        \     "max_tokens": 1000,
+        \     "temperature": 0.1,
+        \     "request_timeout": 20,
+        \     "selection_boundary": "#####",
+        \   },
+        \   "ui": {
+        \    "paste_mode": 1,
+        \   },
+        \ }
+
+  let g:vim_ai_edit = {
+        \   "engine": "complete",
+        \   "options": {
+        \     "model": "gpt-3.5-turbo-instruct",
+        \     "max_tokens": 1000,
+        \     "temperature": 0.1,
+        \     "request_timeout": 20,
+        \     "selection_boundary": "#####",
+        \   },
+        \   "ui": {
+        \     "paste_mode": 1,
+        \   },
+        \ }
+
+  let s:initial_chat_prompt =<< trim END
+>>> system
+
+You are a general assistant.
+If you attach a code block add syntax type after ``` to enable syntax highlighting.
+Please respond in Japanese.
+END
+
+let g:vim_ai_chat = {
+      \   "options": {
+      \     "model": "gpt-3.5-turbo",
+      \     "max_tokens": 1000,
+      \     "temperature": 1.0,
+      \     "request_timeout": 20,
+      \     "selection_boundary": "#####",
+      \     "initial_prompt": s:initial_chat_prompt,
+      \   },
+      \   "ui": {
+      \     "code_syntax_enabled": 1,
+      \     "populate_options": 0,
+      \     "open_chat_command": "preset_below",
+      \     "scratch_buffer_keep_open": 0,
+      \     "paste_mode": 1,
+      \   },
+      \ }
+endif " }}}
+
+if s:IsPlugged('vim-airline') " {{{
+  let g:airline_experimental = 1
+  let g:airline#extensions#tabline#fnamemod = ':t'
+  let g:airline#extensions#tabline#show_buffers = 0
+  let g:airline#extensions#tabline#show_close_button = 0
+
+  if exists(':AirlineRefresh')
+    AirlineRefresh
+  endif
+
+  if has('gui_running')
+    augroup vimrc
+      let g:airline_theme = g:colors_name
+
+      autocmd GUIEnter * call airline#switch_matching_theme()
+    augroup END
+  endif
+endif " }}}
+
+if s:IsPlugged('vim-buffergator') " {{{
+  let g:buffergator_autodismiss_on_select = 0
+  let g:buffergator_autoexpand_on_split = 0
+  let g:buffergator_autoupdate = 1
+  let g:buffergator_suppress_keymaps = 1
+  let g:buffergator_vsplit_size = 30
+
+  function! s:BuffergatorToggle()
+    try
+      NERDTreeClose
+    catch
+    endtry
+
+    BuffergatorToggle
+  endfunction
+
+  nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+endif " }}}
+
+if s:IsPlugged('vim-chatgpt') " {{{
+  let g:chat_gpt_model = 'gpt-3.5-turbo'
+  let g:chat_gpt_session_mode = 1
+  let g:chat_gpt_temperature = 0.7
+  let g:chat_gpt_lang = 'Japanese'
+
+  vnoremap <silent> <leader>0 <Plug>(chatgpt-menu)
+endif " }}}
+
+"if s:IsPlugged('vim-dadbod') " {{{
+"endif " }}}
+
+if s:IsPlugged('vim-devicons') " {{{
+  if has('win32')
+    set ambiwidth=single
+  endif
+
+  let g:webdevicons_enable = 1
+  let g:webdevicons_enable_airline_statusline = 1
+  let g:webdevicons_enable_airline_tabline = 1
+  let g:webdevicons_enable_nerdtree = 1
+  let g:webdevicons_conceal_nerdtree_brackets = 1
+
+  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:
+  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+  set showbreak=↪\ \ 
+
+  let g:ale_sign_error = '󰀨'
+  let g:ale_sign_warning = '󰀦'
+
+  if ! exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+  let g:airline_powerline_fonts = 1
+  let g:airline_left_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_sep = ''
+  let g:airline_right_alt_sep = ''
+  let g:airline_symbols.branch = '󰘬'
+  let g:airline_symbols.colnr = ''
+  let g:airline_symbols.dirty = '󰐗'
+  let g:airline_symbols.linenr = ''
+  let g:airline_symbols.maxlinenr = ' '
+  let g:airline_symbols.notexists = '󰱼'
+  let g:airline_symbols.paste = '󰆒'
+  let g:airline_symbols.readonly = '󰌾'
+  let g:airline_symbols.spell = '󰓆'
+  let g:airline_symbols.whitespace = '󱁐'
+  let g:airline#extensions#coc#error_symbol = '󰀩 '
+  let g:airline#extensions#coc#warning_symbol = '󰀦 '
+  let g:airline#extensions#tabline#close_symbol = '󰅖'
+  let g:airline#extensions#tabline#overflow_marker = '…'
+  let g:airline#extensions#tabline#tabs_label = '󰓩'
+
+  try
+    AirlineRefresh
+  catch
+  endtry
+
+  let g:NERDTreeDirArrowCollapsible = ''
+  let g:NERDTreeDirArrowExpandable = ''
+  let g:NERDTreeGitStatusIndicatorMapCustom = {
+        \ 'Modified': '󰧟',
+        \ 'Staged': '󰐕',
+        \ 'Untracked': '󰓎',
+        \ 'Renamed': '󰁔',
+        \ 'Unmerged': '󰦎',
+        \ 'Deleted': '󰆴',
+        \ 'Dirty': '󰂚',
+        \ 'Ignored': '󰅖',
+        \ 'Clean': '󰄬',
+        \ 'Unknown': '?',
+        \ }
+  let g:NERDTreeGitStatusUseNerdFonts = 1
+
+  let g:vista_icon_indent = ['└ ', '├ ']
+  let g:vista_fold_toggle_icons = ['', '']
+  let g:vista#renderer#icons = {
+        \ 'func': '󰊕',
+        \ 'function': '󰊕',
+        \ 'functions': '󰊕',
+        \ 'var': '',
+        \ 'variable': '',
+        \ 'variables': '',
+        \ 'const': '',
+        \ 'constant': '',
+        \ 'constructor': '󰑶',
+        \ 'method': '',
+        \ 'package': '',
+        \ 'packages': '',
+        \ 'enum': '',
+        \ 'enummember': '',
+        \ 'enumerator': '',
+        \ 'module': '',
+        \ 'modules': '',
+        \ 'type': '',
+        \ 'typedef': '',
+        \ 'types': '',
+        \ 'field': '',
+        \ 'fields': '',
+        \ 'macro': '󰎤',
+        \ 'macros': '󰎤',
+        \ 'map': '󰙅',
+        \ 'class': '',
+        \ 'augroup': '󰙅',
+        \ 'struct': '',
+        \ 'union': '󰕤',
+        \ 'member': '',
+        \ 'target': '󰎔',
+        \ 'property': '',
+        \ 'interface': '',
+        \ 'namespace': '',
+        \ 'subroutine': '󰒰',
+        \ 'implementation': '',
+        \ 'typeParameter': '',
+        \ 'default': ''
+        \ }
+
+  try
+    call coc#config('suggest.completionItemKindLabels', {
+          \ 'keyword': '',
+          \ 'variable': '',
+          \ 'value': '󰎠',
+          \ 'operator': 'ψ',
+          \ 'constructor': '󰑶',
+          \ 'function': '󰊕',
+          \ 'reference': '',
+          \ 'constant': '',
+          \ 'method': '',
+          \ 'struct': '',
+          \ 'class': '',
+          \ 'interface': '',
+          \ 'text': '',
+          \ 'enum': '',
+          \ 'enumMember': '',
+          \ 'module': '',
+          \ 'color': '',
+          \ 'property': '',
+          \ 'field': '',
+          \ 'unit': '',
+          \ 'event': '󰥕',
+          \ 'file': '󰈤',
+          \ 'folder': '󰉖',
+          \ 'snippet': '󰅩',
+          \ 'typeParameter': '',
+          \ 'default': ''
+          \ })
+  catch
+  endtry
+endif " }}}
+
+"if s:IsPlugged('vim-easymotion') " {{{
+"endif " }}}
+
+"if s:IsPlugged('vim-fugitive') " {{{
+"endif " }}}
+
+"if s:IsPlugged('vim-gitgutter') " {{{
+"endif " }}}
+
+"if s:IsPlugged('vim-repeat') " {{{
+"endif " }}}
+
+if s:IsPlugged('vim-speeddating') " {{{
+  if exists(':SpeedDatingFormat')
+    SpeedDatingFormat %Y/%m/%d
+  endif
+endif " }}}
+
+"if s:IsPlugged('vim-surround') " {{{
+"endif " }}}
+
+"if s:IsPlugged('vimdoc-ja') " {{{
+"endif " }}}
+
+if s:IsPlugged('vimspector') " {{{
+  let g:vimspector_install_gadgets = []
+
+  if executable('python3')
+    call add(g:vimspector_install_gadgets, 'debugpy')
+  endif
+
+  if executable('php')
+    call add(g:vimspector_install_gadgets, 'vscode-php-debug')
+  endif
+
+  let g:vimspector_base_dir = expand(g:user_vim_dir . '/vimspector')
+  let g:vimspector_enable_mappings = 'HUMAN'
+
+  nnoremap <F2> :<C-u>VimspectorReset<CR>
+endif " }}}
+
+if s:IsPlugged('vista.vim') " {{{
+  let g:vista_sidebar_width = 30
+
+  if s:IsPlugged('coc.nvim')
+    let g:vista_default_executive = 'coc'
+  elseif executable('ctags')
+    let g:vista_default_executive = 'ctags'
+  endif
+
+  function! s:Vista()
+    try
+      UndotreeHide
+    catch
+    endtry
+
+    Vista!!
+  endfunction
+
+  nnoremap <silent> <Leader>t :<C-u>call <SID>Vista()<CR>
+endif " }}}
+" }}}
