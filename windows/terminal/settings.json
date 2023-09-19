@@ -1,0 +1,65 @@
+{
+    "$help": "https://aka.ms/terminal-documentation",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "actions": 
+    [
+      {
+        "command": "unbound",
+        "keys": "ctrl+shift+c"
+      },
+      {
+        "command": "unbound",
+        "keys": "ctrl+shift+v"
+      },
+      {
+        "command": "unbound",
+        "keys": "ctrl+c"
+      },
+      {
+        "command": "unbound",
+        "keys": "ctrl+v"
+      }
+    ],
+    "copyFormatting": "none",
+    "copyOnSelect": true,
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "initialCols": 160,
+    "initialRows": 50,
+    "largePasteWarning": false,
+    "multiLinePasteWarning": false,
+    "newTabMenu": 
+    [
+        {
+            "type": "remainingProfiles"
+        }
+    ],
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "colorScheme": "One Half Dark",
+            "cursorShape": "filledBox",
+            "font": 
+            {
+                "face": "Hack Nerd Font Mono,Cascadia Code",
+                "size": 10
+            }
+        },
+        "list": 
+        [
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "hidden": false,
+                "name": "Windows PowerShell"
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "hidden": false,
+                "name": "Command Prompt"
+            }
+        ]
+    },
+    "schemes": [],
+    "themes": [],
+    "trimBlockSelection": true
+}
