@@ -149,9 +149,9 @@ Add-ScoopApp -Name 'python311'
 
 # development tools
 Add-ScoopApp -Name 'composer'
-Add-ScoopApp -Name 'mysql'
-Add-ScoopApp -Name 'postgresql'
-Add-ScoopApp -Name 'redis'
+#Add-ScoopApp -Name 'mysql'
+#Add-ScoopApp -Name 'postgresql'
+#Add-ScoopApp -Name 'redis'
 Add-ScoopApp -Name 'sqlite'
 
 # media

@@ -106,9 +106,9 @@ brew_install --formula composer
 brew_install --formula corepack
 brew_install --formula git
 brew_install --formula git-flow
-brew_install --formula mysql
-brew_install --formula postgresql@15
-brew_install --formula redis
+#brew_install --formula mysql
+#brew_install --formula postgresql@15
+#brew_install --formula redis
 brew_install --formula sqlite
 brew_install --formula tig
 

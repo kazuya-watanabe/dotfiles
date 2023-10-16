@@ -90,9 +90,10 @@ dnf_install python3-setuptools
 # development tools
 dnf_install cargo
 dnf_install cmake
+#dnf_install community-mysql-server
 dnf_install git
-dnf_install postgresql
-dnf_install redis
+#dnf_install postgresql
+#dnf_install redis
 dnf_install sqlite
 dnf_install tig
 

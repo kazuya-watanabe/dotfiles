@@ -86,10 +86,8 @@ function! s:LoadWindowState()
   endif
 endfunction
 
-augroup gvimrc
-  autocmd GUIEnter * call s:LoadWindowState()
-  autocmd VimLeavePre * call s:SaveWindowState()
-augroup END
+autocmd gvimrc GUIEnter * call s:LoadWindowState()
+autocmd gvimrc VimLeavePre * call s:SaveWindowState()
 " }}}
 
 " s:ChangeBackground() {{{
@@ -108,9 +106,7 @@ if exists('##OSAppearanceChanged')
     redraw!
   endfunction
 
-  augroup gvimrc
-    autocmd OSAppearanceChanged * call s:ChangeBackground()
-  augroup END
+  autocmd gvimrc OSAppearanceChanged * call s:ChangeBackground()
 endif
 " }}}
 " }}}

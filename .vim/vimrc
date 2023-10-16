@@ -34,13 +34,14 @@ if has('win32')
   set ambiwidth=double
   set completeslash=slash
   set fileformats=unix,dos
-  set makeencoding=char
 
   if has('vcon')
     set termguicolors
   endif
 elseif has('osx')
-  set macmeta
+  if exists('+macmeta')
+    set macmeta
+  endif
 endif
 
 let &directory = expand(g:user_vim_dir . '/swap')
@@ -131,15 +132,13 @@ endif
 " }}}
 
 " FILETYPES {{{
-augroup vimrc
-  autocmd BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932
+autocmd vimrc BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932
 
-  if has('win32')
-    autocmd BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal completeslash=backslash
-  endif
+if has('win32')
+  autocmd vimrc BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal completeslash=backslash
+endif
 
-  autocmd BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
-augroup END
+autocmd vimrc BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
 " }}}
 
 " KEY MAPPINGS {{{
@@ -195,9 +194,7 @@ nnoremap <LocalLeader>j <C-w>j
 nnoremap <LocalLeader>k <C-w>k
 nnoremap <LocalLeader>l <C-w>l
 
-augroup vimrc
-  autocmd FileType fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
-augroup END
+autocmd vimrc FileType fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
 " }}}
 
 " UTILS {{{
@@ -260,10 +257,11 @@ if executable('tig')
 endif
 " }}}
 
-function! DownloadFile(url, savepath) " {{{
+function! s:DownloadFile(url, savepath) " {{{
   call mkdir(fnamemodify(a:savepath, ':p:h'), 'p')
 
   let cmd = ''
+
   if executable('curl')
     let cmd = 'curl -fLo ' . shellescape(a:savepath) . ' ' . shellescape(a:url)
   elseif executable('wget')
@@ -281,7 +279,7 @@ function! DownloadFile(url, savepath) " {{{
   return filereadable(a:savepath)
 endfunction " }}}
 
-function! RemoveBackgroundHighlight() " {{{
+function! s:RemoveBackgroundHighlight() " {{{
   highlight EndOfBuffer ctermbg=NONE guibg=NONE
   highlight Folded ctermbg=NONE guibg=NONE
   highlight LineNr ctermbg=NONE guibg=NONE
@@ -296,12 +294,14 @@ let s:vimplug = expand(g:user_vim_dir . '/autoload/plug.vim')
 
 if ! executable('git')
   echomsg 'git is required for vim-plug.'
+
   finish
 endif
 
 if ! filereadable(s:vimplug)
-  if ! DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', s:vimplug)
+  if ! s:DownloadFile('https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim', s:vimplug)
     echoerr 'Unable to download vim-plug.'
+
     finish
   endif
 
@@ -317,8 +317,9 @@ if executable('npm')
   Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
 endif
 
-if executable('pip3')
+if has('python3')
   Plug 'madox2/vim-ai'
+  Plug 'puremourning/vimspector'
 endif
 
 Plug 'rafi/awesome-vim-colorschemes'
@@ -338,7 +339,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'vim-jp/vimdoc-ja'
-Plug 'puremourning/vimspector'
 Plug 'liuchengxu/vista.vim'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
 
@@ -390,11 +390,9 @@ if s:IsPlugged('awesome-vim-colorschemes') " {{{
   highlight! link VertSplit StatusLine
 
   if ! has('gui_running')
-    "augroup vimrc
-      "autocmd ColorScheme * call RemoveBackgroundHighlight()
-    "augroup END
+    "autocmd vimrc ColorScheme * call <SID>RemoveBackgroundHighlight()
 
-    call RemoveBackgroundHighlight()
+    call s:RemoveBackgroundHighlight()
   endif
 endif
 " }}}
@@ -434,9 +432,7 @@ if s:IsPlugged('coc.nvim') " {{{
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
 
   " coc-highlight
-  augroup vimrc
-    autocmd CursorHold * call CocActionAsync('highlight')
-  augroup END
+  autocmd vimrc CursorHold * call CocActionAsync('highlight')
 
   " coc-hover
   function! s:ShowDocumentation()
@@ -626,11 +622,9 @@ if s:IsPlugged('vim-airline') " {{{
   endif
 
   if has('gui_running')
-    augroup vimrc
-      let g:airline_theme = g:colors_name
+    let g:airline_theme = g:colors_name
 
-      autocmd GUIEnter * call airline#switch_matching_theme()
-    augroup END
+    autocmd vimrc GUIEnter * call airline#switch_matching_theme()
   endif
 endif " }}}
 
@@ -670,15 +664,15 @@ if s:IsPlugged('vim-devicons') " {{{
     set ambiwidth=single
   endif
 
+  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
+  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+  set showbreak=↪∙∙∙
+
   let g:webdevicons_enable = 1
   let g:webdevicons_enable_airline_statusline = 1
   let g:webdevicons_enable_airline_tabline = 1
   let g:webdevicons_enable_nerdtree = 1
   let g:webdevicons_conceal_nerdtree_brackets = 1
-
-  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:
-  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
-  set showbreak=↪\ \ 
 
   let g:ale_sign_error = '󰀨'
   let g:ale_sign_warning = '󰀦'
