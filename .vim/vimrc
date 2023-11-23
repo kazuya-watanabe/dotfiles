@@ -335,6 +335,7 @@ Plug 'jeetsukumaran/vim-buffergator'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
 Plug 'airblade/vim-gitgutter'
+Plug 'osyo-manga/vim-precious' | Plug 'Shougo/context_filetype.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
@@ -493,8 +494,9 @@ if s:IsPlugged('coc.nvim') " {{{
   endif
 endif " }}}
 
-"if s:IsPlugged('copilot.vim') " {{{
-"endif " }}}
+if s:IsPlugged('copilot.vim') " {{{
+  highlight! link CopilotSuggestion PmenuSel
+endif " }}}
 
 "if s:IsPlugged('editorconfig-vim') " {{{
 "endif " }}}
@@ -806,6 +808,9 @@ endif " }}}
 "endif " }}}
 
 "if s:IsPlugged('vim-gitgutter') " {{{
+"endif " }}}
+
+"if s:IsPlugged('vim-precious') " {{{
 "endif " }}}
 
 "if s:IsPlugged('vim-repeat') " {{{

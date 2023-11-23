@@ -31,7 +31,7 @@ function Add-Path() {
   Process {
     $Pathes = [System.Environment]::GetEnvironmentVariable('Path', $Scope)
 
-    if (-Not ($Pathes.Contains($Path))) {
+    if (-not ($Pathes.Contains($Path))) {
       Set-EnvVar -Name 'Path' -Value "$Path;$Pathes" -Scope $Scope
     }
   }
@@ -46,7 +46,7 @@ function Add-ScoopBucket() {
   Process {
     Write-Host -Object "bucket: $Name"
 
-    If (-Not (scoop bucket list).Name.Contains($Name)) {
+    If (-not (scoop bucket list).Name.Contains($Name)) {
       scoop bucket add "$Name"
     }
   }
@@ -61,7 +61,7 @@ function Add-ScoopApp() {
   Process {
     Write-Host -Object "app: $Name"
 
-    if (-Not (scoop list).Name.Contains("$Name")) {
+    if (((scoop list).Name -eq $Null) -or (-not (scoop list).Name.Contains("$Name"))) {
       scoop install "$Name"
     }
   }
@@ -82,7 +82,7 @@ function Add-PythonModule() {
   }
 }
 
-If (-Not (Get-Command -Name 'scoop')) {
+If (-not (Get-Command -Name 'scoop')) {
   Write-Host -Object 'scoop'
 
   Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
@@ -100,7 +100,6 @@ Add-ScoopBucket -Name 'versions'
 
 # gui apps
 Add-ScoopApp -Name '7zip'
-Add-ScoopApp -Name 'autohotkey'
 Add-ScoopApp -Name 'ueli'
 Add-ScoopApp -Name 'vim-nightly'
 
@@ -167,7 +166,7 @@ Add-Path -Path (Split-Path -Path (npm root -g) -Parent)
 # python
 Set-EnvVar -Name 'PYTHONHOME' -Value (scoop prefix python311)
 
-If (-Not (Get-Command -Name 'pip3')) {
+If (-not (Get-Command -Name 'pip3')) {
   python3 -m ensurepip
 }
 
@@ -178,7 +177,7 @@ Add-PythonModule -Name 'httpie'
 # dotfiles
 $ConcDir = (Join-Path -Path $HOME -ChildPath 'Documents\Conceal')
 
-If (-Not (Test-Path -Path $ConcDir)) {
+If (-not (Test-Path -Path $ConcDir)) {
   git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$ConcDir"
 
   Push-Location -Path $ConcDir
@@ -189,7 +188,7 @@ If (-Not (Test-Path -Path $ConcDir)) {
 
 $DotDir = (Join-Path -Path $HOME -ChildPath 'Documents\Dotfiles')
 
-If (-Not (Test-Path -Path $DotDir)) {
+If (-not (Test-Path -Path $DotDir)) {
   git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$DotDir"
 
   Push-Location -Path $DotDir

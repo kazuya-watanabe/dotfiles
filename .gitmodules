@@ -1,3 +1,0 @@
-[submodule "windows/ahk/ime"]
-	path = windows/ahk/ime
-	url = https://github.com/k-ayaki/IMEv2.ahk.git
