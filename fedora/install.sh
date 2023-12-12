@@ -80,6 +80,7 @@ dnf_install sed
 dnf_install translate-shell
 
 # program languages
+dnf_install golang
 dnf_install nodejs
 dnf_install perl
 dnf_install php

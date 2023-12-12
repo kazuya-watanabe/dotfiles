@@ -417,6 +417,10 @@ if s:IsPlugged('coc.nvim') " {{{
     call add(g:coc_global_extensions, 'coc-sh')
   endif
 
+  if executable('go')
+    call add(g:coc_global_extensions, 'coc-go')
+  endif
+
   if executable('php')
     call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade'])
   endif
@@ -830,6 +834,10 @@ endif " }}}
 
 if s:IsPlugged('vimspector') " {{{
   let g:vimspector_install_gadgets = []
+
+  if executable('go')
+    call add(g:vimspector_install_gadgets, 'delve')
+  endif
 
   if executable('python3')
     call add(g:vimspector_install_gadgets, 'debugpy')

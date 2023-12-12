@@ -141,6 +141,7 @@ Add-ScoopApp -Name 'sed'
 Add-ScoopApp -Name 'universal-ctags'
 
 # program language
+Add-ScoopApp -Name 'go'
 Add-ScoopApp -Name 'nodejs-lts'
 Add-ScoopApp -Name 'perl'
 Add-ScoopApp -Name 'php'

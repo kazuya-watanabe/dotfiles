@@ -96,6 +96,7 @@ brew_install --formula translate-shell
 brew_install --formula universal-ctags
 
 # program languages
+brew_install --formula go
 brew_install --formula node
 brew_install --formula perl
 brew_install --formula php
