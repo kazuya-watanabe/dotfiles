@@ -42,7 +42,7 @@ Remove-Item alias:tee -Force
 Remove-Item alias:type
 Remove-Item alias:wget
 
-if (Get-Command -Name bat)
+if (Get-Command -Name bat 2>$null)
 {
   function cat()
   {
@@ -55,14 +55,14 @@ if (Get-Command -Name bat)
   }
 }
 
-if (Get-Command -Name delta)
+if (Get-Command -Name delta 2>$null)
 {
   function diff()
   {
     delta.exe $args
   }
 }
-elseif (Get-Command -Name colordiff)
+elseif (Get-Command -Name colordiff >$null)
 {
   function diff()
   {
@@ -100,7 +100,7 @@ function ll() {
 If ($Env:WT_SESSION) {
   $Env:NERDFONT = 1
 
-  if (Get-Command -Name lsd)
+  if (Get-Command -Name lsd 2>$null)
   {
     function ls()
     {
