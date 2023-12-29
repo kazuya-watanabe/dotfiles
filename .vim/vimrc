@@ -600,7 +600,7 @@ END
 
   let g:vim_ai_chat = {
       \   "options": {
-      \     "model": "gpt-3.5-turbo",
+      \     "model": "gpt-3.5-turbo-instruct",
       \     "max_tokens": 1000,
       \     "temperature": 1.0,
       \     "request_timeout": 20,
@@ -651,15 +651,6 @@ if s:IsPlugged('vim-buffergator') " {{{
   endfunction
 
   nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
-endif " }}}
-
-if s:IsPlugged('vim-chatgpt') " {{{
-  let g:chat_gpt_model = 'gpt-3.5-turbo'
-  let g:chat_gpt_session_mode = 1
-  let g:chat_gpt_temperature = 0.7
-  let g:chat_gpt_lang = 'Japanese'
-
-  vnoremap <silent> <leader>0 <Plug>(chatgpt-menu)
 endif " }}}
 
 "if s:IsPlugged('vim-dadbod') " {{{
