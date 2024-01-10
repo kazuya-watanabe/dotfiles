@@ -1,9 +1,3 @@
-$PSReadLineVersion = (Get-Module -Name PSReadLine).Version
-
-If ($PSReadLineVersion -Lt 2.1) {
-  Install-Module -Name PSReadLine -Scope CurrentUser -Force
-}
-
 Import-Module PSReadLine
 
 Set-PSReadLineOption -EditMode Vi
