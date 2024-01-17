@@ -19,6 +19,8 @@ Set-PSReadLineKeyHandler -Key Ctrl+m -Function ValidateAndAcceptLine
 Set-PSReadLineKeyHandler -Key Ctrl+l -Function ClearScreen
 Set-PSReadLineKeyHandler -Key Ctrl+[ -Function ViCommandMode
 
+$env:LESSCHARSET = 'utf-8'
+
 Remove-Item alias:cat
 Remove-Item alias:cp
 Remove-Item alias:curl
@@ -35,34 +37,6 @@ Remove-Item alias:sort -Force
 Remove-Item alias:tee -Force
 Remove-Item alias:type
 Remove-Item alias:wget
-
-if (Get-Command -Name bat 2>$null)
-{
-  function cat()
-  {
-    bat.exe $args
-  }
-
-  function less()
-  {
-    bat.exe $args
-  }
-}
-
-if (Get-Command -Name delta 2>$null)
-{
-  function diff()
-  {
-    delta.exe $args
-  }
-}
-elseif (Get-Command -Name colordiff >$null)
-{
-  function diff()
-  {
-    colordiff.exe $args
-  }
-}
 
 function fd()
 {
@@ -93,14 +67,6 @@ function ll() {
 
 If ($Env:WT_SESSION) {
   $Env:NERDFONT = 1
-
-  if (Get-Command -Name lsd 2>$null)
-  {
-    function ls()
-    {
-        lsd.exe --color auto --classify --group-directories-first $args
-    }
-  }
 }
 
 Invoke-Expression (&starship init powershell)

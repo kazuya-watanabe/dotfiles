@@ -58,3 +58,5 @@ Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\bat') -Path (Join-
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\fd') -Path (Join-Path -Path $env:APPDATA -ChildPath 'fd')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.vim') -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath 'windows\posh') -Path (Join-Path $HOME -ChildPath 'Documents\WindowsPowerShell')
+
+Install-Module -Name PSReadLine -Scope CurrentUser -Force -SkipPublisherCheck
