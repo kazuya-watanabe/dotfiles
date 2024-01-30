@@ -1,6 +1,7 @@
 {
   "codeLens.enable": true,
   "colors.enable": true,
+  "intelephense.environment.phpVersion": "8.3.0",
   "powershell.integratedConsole.showOnStartup": false,
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.enable": true,

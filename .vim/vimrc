@@ -565,21 +565,24 @@ if s:IsPlugged('vim-ai') " {{{
   let g:vim_ai_complete = {
         \   "engine": "complete",
         \   "options": {
-        \     "model": "gpt-3.5-turbo-instruct",
+        \     "model": "gpt-4-turbo-preview",
+        \     "endpoint_url": "https://api.openai.com/v1/completions",
         \     "max_tokens": 1000,
         \     "temperature": 0.1,
         \     "request_timeout": 20,
+        \     "enable_auth": 1,
         \     "selection_boundary": "#####",
         \   },
         \   "ui": {
-        \    "paste_mode": 1,
+        \     "paste_mode": 1,
         \   },
         \ }
 
   let g:vim_ai_edit = {
         \   "engine": "complete",
         \   "options": {
-        \     "model": "gpt-3.5-turbo-instruct",
+        \     "model": "gpt-4-turbo-preview",
+        \     "endpoint_url": "https://api.openai.com/v1/completions",
         \     "max_tokens": 1000,
         \     "temperature": 0.1,
         \     "request_timeout": 20,
@@ -600,10 +603,12 @@ END
 
   let g:vim_ai_chat = {
       \   "options": {
-      \     "model": "gpt-3.5-turbo-instruct",
+      \     "model": "gpt-4-turbo-preview",
       \     "max_tokens": 1000,
+      \     "endpoint_url": "https://api.openai.com/v1/chat/completions",
       \     "temperature": 1.0,
       \     "request_timeout": 20,
+      \     "enable_auth": 1,
       \     "selection_boundary": "#####",
       \     "initial_prompt": s:initial_chat_prompt,
       \   },

@@ -82,6 +82,21 @@ function Add-PythonModule() {
   }
 }
 
+function Add-NodeModule() {
+  Param (
+    [String]
+    $Name
+  )
+
+  Process {
+    Write-Host -Object "node: $Name"
+
+    If (-not (npm list -g --depth=0 | Select-String -Pattern $Name)) {
+      npm install -g $Name
+    }
+  }
+}
+
 If (-not (Get-Command -Name 'scoop')) {
   Write-Host -Object 'scoop'
 
@@ -157,23 +172,6 @@ Add-ScoopApp -Name 'sqlite'
 Add-ScoopApp -Name 'ffmpeg-shared'
 Add-ScoopApp -Name 'imagemagick'
 
-# fzf
-Set-EnvVar -Name 'FZF_DEFAULT_COMMAND' -Value 'fd --hidden --follow --type f --exclude .git/'
-
-# node
-Add-Path -Path (Split-Path -Path (npm root -g) -Parent)
-
-# python
-Set-EnvVar -Name 'PYTHONHOME' -Value (scoop prefix python311)
-
-If (-not (Get-Command -Name 'pip3')) {
-  python3 -m ensurepip
-}
-
-Add-PythonModule -Name 'pip3-autoremove'
-Add-PythonModule -Name 'pip_search'
-Add-PythonModule -Name 'httpie'
-
 # dotfiles
 $ConcDir = (Join-Path -Path $HOME -ChildPath 'Documents\Conceal')
 
@@ -195,6 +193,25 @@ If (-not (Test-Path -Path $DotDir)) {
   .\install-dotfiles.ps1
   Pop-Location
 }
+
+# fzf
+Set-EnvVar -Name 'FZF_DEFAULT_COMMAND' -Value 'fd --hidden --follow --type f --exclude .git/'
+
+# nodejs
+Add-Path -Path (Split-Path -Path (npm root -g) -Parent)
+
+Add-NodeModule -Name 'corepack'
+
+# python
+Set-EnvVar -Name 'PYTHONHOME' -Value (scoop prefix python311)
+
+If (-not (Get-Command -Name 'pip3')) {
+  python3 -m ensurepip
+}
+
+Add-PythonModule -Name 'pip3-autoremove'
+Add-PythonModule -Name 'pip_search'
+Add-PythonModule -Name 'httpie'
 
 # ripgrep
 Set-EnvVar -Name 'RIPGREP_CONFIG_PATH' -Value (Join-Path -Path $DotDir -ChildPath ".config\rg\ripgreprc")
