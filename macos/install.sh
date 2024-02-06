@@ -66,7 +66,7 @@ brew_install --formula tldr
 brew_install --formula tmux
 brew_install --formula zoxide
 
-# compression/archivers
+# compression/archiving
 brew_install --formula bzip2
 brew_install --formula gnu-tar
 brew_install --formula gzip

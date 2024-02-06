@@ -46,8 +46,6 @@ dnf_install navi
 dnf_install tldr
 dnf_install tmux
 dnf_install util-linux-user
-dnf_install vim-enhanced
-dnf_install wkhtmltopdf
 dnf_install zoxide
 dnf_install zsh
 
@@ -78,6 +76,8 @@ dnf_install poppler-utils
 dnf_install ripgrep
 dnf_install sed
 dnf_install translate-shell
+dnf_install vim-enhanced
+dnf_install wkhtmltopdf
 
 # program languages
 dnf_install golang

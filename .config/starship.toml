@@ -1,17 +1,4 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-add_newline = false
-
-right_format = """$time"""
-
-[character]
-error_symbol = "[❯](bold red)"
-success_symbol = "[❯](bold green)"
-
 [package]
-disabled = false
-
-[time]
-disabled = false
-format = '[$time]($style)'
-time_format = '%F %T'
+disabled = true

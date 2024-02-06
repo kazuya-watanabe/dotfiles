@@ -37,13 +37,13 @@ function Link-Dotfile() {
     $DirName = Split-Path -Path $Path -Parent
 
     If ($DirName -Ne '') {
-      New-Item -Force -Path $DirName -ItemType Directory
+      New-Item -Force -Path $DirName -ItemType Directory >$null
     }
 
     If ($IsDirectory) {
-      New-Item -ItemType Junction -Value $Value -Path $Path
+      New-Item -ItemType Junction -Value $Value -Path $Path >$null
     } Else {
-      New-Item -ItemType HardLink -Value $Value -Path $Path
+      New-Item -ItemType HardLink -Value $Value -Path $Path >$null
     }
   }
 }
@@ -59,4 +59,6 @@ Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\fd') -Path (Join-P
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.vim') -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath 'windows\posh') -Path (Join-Path $HOME -ChildPath 'Documents\WindowsPowerShell')
 
-Install-Module -Name PSReadLine -Scope CurrentUser -Force -SkipPublisherCheck
+if (-Not(Get-Module -Name PSReadLine)) {
+  Install-Module -Name PSReadLine -Scope CurrentUser -Force -SkipPublisherCheck
+}
