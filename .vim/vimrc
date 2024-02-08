@@ -88,7 +88,11 @@ set whichwrap& | set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
-set wildoptions=fuzzy,pum,tagfile
+try
+  set wildoptions=fuzzy,pum,tagfile
+catch
+  set wildoptions=tagfile
+endtry
 
 if has('gui_running')
   set guioptions& | set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m

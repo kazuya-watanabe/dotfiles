@@ -51,7 +51,6 @@ brew_install --cask ueli
 brew_install --cask font-hack-nerd-font
 
 # console utils
-brew_install --cask wkhtmltopdf
 brew_install --formula bat
 brew_install --formula coreutils
 brew_install --formula fd
@@ -82,6 +81,7 @@ brew_install --formula w3m
 brew_install --formula wget
 
 # text utils
+brew_install --cask wkhtmltopdf
 brew_install --formula colordiff
 brew_install --formula gawk
 brew_install --formula git-delta
@@ -103,6 +103,7 @@ brew_install --formula php
 brew_install --formula python@3.11
 
 # development tools
+brew_install --formula cmake
 brew_install --formula composer
 brew_install --formula corepack
 brew_install --formula git

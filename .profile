@@ -26,6 +26,9 @@ if type bat >/dev/null 2>&1; then
   export PAGER=bat
 fi
 
+# n
+export N_PREFIX="$HOME/.npm"
+
 # python
 export PYTHONUSERBASE="$HOME/.local"
 
