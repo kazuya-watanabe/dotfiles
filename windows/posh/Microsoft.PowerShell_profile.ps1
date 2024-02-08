@@ -69,5 +69,4 @@ If ($Env:WT_SESSION) {
   $Env:NERDFONT = 1
 }
 
-Invoke-Expression (&starship init powershell)
 Invoke-Expression (& { (zoxide init powershell | Out-String) })

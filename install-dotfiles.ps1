@@ -2,7 +2,6 @@ $DotFiles = @(
   '.config\git'
   '.config\pip'
   '.config\tig'
-  '.config\starship.toml'
   '.curlrc'
   '.ripgreprc'
   '.textlintrc.json'
