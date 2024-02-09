@@ -34,6 +34,10 @@ function pip_install() {
   return 0
 }
 
+echo "$(whoami) ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
+
+sudo dnf upgrade -y
+
 # console utils
 dnf_install bat
 dnf_install coreutils
@@ -132,6 +136,14 @@ cargo_install sheldon
 cargo_install starship
 
 # npm
+npm_install n
+
+export PATH="$HOME/.npm/bin:$PATH"
+export N_PREFIX="$HOME/.npm"
+n install lts
+
+sudo dnf autoremove -y nodejs
+
 npm_install corepack
 
 # python modules

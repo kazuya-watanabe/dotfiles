@@ -34,6 +34,11 @@ function pip_install() {
   return 0
 }
 
+echo "$(whoami) ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
+
+sudo add-apt-repository -y ppa:jonathonf/vim
+sudo add-apt-repository -y ppa:ondrej/php
+
 sudo apt-get update
 sudo apt-get upgrade -y
 
@@ -129,7 +134,6 @@ cargo_install sheldon
 cargo_install starship
 
 # npm
-npm_install corepack
 npm_install n
 
 export PATH="$HOME/.npm/bin:$PATH"
@@ -137,6 +141,8 @@ export N_PREFIX="$HOME/.npm"
 n install lts
 
 sudo apt autoremove -y nodejs npm
+
+npm_install corepack
 
 # python modules
 pip_install pip3-autoremove
