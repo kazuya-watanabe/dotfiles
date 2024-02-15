@@ -8,7 +8,6 @@ dotfiles=$(cat <<END
   .config/git
   .config/pip
   .config/sheldon
-  .config/openai.token
   .config/starship.toml
   .config/tig
   .vim

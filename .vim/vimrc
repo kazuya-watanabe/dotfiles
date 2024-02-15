@@ -339,7 +339,6 @@ Plug 'jeetsukumaran/vim-buffergator'
 Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'osyo-manga/vim-precious' | Plug 'Shougo/context_filetype.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
@@ -631,6 +630,8 @@ if s:IsPlugged('vim-airline') " {{{
   let g:airline#extensions#tabline#fnamemod = ':t'
   let g:airline#extensions#tabline#show_buffers = 0
   let g:airline#extensions#tabline#show_close_button = 0
+  let g:airline#extensions#tabline#show_splits = 0
+  let g:airline#extensions#tabline#show_tab_count = 0
 
   if exists(':AirlineRefresh')
     AirlineRefresh
