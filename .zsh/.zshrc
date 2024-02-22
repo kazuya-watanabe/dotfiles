@@ -62,3 +62,9 @@ bindkey -M viins '^R' history-incremental-pattern-search-backward
 bindkey -M viins '^U' backward-kill-line
 bindkey -M viins '^W' backward-kill-word
 bindkey -M viins '^Y' yank
+
+if type gdircolors >/dev/null 2>&1; then
+  eval "$(gdircolors -b)"
+elif type dircolors >/dev/null 2>&1; then
+  eval "$(dircolors -b)"
+fi

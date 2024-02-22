@@ -3,3 +3,9 @@ type starship >/dev/null 2>&1 && eval "$(starship init bash)"
 type zoxide >/dev/null 2>&1 && eval "$(zoxide init bash)"
 
 test -r "$HOME/.aliases.sh" >/dev/null 2>&1 && source "$HOME/.aliases.sh"
+
+if type gdircolors >/dev/null 2>&1; then
+  eval "$(gdircolors -b)"
+elif type dircolors >/dev/null 2>&1; then
+  eval "$(dircolors -b)"
+fi
