@@ -60,8 +60,6 @@ set belloff=all
 set cmdheight=2
 set display=lastline
 set fileignorecase
-set foldlevelstart=2
-set foldmethod=marker
 set langmenu=none
 set laststatus=2
 set langmenu=none
@@ -565,10 +563,13 @@ if s:IsPlugged('undotree') " {{{
 endif " }}}
 
 if s:IsPlugged('vim-ai') " {{{
+  autocmd vimrc FileType aichat nnoremap <silent> <buffer> <Leader>ai :AIChat<CR>
+  autocmd vimrc FileType aichat xnoremap <silent> <buffer> <Leader>ai :AIChat<CR>
+
   let g:vim_ai_complete = {
         \   "engine": "complete",
         \   "options": {
-        \     "model": "gpt-4-turbo-preview",
+        \     "model": "gpt-3.5-turbo-instruct",
         \     "endpoint_url": "https://api.openai.com/v1/completions",
         \     "max_tokens": 1000,
         \     "temperature": 0.1,
@@ -584,7 +585,7 @@ if s:IsPlugged('vim-ai') " {{{
   let g:vim_ai_edit = {
         \   "engine": "complete",
         \   "options": {
-        \     "model": "gpt-4-turbo-preview",
+        \     "model": "gpt-3.5-turbo-instruct",
         \     "endpoint_url": "https://api.openai.com/v1/completions",
         \     "max_tokens": 1000,
         \     "temperature": 0.1,
