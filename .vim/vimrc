@@ -118,6 +118,7 @@ set undofile
 let &viminfofile = expand(g:user_vim_dir . '/viminfo')
 
 packadd! matchit
+packadd! editorconfig
 " }}}
 
 " SEARCH AND DIFF {{{
@@ -326,7 +327,6 @@ endif
 
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'github/copilot.vim'
-Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
@@ -503,9 +503,6 @@ if s:IsPlugged('copilot.vim') " {{{
   highlight! link CopilotSuggestion PmenuSel
 endif " }}}
 
-"if s:IsPlugged('editorconfig-vim') " {{{
-"endif " }}}
-
 if s:IsPlugged('fzf.vim') " {{{
   let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
   let g:fzf_layout = { 'down': '40%' }
@@ -513,7 +510,9 @@ if s:IsPlugged('fzf.vim') " {{{
 
   command! -bang -nargs=* Grep call fzf#vim#grep('rg --hidden --follow --smart-case --column --line-number --no-heading --color=always -- ' . shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
 
-  nnoremap <silent> <C-p> :<C-u>Files<CR>
+  nnoremap <silent> <C-p>f :<C-u>Files<CR>
+  nnoremap <silent> <C-p>b :<C-u>Buffers<CR>
+  nnoremap <silent> <C-p>g :<C-u>RG 
 endif " }}}
 
 "if s:IsPlugged('nerdcommenter') " {{{
