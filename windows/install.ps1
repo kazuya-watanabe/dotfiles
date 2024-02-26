@@ -128,6 +128,7 @@ Add-ScoopApp -Name 'less'
 Add-ScoopApp -Name 'navi'
 Add-ScoopApp -Name 'tldr'
 Add-ScoopApp -Name 'wkhtmltopdf'
+Add-ScoopApp -Name 'wsltty'
 Add-ScoopApp -Name 'zoxide'
 
 # compression/archive

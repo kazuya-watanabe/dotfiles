@@ -118,7 +118,11 @@ set undofile
 let &viminfofile = expand(g:user_vim_dir . '/viminfo')
 
 packadd! matchit
-packadd! editorconfig
+
+try
+  packadd! editorconfig
+catch
+endtry
 " }}}
 
 " SEARCH AND DIFF {{{
@@ -148,8 +152,8 @@ autocmd vimrc BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config
 let g:mapleader = ','
 let g:maplocalleader = ' '
 
-noremap <F1> <Esc>
-noremap! <F1> <Esc>
+noremap <F1> :tag <C-R><C-W><CR>
+noremap! <F1> :tag <C-R><C-W><CR>
 
 noremap j gj
 noremap k gk
