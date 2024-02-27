@@ -118,11 +118,6 @@ set undofile
 let &viminfofile = expand(g:user_vim_dir . '/viminfo')
 
 packadd! matchit
-
-try
-  packadd! editorconfig
-catch
-endtry
 " }}}
 
 " SEARCH AND DIFF {{{
@@ -331,6 +326,7 @@ endif
 
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'github/copilot.vim'
+Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
