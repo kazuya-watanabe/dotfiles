@@ -511,8 +511,11 @@ if s:IsPlugged('fzf.vim') " {{{
   command! -bang -nargs=* Grep call fzf#vim#grep('rg --hidden --follow --smart-case --column --line-number --no-heading --color=always -- ' . shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
 
   nnoremap <silent> <C-p>f :<C-u>Files<CR>
+  nnoremap <silent> <C-p><C-f> :<C-u>Files<CR>
   nnoremap <silent> <C-p>b :<C-u>Buffers<CR>
+  nnoremap <silent> <C-p><C-b> :<C-u>Buffers<CR>
   nnoremap <silent> <C-p>g :<C-u>RG 
+  nnoremap <silent> <C-p><C-g> :<C-u>RG 
 endif " }}}
 
 "if s:IsPlugged('nerdcommenter') " {{{
