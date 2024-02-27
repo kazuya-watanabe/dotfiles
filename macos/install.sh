@@ -41,10 +41,8 @@ brew_install --cask adguard-vpn
 brew_install --cask altserver
 brew_install --cask appcleaner
 brew_install --cask iterm2
-brew_install --cask karabiner-elements
 brew_install --cask microsoft-edge
 brew_install --cask microsoft-office
-brew_install --cask scroll-reverser
 brew_install --cask ueli
 
 # fonts
