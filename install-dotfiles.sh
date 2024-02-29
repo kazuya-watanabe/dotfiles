@@ -7,6 +7,7 @@ dotfiles=$(cat <<END
   .config/fd
   .config/git
   .config/pip
+  .config/ranger
   .config/sheldon
   .config/starship.toml
   .config/tig

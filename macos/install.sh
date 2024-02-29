@@ -21,18 +21,17 @@ function brew_install() {
 function pip_install() {
   echo "installing $1"
 
-  pip3 show "$1" 2>&1 | grep 'not found' && pip3 install "$1"
+  $HOME/.local/bin/pip show "$1" 2>&1 | grep 'not found' && $HOME/.local/bin/pip install "$1"
 
   return 0
 }
 
 if ! type brew; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  chmod go-w /usr/local/etc
 fi
 
-brew_tap homebrew/cask
 brew_tap homebrew/cask-fonts
-brew_tap microsoft/git
 
 # gui apps
 brew_install --cask 1password
@@ -139,8 +138,13 @@ if [ ! -d "$dotdir" ]; then
 fi
 
 # python modules
+if [ ! -x $HOME/.local/bin/pip ]; then
+  python3 -m venv ~/.local
+fi
+
 pip_install pip3-autoremove
 pip_install pip_search
+pip_install ranger-fm
 
 # tmux
 if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then

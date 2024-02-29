@@ -30,7 +30,7 @@ fi
 export N_PREFIX="$HOME/.npm"
 
 # python
-export PYTHONUSERBASE="$HOME/.local"
+#export PYTHONUSERBASE="$HOME/.local"
 
 # ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/rg/ripgreprc"

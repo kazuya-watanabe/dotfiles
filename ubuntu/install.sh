@@ -29,7 +29,7 @@ function npm_install() {
 function pip_install() {
   echo "installing $1"
 
-  pip3 show "$1" 2>&1 | grep 'not found' && pip3 install "$1"
+  $HOME/.local/bin/pip show "$1" 2>&1 | grep 'not found' && $HOME/.local/bin/pip install "$1"
 
   return 0
 }
@@ -145,8 +145,13 @@ sudo apt autoremove -y nodejs npm
 npm_install corepack
 
 # python modules
+if [ ! -x $HOME/.local/bin/pip ]; then
+  python3 -m venv ~/.local
+fi
+
 pip_install pip3-autoremove
 pip_install pip_search
+pip_install ranger-fm
 
 # tmux
 if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
