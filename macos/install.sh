@@ -58,7 +58,7 @@ brew_install --formula lsd
 #brew_install --formula navi
 brew_install --formula sheldon
 brew_install --formula starship
-brew_install --formula tldr
+#brew_install --formula tldr
 brew_install --formula tmux
 brew_install --formula zoxide
 
@@ -74,11 +74,11 @@ brew_install --formula p7zip
 # network
 #brew_install --formula curl
 brew_install --formula httpie
-brew_install --formula w3m
+#brew_install --formula w3m
 #brew_install --formula wget
 
 # text utils
-brew_install --cask wkhtmltopdf
+#brew_install --cask wkhtmltopdf
 brew_install --formula colordiff
 #brew_install --formula gawk
 #brew_install --formula git-delta
