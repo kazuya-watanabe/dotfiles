@@ -66,7 +66,7 @@ brew_install --formula zoxide
 #brew_install --formula bzip2
 #brew_install --formula gnu-tar
 #brew_install --formula gzip
-brew_install --formula p7zip
+#brew_install --formula p7zip
 #brew_install --formula unzip
 #brew_install --formula xz
 #brew_install --formula zip

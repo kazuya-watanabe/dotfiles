@@ -90,6 +90,7 @@ apt_install nodejs
 #apt_install perl
 #apt_install php
 apt_install python3
+apt_install python3-venv
 #apt_install python3-pip
 
 # development tools

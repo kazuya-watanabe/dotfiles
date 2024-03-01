@@ -56,7 +56,7 @@ dnf_install zsh
 # compression/archivers
 #dnf_install bzip2
 #dnf_install gzip
-dnf_install p7zip
+#dnf_install p7zip
 #dnf_install tar
 #dnf_install unzip
 #dnf_install xz
