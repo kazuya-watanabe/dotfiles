@@ -23,7 +23,6 @@
 	editor = vim
 	ignoreCase = false
 	quotePath = false
-	pager = delta
 
 [credential]
 	helper = manager
@@ -35,12 +34,6 @@
 
 [fetch]
 	prune = true
-
-[interactive]
-	diffFilter = delta --color-only
-
-[delta]
-	navigate = true
 
 [merge]
 	conflictstyle = diff3

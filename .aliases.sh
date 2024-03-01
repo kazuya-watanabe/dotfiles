@@ -3,9 +3,7 @@ if type bat >/dev/null 2>&1; then
   alias less='bat'
 fi
 
-if type delta >/dev/null 2>&1; then
-  alias diff='delta'
-elif type colordiff >/dev/null 2>&1; then
+if type colordiff >/dev/null 2>&1; then
   alias diff='colordiff -u'
 else
   alias diff='diff -u'

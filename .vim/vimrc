@@ -59,6 +59,7 @@ call mkdir(&viewdir, 'p')
 set belloff=all
 set cmdheight=2
 set display=lastline
+set nofoldenable
 set fileignorecase
 set langmenu=none
 set laststatus=2
@@ -326,6 +327,7 @@ endif
 
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'github/copilot.vim'
+Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdcommenter'
@@ -666,8 +668,22 @@ if s:IsPlugged('vim-buffergator') " {{{
   nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
 endif " }}}
 
-"if s:IsPlugged('vim-dadbod') " {{{
-"endif " }}}
+if s:IsPlugged('vim-dadbod') " {{{
+  let g:dbs = {
+        \   'local': 'mysql://root:secret@127.0.0.1:13306/farmbase',
+        \ }
+
+  let g:db_ui_table_helpers = {
+        \   'mysql': {
+        \     'Desc': 'DESC {table}',
+        \     'Create Table': 'SHOW CREATE TABLE {table}',
+        \     'Comment': 'SHOW FULL COLUMNS FROM {table}',
+        \     'Count': 'SELECT COUNT(*) FROM {table}'
+        \   }
+        \ }
+
+  let g:db_ui_use_nerd_fonts = 1
+endif " }}}
 
 if s:IsPlugged('vim-devicons') " {{{
   if has('win32')
