@@ -25,9 +25,7 @@
 	quotePath = false
 
 [credential]
-	helper = manager
 	helper = cache
-	helper = store --file ~/.config/git/store
 
 [diff]
 	algorithm = histogram
@@ -44,6 +42,7 @@
 [pull]
 	ff = only
 	rebase = true
+	autostash = true
 
 [push]
 	default = current
