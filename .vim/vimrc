@@ -317,12 +317,11 @@ call plug#begin(g:user_vim_dir . '/plugged')
 
 if executable('npm')
   Plug 'dense-analysis/ale', { 'do': 'npm install -g textlint textlint-rule-preset-ja-technical-writing' }
-  Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
+  Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 
 if has('python3')
   Plug 'madox2/vim-ai'
-  Plug 'puremourning/vimspector'
 endif
 
 Plug 'rafi/awesome-vim-colorschemes'
@@ -340,7 +339,6 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'vim-jp/vimdoc-ja'
 Plug 'liuchengxu/vista.vim'
@@ -404,32 +402,15 @@ endif
 if s:IsPlugged('coc.nvim') " {{{
   let g:coc_global_extensions = [
         \ 'coc-highlight',
-        \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
-        \ 'coc-html', 'coc-css', 'coc-svg',
-        \ 'coc-tsserver',
         \ 'coc-vimlsp',
         \ 'coc-webview', 'coc-markdown-preview-enhanced'
         \ ]
 
-  if has('python3') && s:IsPlugged('vim-snippets')
-    call add(g:coc_global_extensions, 'coc-snippets')
-  endif
-
   " languages
-  if executable('bash') && ! has('win32')
-    call add(g:coc_global_extensions, 'coc-sh')
-  endif
-
-  if executable('go')
-    call add(g:coc_global_extensions, 'coc-go')
-  endif
-
   if executable('php')
-    call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade'])
-  endif
+    call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade', '@yaegassy/coc-laravel'])
 
-  if executable('powershell') || executable('posh')
-    call add(g:coc_global_extensions,  'coc-powershell')
+    autocmd FileType php,blade let b:coc_root_patterns = ['.git', '.env', 'composer.json', 'artisan']
   endif
 
   if executable('python3')
@@ -520,9 +501,6 @@ if s:IsPlugged('fzf.vim') " {{{
   nnoremap <silent> <C-p><C-g> :<C-u>RG 
 endif " }}}
 
-"if s:IsPlugged('nerdcommenter') " {{{
-"endif " }}}
-
 if s:IsPlugged('nerdtree') " {{{
   let g:NERDTreeBookmarksFile = expand(g:user_vim_dir . '/NERDTreeBookmarksFile')
   let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$']
@@ -539,9 +517,6 @@ if s:IsPlugged('nerdtree') " {{{
 
   nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
 endif " }}}
-
-"if s:IsPlugged('tabular') " {{{
-"endif " }}}
 
 if s:IsPlugged('translate-shell.vim') " {{{
   let g:trans_default_direction = ':ja'
@@ -825,52 +800,8 @@ if s:IsPlugged('vim-devicons') " {{{
   endtry
 endif " }}}
 
-"if s:IsPlugged('vim-easymotion') " {{{
-"endif " }}}
-
-"if s:IsPlugged('vim-fugitive') " {{{
-"endif " }}}
-
-"if s:IsPlugged('vim-gitgutter') " {{{
-"endif " }}}
-
-"if s:IsPlugged('vim-precious') " {{{
-"endif " }}}
-
-"if s:IsPlugged('vim-repeat') " {{{
-"endif " }}}
-
-if s:IsPlugged('vim-speeddating') " {{{
-  if exists(':SpeedDatingFormat')
-    SpeedDatingFormat %Y/%m/%d
-  endif
-endif " }}}
-
-"if s:IsPlugged('vim-surround') " {{{
-"endif " }}}
-
-"if s:IsPlugged('vimdoc-ja') " {{{
-"endif " }}}
-
-if s:IsPlugged('vimspector') " {{{
-  let g:vimspector_install_gadgets = []
-
-  if executable('go')
-    call add(g:vimspector_install_gadgets, 'delve')
-  endif
-
-  if executable('python3')
-    call add(g:vimspector_install_gadgets, 'debugpy')
-  endif
-
-  if executable('php')
-    call add(g:vimspector_install_gadgets, 'vscode-php-debug')
-  endif
-
-  let g:vimspector_base_dir = expand(g:user_vim_dir . '/vimspector')
-  let g:vimspector_enable_mappings = 'HUMAN'
-
-  nnoremap <F2> :<C-u>VimspectorReset<CR>
+if s:IsPlugged('vim-markdown') " {{{
+  let g:vim_markdown_folding_disabled = 1
 endif " }}}
 
 if s:IsPlugged('vista.vim') " {{{
