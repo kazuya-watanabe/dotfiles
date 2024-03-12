@@ -38,3 +38,5 @@ alias ll='ls -Al'
 alias la='ls -A'
 
 alias sudo='sudo '
+
+alias tm='if tmux list-session >/dev/null 2>&1; then NERDFONT=1 tmux attach; else NERDFONT=1 tmux; fi'

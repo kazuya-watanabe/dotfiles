@@ -197,7 +197,7 @@ nnoremap <LocalLeader>j <C-w>j
 nnoremap <LocalLeader>k <C-w>k
 nnoremap <LocalLeader>l <C-w>l
 
-autocmd vimrc FileType fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
+autocmd vimrc FileType dbout,fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
 " }}}
 
 " UTILS {{{
@@ -670,7 +670,7 @@ endif " }}}
 
 if s:IsPlugged('vim-dadbod') " {{{
   let g:dbs = {
-        \   'local': 'mysql://root:secret@127.0.0.1:13306/farmbase',
+        \   'local': 'mysql://root:secret@127.0.0.1:3306/mysql',
         \ }
 
   let g:db_ui_table_helpers = {
