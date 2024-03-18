@@ -174,7 +174,6 @@ Add-Path -Path (Join-Path -Path $HOME -ChildPath '.local\Scripts')
 
 Add-PythonModule -Name 'pip3-autoremove'
 Add-PythonModule -Name 'pip_search'
-Add-PythonModule -Name 'httpie'
 
 # ripgrep
 Set-EnvVar -Name 'RIPGREP_CONFIG_PATH' -Value (Join-Path -Path $DotDir -ChildPath ".config\rg\ripgreprc")

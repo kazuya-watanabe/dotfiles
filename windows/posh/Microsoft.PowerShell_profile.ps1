@@ -19,8 +19,6 @@ Set-PSReadLineKeyHandler -Key Ctrl+m -Function ValidateAndAcceptLine
 Set-PSReadLineKeyHandler -Key Ctrl+l -Function ClearScreen
 Set-PSReadLineKeyHandler -Key Ctrl+[ -Function ViCommandMode
 
-$env:LESSCHARSET = 'utf-8'
-
 Remove-Item alias:cat
 Remove-Item alias:cp
 Remove-Item alias:curl
