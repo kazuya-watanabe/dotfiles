@@ -125,53 +125,19 @@ Add-ScoopApp -Name 'coreutils'
 Add-ScoopApp -Name 'everything-cli'
 Add-ScoopApp -Name 'fd'
 Add-ScoopApp -Name 'fzf'
-#Add-ScoopApp -Name 'less'
-#Add-ScoopApp -Name 'navi'
-#Add-ScoopApp -Name 'tldr'
-#Add-ScoopApp -Name 'wkhtmltopdf'
-Add-ScoopApp -Name 'wsltty'
+Add-ScoopApp -Name 'starship'
 Add-ScoopApp -Name 'zoxide'
 
-# compression/archive
-#Add-ScoopApp -Name 'bzip2'
-#Add-ScoopApp -Name 'gzip'
-#Add-ScoopApp -Name 'tar'
-#Add-ScoopApp -Name 'unzip'
-#Add-ScoopApp -Name 'xz'
-#Add-ScoopApp -Name 'zip'
-
-# network
-#Add-ScoopApp -Name 'curl'
-#Add-ScoopApp -Name 'wget'
-
 # text utils
-#Add-ScoopApp -Name 'delta'
-Add-ScoopApp -Name 'diffutils'
-#Add-ScoopApp -Name 'gawk'
+Add-ScoopApp -Name 'delta'
 Add-ScoopApp -Name 'jq'
-#Add-ScoopApp -Name 'pandoc'
-#Add-ScoopApp -Name 'poppler'
 Add-ScoopApp -Name 'ripgrep'
 Add-ScoopApp -Name 'sed'
 Add-ScoopApp -Name 'universal-ctags'
 
 # program language
-Add-ScoopApp -Name 'go'
 Add-ScoopApp -Name 'nodejs-lts'
-#Add-ScoopApp -Name 'perl'
-#Add-ScoopApp -Name 'php'
 Add-ScoopApp -Name 'python'
-
-# development tools
-#Add-ScoopApp -Name 'composer'
-#Add-ScoopApp -Name 'mysql'
-#Add-ScoopApp -Name 'postgresql'
-#Add-ScoopApp -Name 'redis'
-#Add-ScoopApp -Name 'sqlite'
-
-# media
-#Add-ScoopApp -Name 'ffmpeg-shared'
-#Add-ScoopApp -Name 'imagemagick'
 
 # dotfiles
 $ConcDir = (Join-Path -Path $HOME -ChildPath 'Documents\Conceal')

@@ -10,6 +10,12 @@ function brew_tap() {
   return 0
 }
 
+function cargo_install() {
+  cargo install "$1"
+
+  return 0
+}
+
 function brew_install() {
   echo "installing $2"
 
@@ -42,78 +48,32 @@ brew_install --cask appcleaner
 brew_install --cask iterm2
 brew_install --cask microsoft-edge
 brew_install --cask microsoft-office
-brew_install --cask ueli
+brew_install --cask alfred
 
 # fonts
 brew_install --cask font-hack-nerd-font
 
 # console utils
-brew_install --formula bat
 brew_install --formula coreutils
-brew_install --formula fd
 brew_install --formula fzf
-#brew_install --formula less
-#brew_install --formula lesspipe
-brew_install --formula lsd
-#brew_install --formula navi
-brew_install --formula sheldon
-brew_install --formula starship
-#brew_install --formula tldr
 brew_install --formula tmux
-brew_install --formula zoxide
-
-# compression/archiving
-#brew_install --formula bzip2
-#brew_install --formula gnu-tar
-#brew_install --formula gzip
-#brew_install --formula p7zip
-#brew_install --formula unzip
-#brew_install --formula xz
-#brew_install --formula zip
-
-# network
-#brew_install --formula curl
-brew_install --formula httpie
-#brew_install --formula w3m
-#brew_install --formula wget
 
 # text utils
-#brew_install --cask wkhtmltopdf
-brew_install --formula colordiff
-#brew_install --formula gawk
-#brew_install --formula git-delta
-#brew_install --formula gnu-sed
 brew_install --formula jq
 brew_install --formula macvim
-#brew_install --formula odt2txt
-#brew_install --formula pandoc
-#brew_install --formula poppler
-brew_install --formula ripgrep
 brew_install --formula translate-shell
 brew_install --formula universal-ctags
 
 # program languages
-brew_install --formula go
 brew_install --formula node
-#brew_install --formula perl
-#brew_install --formula php
 brew_install --formula python
+brew_install --formula rust
 
 # development tools
-#brew_install --formula cmake
-#brew_install --formula composer
-brew_install --formula corepack
+brew_install --formula cmake
 brew_install --formula git
 brew_install --formula git-flow
-brew_install --formula mysql
-#brew_install --formula postgresql
-#brew_install --formula redis
-#brew_install --formula sqlite
 brew_install --formula tig
-
-# media
-#brew_install --formula ffmpeg
-#brew_install --formula imagemagick
 
 # dotfiles
 concdir="$HOME/Documents/Conceal"
@@ -136,6 +96,27 @@ if [ ! -d "$dotdir" ]; then
   ./install-dotfiles.sh
   popd
 fi
+
+# cargo
+cargo_install bat
+cargo_install fd-find
+cargo_install git-delta
+cargo_install lsd
+cargo_install ripgrep
+cargo_install sheldon
+cargo_install starship
+cargo_install zoxide
+
+# npm
+npm_install n
+
+export PATH="$HOME/.npm/bin:$PATH"
+export N_PREFIX="$HOME/.npm"
+n install lts
+
+brew uninstall node
+
+npm_install corepack
 
 # python modules
 if [ ! -x $HOME/.local/bin/pip ]; then

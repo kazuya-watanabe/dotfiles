@@ -39,75 +39,32 @@ echo "$(whoami) ALL=(ALL:ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/$(whoami)
 sudo dnf upgrade -y
 
 # console utils
-dnf_install bat
 dnf_install coreutils
-dnf_install fd-find
 dnf_install fzf
 dnf_install langpacks-ja
-#dnf_install less
-dnf_install lsd
-#dnf_install navi
-#dnf_install tldr
 dnf_install tmux
 dnf_install util-linux-user
-dnf_install zoxide
 dnf_install zsh
 
-# compression/archivers
-#dnf_install bzip2
-#dnf_install gzip
-#dnf_install p7zip
-#dnf_install tar
-#dnf_install unzip
-#dnf_install xz
-#dnf_install zip
-
-# network
-#dnf_install curl
-dnf_install httpie
-#dnf_install w3m
-#dnf_install wget
-
 # text utils
-dnf_install colordiff
 dnf_install ctags
-#dnf_install gawk
-#dnf_install git-delta
 dnf_install jq
-#dnf_install odt2txt
-#dnf_install pandoc
-#dnf_install poppler-utils
-dnf_install ripgrep
-#dnf_install sed
 dnf_install translate-shell
 dnf_install vim-enhanced
-#dnf_install wkhtmltopdf
 
 # program languages
-dnf_install golang
 dnf_install nodejs
-#dnf_install perl
-#dnf_install php
 dnf_install python3
 dnf_install python3-devel
-#dnf_install python3-setuptools
 
 # development tools
 dnf_install cargo
-#dnf_install cmake
-#dnf_install community-mysql-server
+dnf_install cmake
 dnf_install git
-#dnf_install postgresql
-#dnf_install redis
-#dnf_install sqlite
 dnf_install tig
 
 # development libraries
 dnf_install openssl-devel
-
-# media
-#dnf_install ffmpeg-free
-#dnf_install ImageMagick
 
 sudo chsh -s /bin/zsh "$(whoami)"
 
@@ -132,8 +89,14 @@ if [ ! -d "$dotdir" ]; then
 fi
 
 # cargo
+cargo_install bat
+cargo_install fd-find
+cargo_install git-delta
+cargo_install lsd
+cargo_install ripgrep
 cargo_install sheldon
 cargo_install starship
+cargo_install zoxide
 
 # npm
 npm_install n

@@ -43,72 +43,31 @@ sudo apt-get update
 sudo apt-get upgrade -y
 
 # console utils
-apt_install bat
 apt_install coreutils
-apt_install fd-find
 apt_install fzf
 apt_install language-pack-ja
-#apt_install less
-#apt_install tldr
 apt_install tmux
-apt_install zoxide
 apt_install zsh
 
-# compression/archiving
-#apt_install bzip2
-#apt_install gzip
-#apt_install p7zip-full
-#apt_install tar
-#apt_install unzip
-#apt_install xz-utils
-#apt_install zip
-
-# network
-#apt_install curl
-apt_install httpie
-#apt_install w3m
-#apt_install wget
-
 # text utils
-apt_install colordiff
-#apt_install gawk
 apt_install jq
-#apt_install odt2txt
-#apt_install pandoc
-#apt_install pandoc-data
-#apt_install poppler-data
-#apt_install poppler-utils
-apt_install ripgrep
-#apt_install sed
 apt_install translate-shell
 apt_install universal-ctags
 apt_install vim-gtk3
 
 # program languages
-apt_install golang
-apt_install nodejs
-#apt_install perl
-#apt_install php
 apt_install python3
 apt_install python3-venv
-#apt_install python3-pip
 
 # development tools
 apt_install cargo
-#apt_install cmake
-#apt_install composer
+apt_install cmake
 apt_install git
 apt_install git-flow
-#apt_install mysql-server
 apt_install npm
-#apt_install postgresql
-#apt_install redis-server
-#apt_install sqlite3
 apt_install tig
 
-# media
-#apt_install ffmpeg
-#apt_install imagemagick
+sudo chsh -s /bin/zsh "$(whoami)"
 
 # dotfiles
 concdir="$HOME/.conceal"
@@ -131,8 +90,14 @@ if [ ! -d "$dotdir" ]; then
 fi
 
 # cargo
+cargo_install bat
+cargo_install fd-find
+cargo_install git-delta
+cargo_install lsd
+cargo_install ripgrep
 cargo_install sheldon
 cargo_install starship
+cargo_install zoxide
 
 # npm
 npm_install n
@@ -141,7 +106,7 @@ export PATH="$HOME/.npm/bin:$PATH"
 export N_PREFIX="$HOME/.npm"
 n install lts
 
-sudo apt autoremove -y nodejs npm
+sudo apt autoremove -y npm
 
 npm_install corepack
 
