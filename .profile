@@ -7,8 +7,6 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export PATH="$HOME/.cargo/bin":"$HOME/.dotnet/tools":"$HOME/.local/bin":"$HOME/.npm/bin":/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin
-
 umask 0022
 
 # fzf

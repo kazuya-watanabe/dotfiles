@@ -4,18 +4,32 @@ plugins=(
   zoxide
   )
 
-type sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
+typeset -U path PATH
 
-test -r "$HOME/.aliases.sh" >/dev/null 2>&1 && source "$HOME/.aliases.sh"
+path+=(/bin(N-/))
+path+=(/sbin(N-/))
+path+=(/usr/bin(N-/))
+path+=(/usr/sbin(N-/))
+path+=(/usr/local/bin(N-/))
+path+=(/usr/local/sbin(N-/))
+
+path+=($HOME/bin(N-/))
+path+=($HOME/sbin(N-/))
+path+=($HOME/.cargo/bin(N-/))
+path+=($HOME/.local/bin(N-/))
+path+=($HOME/.local/sbin(N-/))
+path+=($HOME/.npm/bin(N-/))
 
 typeset -U fpath FPATH
 
-fpath=('/usr/local/share/zsh-completions'(N-/)
-       '/usr/local/share/zsh/site-functions'(N-/)
-       '/usr/share/zsh/site-functions'(N-/)
-       '/usr/local/etc/bash_completion.d'(N-/)
-       '/etc/bash_completion.d'(N-/)
-       $fpath)
+fpath+=('/usr/share/zsh/site-functions'(N-/))
+fpath+=('/usr/share/zsh/vendor-completions'(N-/))
+fpath+=('/usr/local/share/zsh/site-functions'(N-/))
+fpath+=('/usr/local/zsh/vendor-completions'(N-/))
+
+type sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
+
+test -r "$HOME/.aliases.sh" >/dev/null 2>&1 && source "$HOME/.aliases.sh"
 
 setopt auto_name_dirs
 setopt bang_hist
