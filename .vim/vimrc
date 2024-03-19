@@ -435,8 +435,6 @@ if s:IsPlugged('coc.nvim') " {{{
   nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
 
   " coc-completion
-  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<Down>'
-  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<Up>'
   inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : '<C-j>'
   inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : '<C-k>'
   inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
@@ -484,6 +482,12 @@ endif " }}}
 
 if s:IsPlugged('copilot.vim') " {{{
   highlight! link CopilotSuggestion PmenuSel
+
+  inoremap <C-n> <Plug>(copilot-next)
+  inoremap <C-p> <Plug>(copilot-previous)
+  inoremap <C-\> <Plug>(copilot-suggest)
+  inoremap <C-l> <Plug>(copilot-accept-word)
+  inoremap <C-m> <Plug>(copilot-accept-line)
 endif " }}}
 
 if s:IsPlugged('fzf.vim') " {{{

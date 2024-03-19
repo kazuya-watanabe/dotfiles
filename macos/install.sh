@@ -16,6 +16,16 @@ function cargo_install() {
   return 0
 }
 
+function npm_install() {
+  mkdir -p "$HOME/.npm/lib"
+
+  if ! npm -g list "$1"; then
+    npm -g install "$1"
+  fi
+
+  return 0
+}
+
 function brew_install() {
   echo "installing $2"
 
@@ -115,6 +125,7 @@ export N_PREFIX="$HOME/.npm"
 n install lts
 
 brew uninstall node
+brew autoremove
 
 npm_install corepack
 
