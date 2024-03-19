@@ -26,8 +26,6 @@
 
 --theme 'Monokai Extended'
 
---style 'changes,numbers'
-
 --map-syntax '*.conf:INI'
 --map-syntax '*rc:INI'
 --map-syntax '*config:INI'

@@ -125,6 +125,7 @@ Add-ScoopApp -Name 'coreutils'
 Add-ScoopApp -Name 'everything-cli'
 Add-ScoopApp -Name 'fd'
 Add-ScoopApp -Name 'fzf'
+Add-ScoopApp -Name 'less'
 Add-ScoopApp -Name 'starship'
 Add-ScoopApp -Name 'zoxide'
 

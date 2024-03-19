@@ -22,22 +22,27 @@
 	autocrlf = false
 	editor = vim
 	ignoreCase = false
+	pager = delta
 	quotePath = false
 
 [credential]
 	helper = cache
 
+[delta]
+	navigate = true
+
 [diff]
 	algorithm = histogram
+	colorMoved = default
 
 [fetch]
 	prune = true
 
+[interactive]
+	diffFilter = delta --color-only
+
 [merge]
 	conflictstyle = diff3
-
-[diff]
-	colorMoved = default
 
 [pull]
 	ff = only
