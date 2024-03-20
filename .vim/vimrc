@@ -390,6 +390,7 @@ if s:IsPlugged('awesome-vim-colorschemes') " {{{
   highlight! link CocMenuSel PmenuSel
   highlight! link Terminal Normal
   highlight! link VertSplit StatusLine
+  highlight! SignColumn ctermbg=NONE
 
   if ! has('gui_running')
     "autocmd vimrc ColorScheme * call <SID>RemoveBackgroundHighlight()

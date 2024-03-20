@@ -42,9 +42,13 @@ function pip_install() {
   return 0
 }
 
+export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+
 if ! type brew; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  chmod go-w /usr/local/etc
+
+  test -d /opt/homebrew/etc && chmod go-w /opt/homebrew/etc
+  test -d /usr/local/etc && chmod go-w /usr/local/etc
 fi
 
 brew_tap homebrew/cask-fonts

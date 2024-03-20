@@ -6,26 +6,35 @@ plugins=(
 
 typeset -U path PATH
 
-path+=(/bin(N-/))
-path+=(/sbin(N-/))
-path+=(/usr/bin(N-/))
-path+=(/usr/sbin(N-/))
-path+=(/usr/local/bin(N-/))
-path+=(/usr/local/sbin(N-/))
-
-path+=($HOME/bin(N-/))
-path+=($HOME/sbin(N-/))
-path+=($HOME/.cargo/bin(N-/))
-path+=($HOME/.local/bin(N-/))
-path+=($HOME/.local/sbin(N-/))
-path+=($HOME/.npm/bin(N-/))
+path=(
+  $HOME/.cargo/bin(N-/)
+  $HOME/.npm/bin(N-/)
+  $HOME/.local/bin(N-/)
+  $HOME/.local/sbin(N-/)
+  $HOME/bin(N-/)
+  $HOME/sbin(N-/)
+  /opt/homebrew/bin(N-/)
+  /opt/homebrew/sbin(N-/)
+  /usr/local/bin(N-/)
+  /usr/local/sbin(N-/)
+  /usr/bin(N-/)
+  /usr/sbin(N-/)
+  /bin(N-/)
+  /sbin(N-/)
+  $path
+  )
 
 typeset -U fpath FPATH
 
-fpath+=('/usr/share/zsh/site-functions'(N-/))
-fpath+=('/usr/share/zsh/vendor-completions'(N-/))
-fpath+=('/usr/local/share/zsh/site-functions'(N-/))
-fpath+=('/usr/local/zsh/vendor-completions'(N-/))
+fpath=(
+  '/opt/homebrew/share/zsh/site-functions'(N-/)
+  '/opt/homebrew/share/zsh/vendor-completions'(N-/)
+  '/usr/local/share/zsh/site-functions'(N-/)
+  '/usr/local/share/zsh/vendor-completions'(N-/)
+  '/usr/share/zsh/site-functions'(N-/)
+  '/usr/share/zsh/vendor-completions'(N-/)
+  $fpath
+  )
 
 type sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
 
