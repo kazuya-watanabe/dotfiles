@@ -38,10 +38,6 @@ if has('win32')
   if has('vcon')
     set termguicolors
   endif
-
-  noremap <C-@> <C-]>
-  noremap! <C-@> <C-]>
-
 elseif has('osx')
   if exists('+macmeta')
     set macmeta
@@ -156,6 +152,8 @@ noremap j gj
 noremap k gk
 noremap n nzz
 noremap N Nzz
+
+noremap <C-@> <C-]>
 
 cnoremap <C-a> <Home>
 cnoremap <C-b> <Left>
@@ -321,19 +319,17 @@ if executable('npm')
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 
-if has('python3')
-  Plug 'madox2/vim-ai'
+if executable('trans')
+  Plug 'echuraev/translate-shell.vim'
 endif
 
 Plug 'rafi/awesome-vim-colorschemes'
 Plug 'github/copilot.vim'
-Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'editorconfig/editorconfig-vim'
 Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown'
-Plug 'echuraev/translate-shell.vim'
 Plug 'mbbill/undotree'
 Plug 'jeetsukumaran/vim-buffergator'
 Plug 'easymotion/vim-easymotion'
@@ -542,70 +538,6 @@ if s:IsPlugged('undotree') " {{{
   nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
 endif " }}}
 
-if s:IsPlugged('vim-ai') " {{{
-  autocmd vimrc FileType aichat nnoremap <silent> <buffer> <Leader>ai :AIChat<CR>
-  autocmd vimrc FileType aichat xnoremap <silent> <buffer> <Leader>ai :AIChat<CR>
-
-  let g:vim_ai_complete = {
-        \   "engine": "complete",
-        \   "options": {
-        \     "model": "gpt-3.5-turbo-instruct",
-        \     "endpoint_url": "https://api.openai.com/v1/completions",
-        \     "max_tokens": 1000,
-        \     "temperature": 0.1,
-        \     "request_timeout": 20,
-        \     "enable_auth": 1,
-        \     "selection_boundary": "#####",
-        \   },
-        \   "ui": {
-        \     "paste_mode": 1,
-        \   },
-        \ }
-
-  let g:vim_ai_edit = {
-        \   "engine": "complete",
-        \   "options": {
-        \     "model": "gpt-3.5-turbo-instruct",
-        \     "endpoint_url": "https://api.openai.com/v1/completions",
-        \     "max_tokens": 1000,
-        \     "temperature": 0.1,
-        \     "request_timeout": 20,
-        \     "selection_boundary": "#####",
-        \   },
-        \   "ui": {
-        \     "paste_mode": 1,
-        \   },
-        \ }
-
-  let s:initial_chat_prompt =<< trim END
->>> system
-
-You are a general assistant.
-If you attach a code block add syntax type after ``` to enable syntax highlighting.
-Please respond in Japanese.
-END
-
-  let g:vim_ai_chat = {
-      \   "options": {
-      \     "model": "gpt-4-turbo-preview",
-      \     "max_tokens": 1000,
-      \     "endpoint_url": "https://api.openai.com/v1/chat/completions",
-      \     "temperature": 1.0,
-      \     "request_timeout": 20,
-      \     "enable_auth": 1,
-      \     "selection_boundary": "#####",
-      \     "initial_prompt": s:initial_chat_prompt,
-      \   },
-      \   "ui": {
-      \     "code_syntax_enabled": 1,
-      \     "populate_options": 0,
-      \     "open_chat_command": "preset_below",
-      \     "scratch_buffer_keep_open": 0,
-      \     "paste_mode": 1,
-      \   },
-      \ }
-endif " }}}
-
 if s:IsPlugged('vim-airline') " {{{
   let g:airline_experimental = 1
   let g:airline#extensions#tabline#fnamemod = ':t'
@@ -642,23 +574,6 @@ if s:IsPlugged('vim-buffergator') " {{{
   endfunction
 
   nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
-endif " }}}
-
-if s:IsPlugged('vim-dadbod') " {{{
-  let g:dbs = {
-        \   'local': 'mysql://root:secret@127.0.0.1:3306/mysql',
-        \ }
-
-  let g:db_ui_table_helpers = {
-        \   'mysql': {
-        \     'Desc': 'DESC {table}',
-        \     'Create Table': 'SHOW CREATE TABLE {table}',
-        \     'Comment': 'SHOW FULL COLUMNS FROM {table}',
-        \     'Count': 'SELECT COUNT(*) FROM {table}'
-        \   }
-        \ }
-
-  let g:db_ui_use_nerd_fonts = 1
 endif " }}}
 
 if s:IsPlugged('vim-devicons') " {{{
