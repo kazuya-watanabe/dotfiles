@@ -38,6 +38,10 @@ if has('win32')
   if has('vcon')
     set termguicolors
   endif
+
+  noremap <C-@> <C-]>
+  noremap! <C-@> <C-]>
+
 elseif has('osx')
   if exists('+macmeta')
     set macmeta
@@ -147,9 +151,6 @@ autocmd vimrc BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config
 " KEY MAPPINGS {{{
 let g:mapleader = ','
 let g:maplocalleader = ' '
-
-noremap <F1> :tag <C-R><C-W><CR>
-noremap! <F1> :tag <C-R><C-W><CR>
 
 noremap j gj
 noremap k gk
