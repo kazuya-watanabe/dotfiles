@@ -26,6 +26,7 @@
   "profiles": {
     "defaults": {
       "bellStyle": "none",
+      "colorScheme": "PaperColor Dark",
       "cursorShape": "filledBox",
       "font": {
         "face": "Hack Nerd Font Mono",
