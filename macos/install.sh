@@ -76,6 +76,8 @@ brew_install --formula tmux
 
 # text utils
 brew_install --formula jq
+brew_install --formula pandoc
+brew_install --formula poppler
 brew_install --formula translate-shell
 brew_install --formula universal-ctags
 
@@ -114,6 +116,7 @@ fi
 
 # cargo
 cargo_install bat
+cargo_install cargo-update
 cargo_install fd-find
 cargo_install git-delta
 cargo_install lsd

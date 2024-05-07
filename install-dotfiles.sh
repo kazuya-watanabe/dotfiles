@@ -8,9 +8,10 @@ dotfiles=$(cat <<END
   .config/git
   .config/lf
   .config/pip
+  .config/rg
   .config/sheldon
-  .config/starship.toml
   .config/tig
+  .config/starship.toml
   .vim
   .w3m/config
   .w3m/keymap
