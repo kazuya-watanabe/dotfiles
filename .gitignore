@@ -1,6 +1,7 @@
 *~
 *.sw?
 .config/git/store
+.config/lf/files
 .config/lf/history
 .vim/NERDTreeBookmarksFile
 .vim/autoload/plug.vim*
