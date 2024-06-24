@@ -599,7 +599,6 @@ if s:IsPlugged('vim-ai') " {{{
 
 You are a general assistant.
 If you attach a code block add syntax type after ``` to enable syntax highlighting.
-Please respond in Japanese.
 END
 
   " :AIChat

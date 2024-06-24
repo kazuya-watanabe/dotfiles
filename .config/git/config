@@ -30,6 +30,8 @@
 
 [delta]
 	navigate = true
+	line-numbers = true
+	keep-plus-minus-markers = true
 
 [diff]
 	algorithm = histogram
