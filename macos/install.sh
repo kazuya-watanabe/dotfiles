@@ -51,22 +51,21 @@ if ! type brew; then
   test -d /usr/local/etc && chmod go-w /usr/local/etc
 fi
 
-brew_tap homebrew/cask-fonts
-
 # gui apps
 brew_install --cask 1password
 brew_install --cask adguard
 brew_install --cask adguard-vpn
+brew_install --cask alfred
 brew_install --cask altserver
+brew_install --cask apidog
 brew_install --cask appcleaner
 brew_install --cask iterm2
+brew_install --cask karabiner-elements
 brew_install --cask macvim
 brew_install --cask microsoft-edge
 brew_install --cask microsoft-office
-brew_install --cask alfred
-
-# fonts
-brew_install --cask font-hack-nerd-font
+brew_install --cask sequel-ace
+brew_install --cask visual-studio-code
 
 # console utils
 brew_install --formula coreutils
@@ -74,23 +73,39 @@ brew_install --formula fzf
 brew_install --formula lf
 brew_install --formula tmux
 
+# compression archivers
+brew_install --formula p7zip
+brew_install --formula xz
+
 # text utils
+brew_install --formula gawk
 brew_install --formula jq
 brew_install --formula pandoc
 brew_install --formula poppler
 brew_install --formula translate-shell
 brew_install --formula universal-ctags
 
+# network utils
+brew_install --formula curl
+brew_install --formula w3m
+
+# database utils
+brew_install --formula mysql
+brew_install --formula sqlite
+
 # program languages
 brew_install --formula node
+brew_install --formula php composer
 brew_install --formula python
 brew_install --formula rust
 
 # development tools
+brew_install --formula autoconf
+brew_install --formula automake
 brew_install --formula cmake
-brew_install --formula git
-brew_install --formula git-flow
-brew_install --formula tig
+brew_install --formula docker docker-completion
+brew_install --formula git git-flow tig
+brew_install --formula llvm
 
 # dotfiles
 concdir="$HOME/Documents/Conceal"
