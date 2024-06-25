@@ -120,25 +120,42 @@ Add-ScoopApp -Name 'ueli'
 Add-ScoopApp -Name 'vim-nightly'
 
 # console utils
-Add-ScoopApp -Name 'bat'
 Add-ScoopApp -Name 'coreutils'
 Add-ScoopApp -Name 'everything-cli'
 Add-ScoopApp -Name 'fd'
 Add-ScoopApp -Name 'fzf'
 Add-ScoopApp -Name 'less'
+Add-ScoopApp -Name 'lf'
+Add-ScoopApp -Name 'lsd'
 Add-ScoopApp -Name 'starship'
 Add-ScoopApp -Name 'zoxide'
 
 # text utils
+Add-ScoopApp -Name 'bat'
 Add-ScoopApp -Name 'delta'
+Add-ScoopApp -Name 'gawk'
 Add-ScoopApp -Name 'jq'
+Add-ScoopApp -Name 'pandoc'
+Add-ScoopApp -Name 'poppler'
 Add-ScoopApp -Name 'ripgrep'
 Add-ScoopApp -Name 'sed'
 Add-ScoopApp -Name 'universal-ctags'
 
+# network utils
+
+# database utils
+Add-ScoopApp -Name 'mysql'
+Add-ScoopApp -Name 'sqlite'
+
 # program language
 Add-ScoopApp -Name 'nodejs-lts'
 Add-ScoopApp -Name 'python'
+Add-ScoopApp -Name 'php'
+Add-ScoopApp -Name 'composer'
+
+# development tools
+Add-ScoopApp -Name 'cmake'
+Add-ScoopApp -Name 'tig'
 
 # dotfiles
 $ConcDir = (Join-Path -Path $HOME -ChildPath 'Documents\Conceal')

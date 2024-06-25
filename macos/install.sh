@@ -95,7 +95,8 @@ brew_install --formula sqlite
 
 # program languages
 brew_install --formula node
-brew_install --formula php composer
+brew_install --formula php
+brew_install --formula composer
 brew_install --formula python
 brew_install --formula rust
 
@@ -103,8 +104,11 @@ brew_install --formula rust
 brew_install --formula autoconf
 brew_install --formula automake
 brew_install --formula cmake
-brew_install --formula docker docker-completion
-brew_install --formula git git-flow tig
+brew_install --formula docker
+brew_install --formula docker-completion
+brew_install --formula git
+brew_install --formula git-flow
+brew_install --formula tig
 brew_install --formula llvm
 
 # dotfiles
