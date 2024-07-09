@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+set -u
+
+if [ -z "${1:-}" ]; then
+  echo "Usage: $0 <keyname>"
+  exit 1
+fi
+
+KEYPATH=$HOME/.ssh/github/$1/id_rsa
+
+if [ ! -f "$KEYPATH" ]; then
+  echo "Key $KEYPATH does not exist"
+  exit 1
+fi
+
+pushd $HOME/.ssh/ > /dev/null
+ln -fs $KEYPATH $HOME/.ssh/github/id_rsa
+ln -fs $KEYPATH.pub $HOME/.ssh/github/id_rsa.pub
+popd > /dev/null

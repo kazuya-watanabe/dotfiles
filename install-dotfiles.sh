@@ -28,6 +28,7 @@ dotfiles=$(cat <<END
   .tmux.conf
   .wgetrc
   .zshenv
+  bin/gitkey
 END
 )
 
