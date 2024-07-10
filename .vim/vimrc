@@ -404,7 +404,10 @@ if s:IsPlugged('coc.nvim') " {{{
         \ 'coc-highlight',
         \ 'coc-snippets',
         \ 'coc-vimlsp',
-        \ 'coc-webview', 'coc-markdown-preview-enhanced'
+        \ 'coc-webview', 'coc-markdown-preview-enhanced',
+        \ 'coc-tsserver', 'coc-vetur',
+        \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
+        \ 'coc-html', 'coc-css', 'coc-tailwindcss',
         \ ]
 
   " languages
@@ -417,12 +420,6 @@ if s:IsPlugged('coc.nvim') " {{{
   if executable('python3')
     call add(g:coc_global_extensions, 'coc-pyright')
   endif
-
-  call extend(g:coc_global_extensions, ['coc-tsserver', 'coc-vetur'])
-
-  call extend(g:coc_global_extensions, ['coc-json', 'coc-toml', 'coc-xml', 'coc-yaml'])
-
-  call extend(g:coc_global_extensions, ['coc-html', 'coc-css', 'coc-tailwindcss'])
 
   " coc-markdown-preview-enhanced
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
@@ -553,13 +550,6 @@ if s:IsPlugged('undotree') " {{{
 endif " }}}
 
 if s:IsPlugged('vim-ai') " {{{
-  let g:vim_ai_chat = {
-        \   "options": {
-        \     "model": "gpt-4o",
-        \     "temperature": 0.2,
-        \   },
-        \ }
-
   " :AI
   " - engine: complete | chat - see how to configure chat engine in the section below
   " - options: openai config (see https://platform.openai.com/docs/api-reference/completions)
@@ -568,18 +558,18 @@ if s:IsPlugged('vim-ai') " {{{
   " - options.selection_boundary: seleciton prompt wrapper (eliminates empty responses, see #20)
   " - ui.paste_mode: use paste mode (see more info in the Notes below)
   let g:vim_ai_complete = {
-        \   "engine": "complete",
-        \   "options": {
-        \     "model": "gpt-4o",
-        \     "endpoint_url": "https://api.openai.com/v1/completions",
-        \     "max_tokens": 2000,
-        \     "temperature": 0.2,
-        \     "request_timeout": 20,
-        \     "enable_auth": 1,
-        \     "selection_boundary": "#####",
+        \   'engine': 'complete',
+        \   'options': {
+        \     'model': 'gpt-4o',
+        \     'endpoint_url': 'https://api.openai.com/v1/completions',
+        \     'max_tokens': 2000,
+        \     'temperature': 0.2,
+        \     'request_timeout': 20,
+        \     'enable_auth': 1,
+        \     'selection_boundary': '#####',
         \   },
-        \   "ui": {
-        \     "paste_mode": 1,
+        \   'ui': {
+        \     'paste_mode': 1,
         \   },
         \ }
 
@@ -591,18 +581,18 @@ if s:IsPlugged('vim-ai') " {{{
   " - options.selection_boundary: seleciton prompt wrapper (eliminates empty responses, see #20)
   " - ui.paste_mode: use paste mode (see more info in the Notes below)
   let g:vim_ai_edit = {
-        \   "engine": "complete",
-        \   "options": {
-        \     "model": "gpt-4o",
-        \     "endpoint_url": "https://api.openai.com/v1/completions",
-        \     "max_tokens": 2000,
-        \     "temperature": 0.2,
-        \     "request_timeout": 20,
-        \     "enable_auth": 1,
-        \     "selection_boundary": "#####",
+        \   'engine': 'complete',
+        \   'options': {
+        \     'model': 'gpt-4o',
+        \     'endpoint_url': 'https://api.openai.com/v1/completions',
+        \     'max_tokens': 2000,
+        \     'temperature': 0.2,
+        \     'request_timeout': 20,
+        \     'enable_auth': 1,
+        \     'selection_boundary': '#####',
         \   },
-        \   "ui": {
-        \     "paste_mode": 1,
+        \   'ui': {
+        \     'paste_mode': 1,
         \   },
         \ }
 
@@ -626,22 +616,22 @@ END
   " - ui.scratch_buffer_keep_open: re-use scratch buffer within the vim session
   " - ui.paste_mode: use paste mode (see more info in the Notes below)
   let g:vim_ai_chat = {
-        \   "options": {
-        \     "model": "gpt-4o",
-        \     "endpoint_url": "https://api.openai.com/v1/chat/completions",
-        \     "max_tokens": 2000,
-        \     "temperature": 0.8,
-        \     "request_timeout": 20,
-        \     "enable_auth": 1,
-        \     "selection_boundary": "",
-        \     "initial_prompt": s:initial_chat_prompt,
+        \   'options': {
+        \     'model': 'gpt-4o',
+        \     'endpoint_url': 'https://api.openai.com/v1/chat/completions',
+        \     'max_tokens': 2000,
+        \     'temperature': 0.8,
+        \     'request_timeout': 20,
+        \     'enable_auth': 1,
+        \     'selection_boundary': '',
+        \     'initial_prompt': s:initial_chat_prompt,
         \   },
-        \   "ui": {
-        \     "code_syntax_enabled": 1,
-        \     "populate_options": 0,
-        \     "open_chat_command": "preset_below",
-        \     "scratch_buffer_keep_open": 0,
-        \     "paste_mode": 1,
+        \   'ui': {
+        \     'code_syntax_enabled': 1,
+        \     'populate_options': 0,
+        \     'open_chat_command': 'preset_below',
+        \     'scratch_buffer_keep_open': 0,
+        \     'paste_mode': 1,
         \   },
         \ }
 

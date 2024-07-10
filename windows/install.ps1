@@ -117,7 +117,7 @@ Add-ScoopBucket -Name 'versions'
 Add-ScoopApp -Name '7zip'
 Add-ScoopApp -Name 'autohotkey'
 Add-ScoopApp -Name 'ueli'
-Add-ScoopApp -Name 'vim-nightly'
+Add-ScoopApp -Name 'vim'
 
 # console utils
 Add-ScoopApp -Name 'coreutils'
