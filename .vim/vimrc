@@ -336,6 +336,7 @@ Plug 'easymotion/vim-easymotion'
 Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-repeat'
+Plug 'honza/vim-snippets'
 Plug 'tpope/vim-surround'
 Plug 'vim-jp/vimdoc-ja'
 Plug 'liuchengxu/vista.vim'
@@ -401,6 +402,7 @@ endif
 if s:IsPlugged('coc.nvim') " {{{
   let g:coc_global_extensions = [
         \ 'coc-highlight',
+        \ 'coc-snippets',
         \ 'coc-vimlsp',
         \ 'coc-webview', 'coc-markdown-preview-enhanced'
         \ ]
@@ -415,6 +417,12 @@ if s:IsPlugged('coc.nvim') " {{{
   if executable('python3')
     call add(g:coc_global_extensions, 'coc-pyright')
   endif
+
+  call extend(g:coc_global_extensions, ['coc-tsserver', 'coc-vetur'])
+
+  call extend(g:coc_global_extensions, ['coc-json', 'coc-toml', 'coc-xml', 'coc-yaml'])
+
+  call extend(g:coc_global_extensions, ['coc-html', 'coc-css', 'coc-tailwindcss'])
 
   " coc-markdown-preview-enhanced
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
@@ -477,6 +485,11 @@ if s:IsPlugged('coc.nvim') " {{{
   if (get(g:, 'coc_service_initialized', 0) == 0) && exists(':CocStart')
     CocStart
   endif
+
+  " coc-snippets
+  inoremap <C-l> <Plug>(coc-snippets-expand-jump)
+
+  let g:coc_snippet_prev = '<C-h>'
 endif " }}}
 
 if s:IsPlugged('copilot.vim') " {{{
@@ -485,8 +498,8 @@ if s:IsPlugged('copilot.vim') " {{{
   inoremap <C-n> <Plug>(copilot-next)
   inoremap <C-p> <Plug>(copilot-previous)
   inoremap <C-\> <Plug>(copilot-suggest)
-  inoremap <C-l> <Plug>(copilot-accept-word)
-  inoremap <C-m> <Plug>(copilot-accept-line)
+  "inoremap <C-l> <Plug>(copilot-accept-word)
+  "inoremap <C-m> <Plug>(copilot-accept-line)
 endif " }}}
 
 if s:IsPlugged('fzf.vim') " {{{
