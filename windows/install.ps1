@@ -111,7 +111,6 @@ git config --system core.autocrlf false
 git config --global core.autocrlf false
 
 Add-ScoopBucket -Name 'extras'
-Add-ScoopBucket -Name 'versions'
 
 # gui apps
 Add-ScoopApp -Name '7zip'
