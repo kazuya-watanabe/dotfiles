@@ -492,9 +492,9 @@ endif " }}}
 if s:IsPlugged('copilot.vim') " {{{
   highlight! link CopilotSuggestion PmenuSel
 
-  inoremap <C-n> <Plug>(copilot-next)
-  inoremap <C-p> <Plug>(copilot-previous)
-  inoremap <C-\> <Plug>(copilot-suggest)
+  "inoremap <C-n> <Plug>(copilot-next)
+  "inoremap <C-p> <Plug>(copilot-previous)
+  "inoremap <C-\> <Plug>(copilot-suggest)
   "inoremap <C-l> <Plug>(copilot-accept-word)
   "inoremap <C-m> <Plug>(copilot-accept-line)
 endif " }}}
