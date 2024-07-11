@@ -1,4 +1,4 @@
-" PREPARATIONS {{{
+" PREPARATIONS
 scriptencoding utf-8
 
 set encoding=utf-8
@@ -23,9 +23,8 @@ let g:loaded_tarPlugin = 1
 "let g:loaded_2html_plugin = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_zipPlugin = 1
-" }}}
 
-" ENVIRONMENTS {{{
+" ENVIRONMENTS
 let g:user_vim_dir = '~/.vim'
 
 if has('win32')
@@ -53,9 +52,8 @@ call mkdir(&directory, 'p')
 call mkdir(&backupdir, 'p')
 call mkdir(&undodir, 'p')
 call mkdir(&viewdir, 'p')
-" }}}
 
-" UI {{{
+" UI
 set belloff=all
 set cmdheight=2
 set display=lastline
@@ -87,6 +85,7 @@ set whichwrap& | set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
+
 try
   set wildoptions=fuzzy,pum,tagfile
 catch
@@ -96,9 +95,8 @@ endtry
 if has('gui_running')
   set guioptions& | set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
 endif
-" }}}
 
-" EDITING {{{
+" EDITING
 set autoindent
 set autoread
 set backspace=indent,eol,start
@@ -118,10 +116,12 @@ set undofile
 
 let &viminfofile = expand(g:user_vim_dir . '/viminfo')
 
-packadd! matchit
-" }}}
+try
+  packadd! matchit
+catch
+endtry
 
-" SEARCH AND DIFF {{{
+" SEARCH AND DIFF
 set diffopt& | set diffopt+=vertical,algorithm:histogram
 set hlsearch
 set ignorecase
@@ -132,9 +132,8 @@ if executable('rg')
   set grepformat& | set grepformat+=%f:%l:%c:%m
   set grepprg=rg\ --vimgrep
 endif
-" }}}
 
-" FILETYPES {{{
+" FILETYPES
 autocmd vimrc BufNewFile *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932
 
 if has('win32')
@@ -142,9 +141,8 @@ if has('win32')
 endif
 
 autocmd vimrc BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
-" }}}
 
-" KEY MAPPINGS {{{
+" KEY MAPPINGS
 let g:mapleader = ','
 let g:maplocalleader = ' '
 
@@ -197,14 +195,12 @@ nnoremap <LocalLeader>k <C-w>k
 nnoremap <LocalLeader>l <C-w>l
 
 autocmd vimrc FileType dbout,fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
-" }}}
 
-" UTILS {{{
-" :Grep {{{
+" UTILS
+" :Grep
 command! -nargs=* Grep grep <args> | cwindow
-" }}}
 
-" :PrintPDF {{{
+" :PrintPDF
 function! s:PrintPDF(path, line1, line2, bang)
   if ! executable('wkhtmltopdf')
     echomsg 'wkhtmltopdf is required for PrintPDF.'
@@ -251,15 +247,13 @@ function! s:PrintPDF(path, line1, line2, bang)
 endfunction
 
 command! -nargs=? -complete=file -range=% -bang PrintPDF call s:PrintPDF(<q-args>, <line1>, <line2>, <q-bang>)
-" }}}
 
-" :Tig {{{
+" :Tig
 if executable('tig')
   command! -nargs=* Tig terminal ++close tig <f-args>
 endif
-" }}}
 
-function! s:DownloadFile(url, savepath) " {{{
+function! s:DownloadFile(url, savepath)
   call mkdir(fnamemodify(a:savepath, ':p:h'), 'p')
 
   let cmd = ''
@@ -279,19 +273,18 @@ function! s:DownloadFile(url, savepath) " {{{
   endif
 
   return filereadable(a:savepath)
-endfunction " }}}
+endfunction
 
-function! s:RemoveBackgroundHighlight() " {{{
+function! s:RemoveBackgroundHighlight()
   highlight EndOfBuffer ctermbg=NONE guibg=NONE
   highlight Folded ctermbg=NONE guibg=NONE
   highlight LineNr ctermbg=NONE guibg=NONE
   highlight NonText ctermbg=NONE guibg=NONE
   highlight Normal ctermbg=NONE guibg=NONE
-endfunction " }}}
-" }}}
+endfunction
 
-" EXTERNAL PLUGINS {{{
-" Install vim-plug automatically {{{
+" EXTERNAL PLUGINS
+" Install vim-plug automatically
 let s:vimplug = expand(g:user_vim_dir . '/autoload/plug.vim')
 
 if ! executable('git')
@@ -309,9 +302,8 @@ if ! filereadable(s:vimplug)
 
   echomsg 'vim-plug is installed.'
 endif
-" }}}
 
-" Initialize vim-plug and list the plugins to be used. {{{
+" Initialize vim-plug and list the plugins to be used.
 call plug#begin(g:user_vim_dir . '/plugged')
 
 if executable('npm')
@@ -348,13 +340,12 @@ if &encoding == 'utf-8' && (has('gui_running') || exists('$NERDFONT'))
 endif
 
 call plug#end()
-" }}}
 
-function! s:IsPlugged(plug) " {{{
+function! s:IsPlugged(plug)
   return has_key(g:plugs, a:plug) && has_key(g:plugs[a:plug], 'dir') && isdirectory(g:plugs[a:plug]['dir'])
-endfunction " }}}
+endfunction
 
-" Download and install the missing plugins. {{{
+" Download and install the missing plugins.
 for i in keys(g:plugs)
   if ! s:IsPlugged(i)
     silent PlugInstall --sync
@@ -366,16 +357,15 @@ for i in keys(g:plugs)
     finish
   endif
 endfor
-" }}}
 
-if s:IsPlugged('ale') " {{{
+if s:IsPlugged('ale')
   let g:ale_completion_enabled = 1
   let g:ale_linters = {
         \ 'markdown': [ 'textlint' ],
         \ }
-endif " }}}
+endif
 
-if s:IsPlugged('awesome-vim-colorschemes') " {{{
+if s:IsPlugged('awesome-vim-colorschemes')
   if has('gui_running')
     set background=light
   else
@@ -397,9 +387,8 @@ if s:IsPlugged('awesome-vim-colorschemes') " {{{
     call s:RemoveBackgroundHighlight()
   endif
 endif
-" }}}
 
-if s:IsPlugged('coc.nvim') " {{{
+if s:IsPlugged('coc.nvim')
   let g:coc_global_extensions = [
         \ 'coc-highlight',
         \ 'coc-snippets',
@@ -487,9 +476,9 @@ if s:IsPlugged('coc.nvim') " {{{
   inoremap <C-l> <Plug>(coc-snippets-expand-jump)
 
   let g:coc_snippet_prev = '<C-h>'
-endif " }}}
+endif
 
-if s:IsPlugged('copilot.vim') " {{{
+if s:IsPlugged('copilot.vim')
   highlight! link CopilotSuggestion PmenuSel
 
   "inoremap <C-n> <Plug>(copilot-next)
@@ -497,9 +486,9 @@ if s:IsPlugged('copilot.vim') " {{{
   "inoremap <C-\> <Plug>(copilot-suggest)
   "inoremap <C-l> <Plug>(copilot-accept-word)
   "inoremap <C-m> <Plug>(copilot-accept-line)
-endif " }}}
+endif
 
-if s:IsPlugged('fzf.vim') " {{{
+if s:IsPlugged('fzf.vim')
   let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
   let g:fzf_layout = { 'down': '40%' }
   let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
@@ -507,9 +496,9 @@ if s:IsPlugged('fzf.vim') " {{{
   command! -bang -nargs=* Grep call fzf#vim#grep('rg --hidden --follow --smart-case --column --line-number --no-heading --color=always -- ' . shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
 
   nnoremap <silent> <Leader>f :<C-u>Files<CR>
-endif " }}}
+endif
 
-if s:IsPlugged('nerdtree') " {{{
+if s:IsPlugged('nerdtree')
   let g:NERDTreeBookmarksFile = expand(g:user_vim_dir . '/NERDTreeBookmarksFile')
   let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$']
   let g:NERDTreeWinSize = 30
@@ -524,15 +513,15 @@ if s:IsPlugged('nerdtree') " {{{
   endfunction
 
   nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
-endif " }}}
+endif
 
-if s:IsPlugged('translate-shell.vim') " {{{
+if s:IsPlugged('translate-shell.vim')
   let g:trans_default_direction = ':ja'
   let g:trans_advanced_options = '-brief'
   let g:trans_join_lines = 1
-endif " }}}
+endif
 
-if s:IsPlugged('undotree') " {{{
+if s:IsPlugged('undotree')
   let g:undotree_SetFocusWhenToggle = 1
   let g:undotree_SplitWidth = 30
   let g:undotree_WindowLayout = 3
@@ -547,9 +536,9 @@ if s:IsPlugged('undotree') " {{{
   endfunction
 
   nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
-endif " }}}
+endif
 
-if s:IsPlugged('vim-ai') " {{{
+if s:IsPlugged('vim-ai')
   " :AI
   " - engine: complete | chat - see how to configure chat engine in the section below
   " - options: openai config (see https://platform.openai.com/docs/api-reference/completions)
@@ -645,9 +634,9 @@ END
   " - setting max tokens to 0 will exclude it from the OpenAI API request parameters, it is
   "   unclear/undocumented what it exactly does, but it seems to resolve issues when the model
   "   hits token limit, which respond with `OpenAI: HTTPError 400`
-endif " }}}
+endif
 
-if s:IsPlugged('vim-airline') " {{{
+if s:IsPlugged('vim-airline')
   let g:airline_experimental = 1
   let g:airline#extensions#tabline#fnamemod = ':t'
   let g:airline#extensions#tabline#show_buffers = 0
@@ -664,9 +653,9 @@ if s:IsPlugged('vim-airline') " {{{
 
     autocmd vimrc GUIEnter * call airline#switch_matching_theme()
   endif
-endif " }}}
+endif
 
-if s:IsPlugged('vim-buffergator') " {{{
+if s:IsPlugged('vim-buffergator')
   let g:buffergator_autodismiss_on_select = 0
   let g:buffergator_autoexpand_on_split = 0
   let g:buffergator_autoupdate = 1
@@ -683,9 +672,9 @@ if s:IsPlugged('vim-buffergator') " {{{
   endfunction
 
   nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
-endif " }}}
+endif
 
-if s:IsPlugged('vim-devicons') " {{{
+if s:IsPlugged('vim-devicons')
   if has('win32')
     set ambiwidth=single
   endif
@@ -823,13 +812,13 @@ if s:IsPlugged('vim-devicons') " {{{
           \ })
   catch
   endtry
-endif " }}}
+endif
 
-if s:IsPlugged('vim-markdown') " {{{
+if s:IsPlugged('vim-markdown')
   let g:vim_markdown_folding_disabled = 1
-endif " }}}
+endif
 
-if s:IsPlugged('vista.vim') " {{{
+if s:IsPlugged('vista.vim')
   let g:vista_sidebar_width = 30
 
   if s:IsPlugged('coc.nvim')
@@ -848,5 +837,4 @@ if s:IsPlugged('vista.vim') " {{{
   endfunction
 
   nnoremap <silent> <Leader>t :<C-u>call <SID>Vista()<CR>
-endif " }}}
-" }}}
+endif
