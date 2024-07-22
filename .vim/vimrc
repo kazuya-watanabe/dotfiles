@@ -197,10 +197,8 @@ nnoremap <LocalLeader>l <C-w>l
 autocmd vimrc FileType dbout,fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
 
 " UTILS
-" :Grep
 command! -nargs=* Grep grep <args> | cwindow
 
-" :PrintPDF
 function! s:PrintPDF(path, line1, line2, bang)
   if ! executable('wkhtmltopdf')
     echomsg 'wkhtmltopdf is required for PrintPDF.'
@@ -248,7 +246,6 @@ endfunction
 
 command! -nargs=? -complete=file -range=% -bang PrintPDF call s:PrintPDF(<q-args>, <line1>, <line2>, <q-bang>)
 
-" :Tig
 if executable('tig')
   command! -nargs=* Tig terminal ++close tig <f-args>
 endif
@@ -284,7 +281,6 @@ function! s:RemoveBackgroundHighlight()
 endfunction
 
 " EXTERNAL PLUGINS
-" Install vim-plug automatically
 let s:vimplug = expand(g:user_vim_dir . '/autoload/plug.vim')
 
 if ! executable('git')
@@ -303,7 +299,6 @@ if ! filereadable(s:vimplug)
   echomsg 'vim-plug is installed.'
 endif
 
-" Initialize vim-plug and list the plugins to be used.
 call plug#begin(g:user_vim_dir . '/plugged')
 
 if executable('npm')
@@ -345,7 +340,6 @@ function! s:IsPlugged(plug)
   return has_key(g:plugs, a:plug) && has_key(g:plugs[a:plug], 'dir') && isdirectory(g:plugs[a:plug]['dir'])
 endfunction
 
-" Download and install the missing plugins.
 for i in keys(g:plugs)
   if ! s:IsPlugged(i)
     silent PlugInstall --sync
@@ -399,7 +393,6 @@ if s:IsPlugged('coc.nvim')
         \ 'coc-html', 'coc-css', 'coc-tailwindcss',
         \ ]
 
-  " languages
   if executable('php')
     call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade', '@yaegassy/coc-laravel'])
 
@@ -410,13 +403,10 @@ if s:IsPlugged('coc.nvim')
     call add(g:coc_global_extensions, 'coc-pyright')
   endif
 
-  " coc-markdown-preview-enhanced
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
 
-  " coc-highlight
   autocmd vimrc CursorHold * call CocActionAsync('highlight')
 
-  " coc-hover
   function! s:ShowDocumentation()
     if CocAction('hasProvider', 'hover')
       call CocActionAsync('definitionHover')
@@ -427,7 +417,6 @@ if s:IsPlugged('coc.nvim')
 
   nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
 
-  " coc-completion
   inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : '<C-j>'
   inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : '<C-k>'
   inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
@@ -443,25 +432,20 @@ if s:IsPlugged('coc.nvim')
   inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
   inoremap <silent><expr> <C-.> coc#refresh()
 
-  " coc-diagnostics
   nmap <silent> [g <Plug>(coc-diagnostic-prev)
   nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-  " coc-locations
   nmap <silent> gd <Plug>(coc-definition)
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
 
-  " coc-rename
   nmap <Leader>rn <Plug>(coc-rename)
   nmap <Leader>re <Plug>(coc-refactor)
 
-  " coc-format
   xmap <Leader>f <Plug>(coc-format-selected)
   nmap <Leader>f <Plug>(coc-format-selected)
 
-  " coc-codeLens
   nmap <Leader>l <Plug>(coc-codelens-action)
 
   command! -nargs=? Fold :call CocAction('fold', <f-args>)
@@ -472,7 +456,6 @@ if s:IsPlugged('coc.nvim')
     CocStart
   endif
 
-  " coc-snippets
   inoremap <C-l> <Plug>(coc-snippets-expand-jump)
 
   let g:coc_snippet_prev = '<C-h>'
@@ -492,8 +475,6 @@ if s:IsPlugged('fzf.vim')
   let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
   let g:fzf_layout = { 'down': '40%' }
   let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
-
-  command! -bang -nargs=* Grep call fzf#vim#grep('rg --hidden --follow --smart-case --column --line-number --no-heading --color=always -- ' . shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
 
   nnoremap <silent> <Leader>f :<C-u>Files<CR>
 endif
@@ -539,13 +520,6 @@ if s:IsPlugged('undotree')
 endif
 
 if s:IsPlugged('vim-ai')
-  " :AI
-  " - engine: complete | chat - see how to configure chat engine in the section below
-  " - options: openai config (see https://platform.openai.com/docs/api-reference/completions)
-  " - options.request_timeout: request timeout in seconds
-  " - options.enable_auth: enable authorization using openai key
-  " - options.selection_boundary: seleciton prompt wrapper (eliminates empty responses, see #20)
-  " - ui.paste_mode: use paste mode (see more info in the Notes below)
   let g:vim_ai_complete = {
         \   'engine': 'complete',
         \   'options': {
@@ -562,13 +536,6 @@ if s:IsPlugged('vim-ai')
         \   },
         \ }
 
-  " :AIEdit
-  " - engine: complete | chat - see how to configure chat engine in the section below
-  " - options: openai config (see https://platform.openai.com/docs/api-reference/completions)
-  " - options.request_timeout: request timeout in seconds
-  " - options.enable_auth: enable authorization using openai key
-  " - options.selection_boundary: seleciton prompt wrapper (eliminates empty responses, see #20)
-  " - ui.paste_mode: use paste mode (see more info in the Notes below)
   let g:vim_ai_edit = {
         \   'engine': 'complete',
         \   'options': {
@@ -585,7 +552,6 @@ if s:IsPlugged('vim-ai')
         \   },
         \ }
 
-  " This prompt instructs model to work with syntax highlighting
   let s:initial_chat_prompt =<< trim END
 >>> system
 
@@ -594,16 +560,6 @@ If you attach a code block add syntax type after ``` to enable syntax highlighti
 Please respond in Japanese.
 END
 
-  " :AIChat
-  " - options: openai config (see https://platform.openai.com/docs/api-reference/chat)
-  " - options.initial_prompt: prompt prepended to every chat request (list of lines or string)
-  " - options.request_timeout: request timeout in seconds
-  " - options.enable_auth: enable authorization using openai key
-  " - options.selection_boundary: seleciton prompt wrapper (eliminates empty responses, see #20)
-  " - ui.populate_options: put [chat-options] to the chat header
-  " - ui.open_chat_command: preset (preset_below, preset_tab, preset_right) or a custom command
-  " - ui.scratch_buffer_keep_open: re-use scratch buffer within the vim session
-  " - ui.paste_mode: use paste mode (see more info in the Notes below)
   let g:vim_ai_chat = {
         \   'options': {
         \     'model': 'gpt-4o',
@@ -623,17 +579,6 @@ END
         \     'paste_mode': 1,
         \   },
         \ }
-
-  " Notes:
-  " ui.paste_mode
-  " - if disabled code indentation will work but AI doesn't always respond with a code block
-  "   therefore it could be messed up
-  " - find out more in vim's help `:help paste`
-  " options.max_tokens
-  " - note that prompt + max_tokens must be less than model's token limit, see #42, #46
-  " - setting max tokens to 0 will exclude it from the OpenAI API request parameters, it is
-  "   unclear/undocumented what it exactly does, but it seems to resolve issues when the model
-  "   hits token limit, which respond with `OpenAI: HTTPError 400`
 endif
 
 if s:IsPlugged('vim-airline')

@@ -1,12 +1,11 @@
-" PREPARATIONS {{{
+" PREPARATIONS
 scriptencoding utf-8
 
 augroup gvimrc
   autocmd!
 augroup END
-" }}}
 
-" ENVIRONMENTS {{{
+" ENVIRONMENTS
 if has('win32')
   set guifont=Hack_Nerd_Font_Mono:h12,Consolas:h12
   set guifontwide=MS_Gothic:h12
@@ -21,16 +20,14 @@ elseif has('osx')
   set guifontwide=YuGo-Medium:h13
   set linespace=1
 endif
-" }}}
 
-" UTILS {{{
-function! IncreaseFontSize(inc) " {{{
+" UTILS
+function! IncreaseFontSize(inc)
   let size = matchstr(&guifont, '\d\+')
   let &guifont = substitute(&guifont, '\d\+', str2nr(size) + a:inc, 'g')
   let &guifontwide = substitute(&guifontwide, '\d\+', str2nr(size) + a:inc, 'g')
-endfunction " }}}
+endfunction
 
-" :ToggleFullscreen {{{
 function! s:Fullscreen()
   if ! s:IsFullscreen()
     if exists('&fullscreen')
@@ -64,9 +61,7 @@ endfunction
 command! -nargs=0 ToggleFullscreen if s:IsFullscreen() | call s:QuitFullscreen() | else | call s:Fullscreen() | endif
 
 nnoremap <M-CR> :ToggleFullscreen<CR>
-" }}}
 
-" s:LoadWindowState() / s:SaveWindowState() {{{
 let s:winstat_file = expand(g:user_vim_dir . '/winstat')
 
 function! s:SaveWindowState()
@@ -88,9 +83,7 @@ endfunction
 
 autocmd gvimrc GUIEnter * call s:LoadWindowState()
 autocmd gvimrc VimLeavePre * call s:SaveWindowState()
-" }}}
 
-" s:ChangeBackground() {{{
 if exists('##OSAppearanceChanged')
   function! s:ChangeBackground()
     if (v:os_appearance)
@@ -108,5 +101,3 @@ if exists('##OSAppearanceChanged')
 
   autocmd gvimrc OSAppearanceChanged * call s:ChangeBackground()
 endif
-" }}}
-" }}}
