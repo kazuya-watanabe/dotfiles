@@ -2,8 +2,6 @@ $DotFiles = @(
   '.config\git'
   '.config\pip'
   '.config\tig'
-  '.curlrc'
-  '.ripgreprc'
   '.textlintrc.json'
 )
 
@@ -53,9 +51,6 @@ Foreach ($i in $DotFiles) {
   Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath $i) -Path (Join-Path -Path $HOME -ChildPath $i)
 }
 
-Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\bat') -Path (Join-Path -Path $env:APPDATA -ChildPath 'bat')
-Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\fd') -Path (Join-Path -Path $env:APPDATA -ChildPath 'fd')
-Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\lf') -Path (Join-Path -Path $env:LOCALAPPDATA -ChildPath 'lf')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.vim') -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath 'windows\posh') -Path (Join-Path $HOME -ChildPath 'Documents\WindowsPowerShell')
 

@@ -36,35 +36,6 @@ Remove-Item alias:tee -Force
 Remove-Item alias:type
 Remove-Item alias:wget
 
-function fd()
-{
-  fd.exe --follow --hidden $args
-}
-
-function d()
-{
-  fd --type d . $args
-}
-
-function ls()
-{
-  ls.exe --color=auto --classify --quoting-style=literal --show-control-chars $args
-}
-
-function l() {
-  ls -l $args
-}
-
-function la() {
-  ls -A $args
-}
-
-function ll() {
-  ls -Al $args
-}
-
 If ($Env:WT_SESSION) {
   $Env:NERDFONT = 1
 }
-
-Invoke-Expression (& { (zoxide init powershell | Out-String) })

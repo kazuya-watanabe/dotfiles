@@ -57,3 +57,10 @@
 [user]
 	name = Kazuya Watanabe
 	email = kazuya.watanabe@workram.com
+
+[difftool "sourcetree"]
+	cmd = "'' "
+
+[mergetool "sourcetree"]
+	cmd = "'' "
+	trustExitCode = true
