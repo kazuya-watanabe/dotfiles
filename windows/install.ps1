@@ -33,7 +33,6 @@ winget install --interactive --id AdGuard.AdGuardVPN
 winget install --interactive --id AgileBits.1Password
 winget install --interactive --id Amazon.Games
 winget install --interactive --id Atlassian.Sourcetree
-winget install --interactive --id AutoHotkey.AutoHotkey
 winget install --interactive --id EpicGames.EpicGamesLauncher
 winget install --interactive --id GOG.Galaxy
 winget install --interactive --id GeekUnintaller.GeekUninstaller
@@ -47,7 +46,6 @@ winget install --interactive --id Microsoft.Office
 winget install --interactive --id Microsoft.VisualStudioCode
 winget install --interactive --id Mozilla.Thunderbird
 winget install --interactive --id MusicBee.MusicBee
-winget install --interactive --id OliverSchwendener.ueli
 winget install --interactive --id OpenJS.NodeJS.LTS
 winget install --interactive --id Oracle.VirtualBox
 winget install --interactive --id PuTTY.PuTTY
@@ -58,7 +56,5 @@ winget install --interactive --id VideoLAN.VLC
 winget install --interactive --id WinMerge.WinMerge
 winget install --interactive --id WinSCP.WinSCP
 winget install --interactive --id vim.vim
-winget install --interactive --id voidtools.Everything
-winget install --interactive --id voidtools.Everything.Cli
 winget install --interactive --id Docker.DockerCLI
 winget install --interactive --id Docker.DockerCompose
