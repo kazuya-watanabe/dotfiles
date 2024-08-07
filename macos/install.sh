@@ -60,7 +60,6 @@ brew_install --cask altserver
 brew_install --cask apidog
 brew_install --cask appcleaner
 brew_install --cask iterm2
-brew_install --cask karabiner-elements
 brew_install --cask macvim
 brew_install --cask microsoft-edge
 brew_install --cask microsoft-office
@@ -106,6 +105,7 @@ brew_install --formula automake
 brew_install --formula cmake
 brew_install --formula docker
 brew_install --formula docker-completion
+brew_install --formula gh
 brew_install --formula git
 brew_install --formula git-flow
 brew_install --formula tig
