@@ -51,6 +51,7 @@ Foreach ($i in $DotFiles) {
   Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath $i) -Path (Join-Path -Path $HOME -ChildPath $i)
 }
 
+Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.config\git\config.win') -Path (Join-Path -Path $HOME -ChildPath '.config\git\config')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath '.vim') -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
 Link-Dotfile -Value (Join-Path -Path $Dir -ChildPath 'windows\posh') -Path (Join-Path $HOME -ChildPath 'Documents\WindowsPowerShell')
 

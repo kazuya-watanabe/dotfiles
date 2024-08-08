@@ -1,5 +1,6 @@
 *~
 *.sw?
+.config/git/config
 .config/git/store
 .config/lf/files
 .config/lf/history

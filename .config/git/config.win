@@ -1,0 +1,34 @@
+[core]
+	autocrlf = false
+	editor = vim
+	ignoreCase = false
+	quotePath = false
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[fetch]
+	prune = true
+
+[merge]
+	conflictstyle = diff3
+
+[pull]
+	ff = only
+	rebase = true
+	autostash = true
+
+[push]
+	default = current
+
+[user]
+	name = Kazuya Watanabe
+	email = kazuya.watanabe@workram.com
+
+[difftool "sourcetree"]
+	cmd = "'' "
+
+[mergetool "sourcetree"]
+	cmd = "'' "
+	trustExitCode = true

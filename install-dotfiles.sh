@@ -58,5 +58,6 @@ function install_dotfiles() {
 }
 
 mkdir -p ~/.local/bin ~/.local/lib ~/.local/share ~/.local/state ~/.local/tmp
+ln -sf ~/.config/git/config.mac ~/.config/git/config
 
 install_dotfiles "$(dirname $0)"
