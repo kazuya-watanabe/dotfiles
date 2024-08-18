@@ -2,7 +2,7 @@ $DotFiles = @(
   '.config\git'
   '.config\pip'
   '.config\tig'
-  '.textlintrc.json'
+  '.textlintrc'
 )
 
 function Link-Dotfile() {

@@ -302,7 +302,7 @@ endif
 call plug#begin(g:user_vim_dir . '/plugged')
 
 if executable('npm')
-  Plug 'dense-analysis/ale', { 'do': 'npm install -g textlint textlint-rule-preset-ja-technical-writing' }
+  Plug 'dense-analysis/ale', { 'do': 'npm install -g textlint textlint-rule-preset-ja-technical-writing textlint-rule-prh' }
   Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 endif
 

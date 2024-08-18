@@ -24,7 +24,7 @@ dotfiles=$(cat <<END
   .npmrc
   .profile
   .ripgreprc
-  .textlintrc.json
+  .textlintrc
   .tmux.conf
   .wgetrc
   .zshenv
