@@ -199,6 +199,14 @@ autocmd vimrc FileType dbout,fugitive,help,qf nnoremap <silent> <buffer> q :<C-u
 " UTILS
 command! -nargs=* Grep grep <args> | cwindow
 
+if has('win32')
+  command! -nargs=* Vterminal vertical terminal ++close powershell
+else
+  command! -nargs=* Vterminal vertical terminal ++close
+endif
+
+nnoremap <Leader>sh :Vterminal<CR>
+
 function! s:PrintPDF(path, line1, line2, bang)
   if ! executable('wkhtmltopdf')
     echomsg 'wkhtmltopdf is required for PrintPDF.'
@@ -332,6 +340,7 @@ Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:a
 
 if &encoding == 'utf-8' && (has('gui_running') || exists('$NERDFONT'))
   Plug 'ryanoasis/vim-devicons'
+  Plug 'adelarsq/vim-devicons-emoji'
 endif
 
 call plug#end()
