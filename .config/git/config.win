@@ -3,6 +3,7 @@
 	editor = vim
 	ignoreCase = false
 	quotePath = false
+	symlinks = true
 
 [diff]
 	algorithm = histogram
