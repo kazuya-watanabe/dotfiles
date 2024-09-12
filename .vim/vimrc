@@ -85,6 +85,7 @@ set whichwrap& | set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
+set nowrap
 
 try
   set wildoptions=fuzzy,pum,tagfile
