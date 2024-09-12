@@ -2,138 +2,133 @@
 
 set -eu
 
-function brew_tap() {
-  echo "tapping $1"
-
-  brew tap-info "$1" | grep 'Not installed' && brew tap "$1"
-
-  return 0
-}
-
-function cargo_install() {
-  cargo install "$1"
-
-  return 0
-}
-
-function npm_install() {
-  mkdir -p "$HOME/.npm/lib"
-
-  if ! npm -g list "$1"; then
-    npm -g install "$1"
+function cask_install() {
+  if ! brew info --cask "$1" >/dev/null 2>&1; then
+    brew install --cask "$1"
   fi
 
   return 0
 }
 
 function brew_install() {
-  echo "installing $2"
+  if ! brew info --formula "$1" >/dev/null 2>&1; then
+    brew install --formula "$1"
+  fi
 
-  brew info "$1" "$2" | grep 'Not installed' && brew install "$1" "$2"
+  return 0
+}
+
+function cargo_install() {
+  if ! $HOME/.cargo/bin/cargo install --list | grep -q "$1"; then
+    $HOME/.cargo/bin/cargo install "$1"
+  fi
+
+  return 0
+}
+
+function npm_install() {
+  if ! npm --global list "$1" >/dev/null 2>&1; then
+    npm --global install "$1"
+  fi
 
   return 0
 }
 
 function pip_install() {
-  echo "installing $1"
-
-  $HOME/.local/bin/pip show "$1" 2>&1 | grep 'not found' && $HOME/.local/bin/pip install "$1"
+  if ! $HOME/.local/bin/pip show "$1"; then
+    $HOME/.local/bin/pip install "$1"
+  fi
 
   return 0
 }
 
-export PATH=/opt/homebrew/bin:/usr/local/bin:$PATH
+export PATH=/opt/homebrew/bin:$PATH
 
 if ! type brew; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
   test -d /opt/homebrew/etc && chmod go-w /opt/homebrew/etc
-  test -d /usr/local/etc && chmod go-w /usr/local/etc
 fi
 
-# gui apps
-brew_install --cask 1password
-brew_install --cask adguard
-brew_install --cask adguard-vpn
-brew_install --cask alfred
-brew_install --cask altserver
-brew_install --cask apidog
-brew_install --cask appcleaner
-brew_install --cask iterm2
-brew_install --cask macvim
-brew_install --cask microsoft-edge
-brew_install --cask microsoft-office
-brew_install --cask sequel-ace
-brew_install --cask visual-studio-code
+cask_install 1password
+cask_install adguard
+cask_install adguard-vpn
+cask_install alfred
+cask_install altserver
+cask_install apidog
+cask_install appcleaner
+cask_install iterm2
+cask_install macvim
+cask_install microsoft-edge
+cask_install microsoft-office
+cask_install sequel-ace
+cask_install visual-studio-code
 
-# console utils
-brew_install --formula coreutils
-brew_install --formula fzf
-brew_install --formula lf
-brew_install --formula tmux
+brew_install coreutils
+brew_install fzf
+brew_install lf
+brew_install tmux
 
-# compression archivers
-brew_install --formula p7zip
-brew_install --formula xz
+brew_install p7zip
+brew_install xz
 
-# text utils
-brew_install --formula gawk
-brew_install --formula jq
-brew_install --formula pandoc
-brew_install --formula poppler
-brew_install --formula translate-shell
-brew_install --formula universal-ctags
+brew_install gawk
+brew_install jq
+brew_install pandoc
+brew_install poppler
+brew_install translate-shell
+brew_install universal-ctags
 
-# network utils
-brew_install --formula curl
-brew_install --formula w3m
+brew_install curl
+brew_install w3m
+brew_install wget
 
-# database utils
-brew_install --formula mysql
-brew_install --formula sqlite
+brew_install mysql
+brew_install sqlite
 
-# program languages
-brew_install --formula node
-brew_install --formula php
-brew_install --formula composer
-brew_install --formula python
-brew_install --formula rust
+brew_install node
+brew_install php
+brew_install composer
+brew_install python
 
-# development tools
-brew_install --formula autoconf
-brew_install --formula automake
-brew_install --formula cmake
-brew_install --formula docker
-brew_install --formula docker-completion
-brew_install --formula gh
-brew_install --formula git
-brew_install --formula git-flow
-brew_install --formula tig
-brew_install --formula llvm
+brew_install autoconf
+brew_install automake
+brew_install cmake
+brew_install docker
+brew_install docker-completion
+brew_install gh
+brew_install git
+brew_install git-flow
+brew_install tig
+brew_install llvm
 
-# dotfiles
-concdir="$HOME/Documents/Conceal"
+gh auth login
 
-if [ ! -d "$concdir" ]; then
-  git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$concdir"
-  pushd "$concdir"
-  git remote set-url origin git@github.com:kazuya-watanabe/dotfiles.conceal.git
+GIT_DIR="$HOME/Documents/Conceal"
+
+if [ ! -d "$GIT_DIR" ]; then
+  gh repo clone dotfiles.conceal "$GIT_DIR" --recursive
+  pushd "$GIT_DIR"
+  gh auth setup-git
   chmod +x ./install-dotfiles.sh
   ./install-dotfiles.sh
   popd
 fi
 
-dotdir="$HOME/Documents/Dotfiles"
+GIT_DIR="$HOME/Documents/Dotfiles"
 
-if [ ! -d "$dotdir" ]; then
-  git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$dotdir"
-  pushd "$dotdir"
+if [ ! -d "$GIT_DIR" ]; then
+  gh repo clone dotfiles "$GIT_DIR" --recursive
+  pushd "$GIT_DIR"
   chmod +x ./install-dotfiles.sh
   ./install-dotfiles.sh
   popd
 fi
 
-# cargo
+if [ ! -f "$HOME/.cargo/bin/cargo" ]; then
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+fi
+
 cargo_install bat
 cargo_install cargo-update
 cargo_install fd-find
@@ -144,29 +139,29 @@ cargo_install sheldon
 cargo_install starship
 cargo_install zoxide
 
-# npm
-npm_install n
-
 export PATH="$HOME/.npm/bin:$PATH"
 export N_PREFIX="$HOME/.npm"
-n install lts
 
-brew uninstall node
-brew autoremove
+mkdir -p "$HOME/.npm/lib"
 
+npm_install n
 npm_install corepack
 
-# python modules
+n install lts
+
+brew uninstall --formula node
+brew autoremove
+
 if [ ! -x $HOME/.local/bin/pip ]; then
   python3 -m venv ~/.local
 fi
 
+pip_install httpie
 pip_install pip3-autoremove
 pip_install pip_search
 
-# tmux
 if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
   git clone https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
-
-  "$HOME/.tmux/plugins/tpm/bin/install_plugins"
 fi
+
+"$HOME/.tmux/plugins/tpm/bin/install_plugins"

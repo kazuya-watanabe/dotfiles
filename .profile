@@ -49,3 +49,8 @@ if [ $(uname)='Darwin' ]; then
   export SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
   export _JAVA_OPTIONS='-Dfile.encoding=UTF-8'
 fi
+
+# cargo
+if [ -r "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
