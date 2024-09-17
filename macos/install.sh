@@ -95,27 +95,38 @@ function install_cargo_package() {
   fi
 }
 
+function install_apt_package() {
+  if ! dpkg -l "${1}" >/dev/null 2>&1; then
+    sudo apt-get install --yes "${1}"
+  fi
+}
+
 function install_npm_package() {
   if ! npm --global list "${1}" >/dev/null 2>&1; then
     npm --global install "${1}"
   fi
 }
 
-function uninstall_npm() {
+function cleanup_packages() {
   if [ $(uname -s) = 'Darwin' ]; then
     if brew list --formula node >/dev/null 2>&1; then
       brew uninstall --formula node
       brew autoremove
     fi
+  elif [ $(uname -s) = 'Linux' ]; then
+    if type apt-get; then
+      sudo apt-get purge --yes nodejs
+      sudo apt-get purge --yes python3-venv
+      sudo apt-get purge --yes python3-pip
+      sudo apt-get autoremove --yes
+    fi
   fi
 }
 
 function install_pip_package() {
-  if ! ${HOME}/.local/bin/pip show "${1}"; then
-    ${HOME}/.local/bin/pip install "${1}"
+  if ! pip show "${1}"; then
+    pip install "${1}"
   fi
-
-  return 0
 }
 
 export PATH="${HOME}/.cargo/bin":"${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
@@ -153,6 +164,7 @@ if [ $(uname -s) = 'Darwin' ]; then
   install_brew_package fzf
   install_brew_package gawk
   install_brew_package git-flow
+  install_brew_package go
   install_brew_package jq
   install_brew_package lf
   install_brew_package mysql
@@ -167,6 +179,45 @@ if [ $(uname -s) = 'Darwin' ]; then
   install_brew_package w3m
   install_brew_package wget
   install_brew_package xz
+elif [ $(uname -s) = 'Linux' ]; then
+  if type apt-get; then
+    sudo apt-get update --yes
+
+    install_apt_package gh
+
+    install_dotfiles
+
+    install_apt_package bzip2
+    install_apt_package cmake
+    install_apt_package composer
+    install_apt_package fzf
+    install_apt_package gawk
+    install_apt_package git-flow
+    install_apt_package golang
+    install_apt_package jq
+    install_apt_package mysql-client
+    install_apt_package npm
+    install_apt_package p7zip
+    install_apt_package pandoc
+    install_apt_package pandoc-data
+    install_apt_package poppler-data
+    install_apt_package poppler-utils
+    install_apt_package python3-pip
+    install_apt_package python3-venv
+    install_apt_package sqlite3
+    install_apt_package tig
+    install_apt_package tmux
+    install_apt_package translate-shell
+    install_apt_package universal-ctags
+    install_apt_package unzip
+    install_apt_package w3m
+    install_apt_package wget
+    install_apt_package xz-utils
+    install_apt_package zip
+  else
+    echo "Unsupported package manager"
+    exit 1
+  fi
 fi
 
 if ! type cargo >/dev/null 2>&1; then
@@ -192,7 +243,7 @@ install_npm_package corepack
 
 n install lts
 
-uninstall_npm
+cleanup_packages
 
 if ! type pip; then
   python3 -m venv ~/.local

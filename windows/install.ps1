@@ -143,6 +143,7 @@ Install-Winget-Package Eraser.Eraser
 Install-Winget-Package GOG.Galaxy
 Install-Winget-Package GeekUninstaller.GeekUninstaller
 Install-Winget-Package GnuPG.Gpg4win
+Install-Winget-Package Golang.Go
 Install-Winget-Package HeidiSQL.HeidiSQL
 Install-Winget-Package IrfanSkiljan.IrfanView
 Install-Winget-Package IrfanSkiljan.IrfanView.PlugIns

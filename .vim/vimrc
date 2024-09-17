@@ -402,17 +402,29 @@ if s:IsPlugged('coc.nvim')
         \ 'coc-tsserver', 'coc-vetur',
         \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
         \ 'coc-html', 'coc-css', 'coc-tailwindcss',
+        \ 'coc-go', 'coc-golines',
+        \ 'coc-phpls', 'coc-blade', '@yaegassy/coc-laravel',
+        \ 'coc-pyright',
+        \ 'coc-rust-analyzer',
         \ ]
 
-  if executable('php')
-    call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade', '@yaegassy/coc-laravel'])
+  "if executable('go')
+    "call extend(g:coc_global_extensions, ['coc-go', 'coc-golines'])
+  "endif
 
-    autocmd FileType php,blade let b:coc_root_patterns = ['.git', '.env', 'composer.json', 'artisan']
-  endif
+  "if executable('php')
+    "call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade', '@yaegassy/coc-laravel'])
 
-  if executable('python3')
-    call add(g:coc_global_extensions, 'coc-pyright')
-  endif
+    "autocmd FileType php,blade let b:coc_root_patterns = ['.git', '.env', 'composer.json', 'artisan']
+  "endif
+
+  "if executable('python3')
+    "call add(g:coc_global_extensions, 'coc-pyright')
+  "endif
+
+  "if executable('rustc')
+    "call add(g:coc_global_extensions, 'coc-rust-analyzer')
+  "endif
 
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
 
