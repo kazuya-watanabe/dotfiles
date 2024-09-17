@@ -1,5 +1,7 @@
 {
-  "actions":
+  "$help": "https://aka.ms/terminal-documentation",
+  "$schema": "https://aka.ms/terminal-profiles-schema",
+  "actions": 
   [
     {
       "command": "unbound",
@@ -23,7 +25,14 @@
   "trimBlockSelection": true,
   "largePasteWarning": false,
   "multiLinePasteWarning": false,
-  "profiles": {
+  "newTabMenu": 
+  [
+    {
+      "type": "remainingProfiles"
+    }
+  ],
+  "profiles": 
+  {
     "defaults": {
       "bellStyle": "none",
       "colorScheme": "PaperColor Dark",
@@ -81,5 +90,6 @@
       "brightCyan": "#25c3dc",
       "brightWhite": "#ffffff"
     }
-  ]
+  ],
+  "themes": []
 }

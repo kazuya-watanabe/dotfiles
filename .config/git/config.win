@@ -5,12 +5,20 @@
 	quotePath = false
 	symlinks = true
 
+[delta]
+	navigate = true
+	line-numbers = true
+	keep-plus-minus-markers = true
+
 [diff]
 	algorithm = histogram
 	colorMoved = default
 
 [fetch]
 	prune = true
+
+[interactive]
+	diffFilter = delta --color-only
 
 [merge]
 	conflictstyle = diff3

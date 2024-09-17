@@ -1,59 +1,177 @@
-# Dotfiles
-$ConcDir = (Join-Path -Path $HOME -ChildPath 'Documents\Conceal')
+function _Link() {
+  Param (
+    [String]
+    $Value,
 
-If (-not (Test-Path -Path $ConcDir)) {
-  git clone --recursive https://github.com/kazuya-watanabe/dotfiles.conceal.git "$ConcDir"
+    [String]
+    $Path
+  )
 
-  Push-Location -Path $ConcDir
-  git remote set-url origin git@github.com:kazuya-watanabe/dotfiles.conceal.git
-  .\install-dotfiles.ps1
-  Pop-Location
+  Process {
+    $IsDirectory = (Get-Item -Path $Value).PSIsContainer
+
+    If (Test-Path -Path $Path) {
+      $Item = (Get-Item -Path $Path)
+
+      If (($Item.LinkType -Eq 'HardLink') -Or ($Item.LinkType -Eq 'Junction')) {
+        $Item.Delete()
+      } Else {
+        If (Test-Path -Path "$Path~") {
+          (Get-Item -Path "$Path~").Delete()
+        }
+
+        $Item.MoveTo("$Path~")
+      }
+    }
+
+    $DirName = Split-Path -Path $Path -Parent
+
+    If ($DirName -Ne '') {
+      New-Item -Force -Path $DirName -ItemType Directory >$null
+    }
+
+    If ($IsDirectory) {
+      New-Item -ItemType Junction -Value $Value -Path $Path >$null
+    } Else {
+      New-Item -ItemType HardLink -Value $Value -Path $Path >$null
+    }
+  }
 }
 
-$DotDir = (Join-Path -Path $HOME -ChildPath 'Documents\Dotfiles')
+function Install-Dotfiles() {
+  gh auth login
 
-If (-not (Test-Path -Path $DotDir)) {
-  git clone --recursive git@github.com:kazuya-watanabe/dotfiles.git "$DotDir"
+  $GitDir= (Join-Path -Path $HOME -ChildPath '.conceal')
 
-  Push-Location -Path $DotDir
-  .\install-dotfiles.ps1
-  Pop-Location
+  If (-not (Test-Path -Path $GitDir)) {
+    gh repo clone dotfiles.conceal $GitDir -- --recursive
+    Push-Location -Path $GitDir
+    gh auth setup-git
+    Pop-Location
+  }
+
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\openai.token')    -Path (Join-Path -Path $HOME -ChildPath '.config\openai.token')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\textlint')        -Path (Join-Path -Path $HOME -ChildPath '.config\textlint')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\aws')                -Path (Join-Path -Path $HOME -ChildPath '.ssh\aws')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\azure')              -Path (Join-Path -Path $HOME -ChildPath '.ssh\azure')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\backlog')            -Path (Join-Path -Path $HOME -ChildPath '.ssh\backlog')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\config.win')         -Path (Join-Path -Path $HOME -ChildPath '.ssh\config')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath 'intelephense')            -Path (Join-Path -Path $HOME -ChildPath 'intelephense')
+
+  $GitDir= (Join-Path -Path $HOME -ChildPath '.dotfiles')
+
+  If (-not (Test-Path -Path $GitDir)) {
+    gh repo clone dotfiles $GitDir -- --recursive
+    Push-Location -Path $GitDir
+    gh auth setup-git
+    Pop-Location
+  }
+
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\git')             -Path (Join-Path -Path $HOME -ChildPath '.config\git')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\git\config.win')  -Path (Join-Path -Path $HOME -ChildPath '.config\git\config')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\pip')             -Path (Join-Path -Path $HOME -ChildPath '.config\pip')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\tig')             -Path (Join-Path -Path $HOME -ChildPath '.config\tig')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.textlintrc')             -Path (Join-Path -Path $HOME -ChildPath '.textlintrc')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.vim')                    -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath 'windows\posh')            -Path (Join-Path -Path $HOME -ChildPath 'Documents\WindowsPowerShell')
+
+  Copy-Item -Path (Join-Path -Path $GitDir -ChildPath 'windows\terminal\settings.json') -Destination (Join-Path -Path $HOME -ChildPath 'AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json') -Force
 }
 
-# Windows Terminal
-$DestFile = (Join-Path -Path "$HOME" -ChildPath 'AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json')
-$SourceFile = (Join-Path -Path $DotDir -ChildPath 'windows\terminal\settings.json')
-Copy-Item -Force -Path $SourceFile -Destination $DestFile
+function Install-Winget-Package() {
+  Param (
+    [String]
+    $Id
+  )
 
-# Apps
-winget install --interactive --id 7zip.7zip
-winget install --interactive --id Acronis.CyberProtectHomeOffice
-winget install --interactive --id AdGuard.AdGuard
-winget install --interactive --id AdGuard.AdGuardVPN
-winget install --interactive --id AgileBits.1Password
-winget install --interactive --id AgileBits.1Password
-winget install --interactive --id Amazon.Games
-winget install --interactive --id Atlassian.Sourcetree
-winget install --interactive --id Docker.DockerCLI
-winget install --interactive --id Docker.DockerCompose
-winget install --interactive --id Electrum.Electrum
-winget install --interactive --id EpicGames.EpicGamesLauncher
-winget install --interactive --id Eraser.Eraser
-winget install --interactive --id GOG.Galaxy
-winget install --interactive --id GeekUninstaller.GeekUninstaller
-winget install --interactive --id Git.Git
-winget install --interactive --id GnuPG.Gpg4win
-winget install --interactive --id HeidiSQL.HeidiSQL
-winget install --interactive --id IrfanSkiljan.IrfanView
-winget install --interactive --id IrfanSkiljan.IrfanView.PlugIns
-winget install --interactive --id Libretro.RetroArch
-winget install --interactive --id Microsoft.Office
-winget install --interactive --id Microsoft.VisualStudioCode
-winget install --interactive --id Mozilla.Thunderbird
-winget install --interactive --id MusicBee.MusicBee
-winget install --interactive --id OpenJS.NodeJS.LTS
-winget install --interactive --id Oracle.VirtualBox
-winget install --interactive --id Python.Python.3.12
-winget install --interactive --id Valve.Steam
-winget install --interactive --id VideoLAN.VLC
-winget install --interactive --id vim.vim
+  if (-not (winget list --id $Id | Select-String -Pattern $Id)) {
+    winget install --interactive --id $Id
+  }
+}
+
+function Install-Cargo-Package() {
+  Param (
+    [String]
+    $Name
+  )
+
+  if (-not (cargo install --list | Select-String -Pattern $Name)) {
+    cargo install $Name
+  }
+}
+
+function Install-Npm-Package() {
+  Param (
+    [String]
+    $Name
+  )
+
+  if (-not (npm --global list $Name | Select-String -Pattern $Name)) {
+    npm --global install $Name
+  }
+}
+
+function Install-Pip-Package() {
+  Param (
+    [String]
+    $Name
+  )
+
+  if (-not (pip list $Name | Select-String -Pattern $Name)) {
+    pip install $Name
+  }
+}
+
+Install-Winget-Package Git.Git
+Install-Winget-Package GitHub.cli
+
+Install-Dotfiles
+
+Install-Winget-Package 7zip.7zip
+#Install-Winget-Package Acronis.CyberProtectHomeOffice
+Install-Winget-Package AdGuard.AdGuard
+Install-Winget-Package AdGuard.AdGuardVPN
+Install-Winget-Package AgileBits.1Password
+Install-Winget-Package AgileBits.1Password
+Install-Winget-Package Amazon.Games
+Install-Winget-Package Atlassian.Sourcetree
+Install-Winget-Package Docker.DockerCLI
+Install-Winget-Package Docker.DockerCompose
+Install-Winget-Package Electrum.Electrum
+Install-Winget-Package EpicGames.EpicGamesLauncher
+Install-Winget-Package Eraser.Eraser
+Install-Winget-Package GOG.Galaxy
+Install-Winget-Package GeekUninstaller.GeekUninstaller
+Install-Winget-Package GnuPG.Gpg4win
+Install-Winget-Package HeidiSQL.HeidiSQL
+Install-Winget-Package IrfanSkiljan.IrfanView
+Install-Winget-Package IrfanSkiljan.IrfanView.PlugIns
+Install-Winget-Package Libretro.RetroArch
+Install-Winget-Package Microsoft.VisualStudioCode
+Install-Winget-Package Mozilla.Thunderbird
+Install-Winget-Package MusicBee.MusicBee
+Install-Winget-Package OpenJS.NodeJS.LTS
+Install-Winget-Package Oracle.VirtualBox
+Install-Winget-Package Python.Python.3.12
+Install-Winget-Package Rustlang.Rustup
+Install-Winget-Package Valve.Steam
+Install-Winget-Package VideoLAN.VLC
+Install-Winget-Package vim.vim
+
+Install-Cargo-Package bat
+Install-Cargo-Package cargo-update
+Install-Cargo-Package fd-find
+Install-Cargo-Package git-delta
+Install-Cargo-Package lsd
+Install-Cargo-Package ripgrep
+#Install-Cargo-Package sheldon
+#Install-Cargo-Package starship
+Install-Cargo-Package zoxide
+
+Install-Npm-Package corepack
+
+Install-Pip-Package httpie
+Install-Pip-Package pip3-autoremove
+Install-Pip-Package pip_search
+
+Install-Module -Name PSReadLine -Scope CurrentUser -Force -SkipPublisherCheck
