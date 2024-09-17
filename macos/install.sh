@@ -118,6 +118,7 @@ function cleanup_packages() {
       sudo apt-get purge --yes nodejs
       sudo apt-get purge --yes python3-venv
       sudo apt-get purge --yes python3-pip
+      sudo apt-get purge --yes vim-tiny
       sudo apt-get autoremove --yes
     fi
   fi
@@ -195,6 +196,7 @@ elif [ $(uname -s) = 'Linux' ]; then
     install_apt_package git-flow
     install_apt_package golang
     install_apt_package jq
+    install_apt_package language-pack-ja-base
     install_apt_package mysql-client
     install_apt_package npm
     install_apt_package p7zip
@@ -214,6 +216,10 @@ elif [ $(uname -s) = 'Linux' ]; then
     install_apt_package wget
     install_apt_package xz-utils
     install_apt_package zip
+    install_apt_package zsh
+
+    sudo add-apt-repository --yes ppa:jonathonf/vim
+    install_apt_package vim
   else
     echo "Unsupported package manager"
     exit 1
@@ -243,15 +249,15 @@ install_npm_package corepack
 
 n install lts
 
-cleanup_packages
-
 if ! type pip >/dev/null 2>&1; then
-  python3 -m venv ~/.local
+  python3 -m venv ${HOME}/.local
 fi
 
 install_pip_package httpie
 install_pip_package pip3-autoremove
 install_pip_package pip_search
+
+cleanup_packages
 
 if [ ! -x "${HOME}/.tmux/plugins/tpm/bin/install_plugins" ]; then
   git clone https://github.com/tmux-plugins/tpm.git "${HOME}/.tmux/plugins/tpm"
