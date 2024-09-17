@@ -7,12 +7,12 @@ plugins=(
 typeset -U path PATH
 
 path=(
-  $HOME/.cargo/bin(N-/)
-  $HOME/.npm/bin(N-/)
-  $HOME/.local/bin(N-/)
-  $HOME/.local/sbin(N-/)
-  $HOME/bin(N-/)
-  $HOME/sbin(N-/)
+  "${HOME}/.cargo/bin"(N-/)
+  "${HOME}/.npm/bin"(N-/)
+  "${HOME}/.local/bin"(N-/)
+  "${HOME}/.local/sbin"(N-/)
+  "${HOME}/bin"(N-/)
+  "${HOME}/sbin"(N-/)
   /opt/homebrew/bin(N-/)
   /opt/homebrew/sbin(N-/)
   /usr/local/bin(N-/)
@@ -21,7 +21,7 @@ path=(
   /usr/sbin(N-/)
   /bin(N-/)
   /sbin(N-/)
-  $path
+  ${path}
   )
 
 typeset -U fpath FPATH
@@ -33,12 +33,12 @@ fpath=(
   '/usr/local/share/zsh/vendor-completions'(N-/)
   '/usr/share/zsh/site-functions'(N-/)
   '/usr/share/zsh/vendor-completions'(N-/)
-  $fpath
+  ${fpath}
   )
 
 type sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
 
-test -r "$HOME/.aliases.sh" >/dev/null 2>&1 && source "$HOME/.aliases.sh"
+test -r "${HOME}/.aliases" >/dev/null 2>&1 && source "${HOME}/.aliases"
 
 setopt auto_name_dirs
 setopt bang_hist
@@ -64,7 +64,7 @@ autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
 zle -N history-beginning-search-forward-end history-search-end
 
-HISTFILE="$HOME/.zsh/.zsh_history"
+HISTFILE="${HOME}/.zsh/.zsh_history"
 HISTSIZE=100000
 SAVEHIST=100000
 

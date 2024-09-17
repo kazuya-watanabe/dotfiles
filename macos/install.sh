@@ -1,167 +1,209 @@
 #!/usr/bin/env bash
 
-set -eu
+set -e
+set -u
+set -o pipefail
 
-function cask_install() {
-  if ! brew info --cask "$1" >/dev/null 2>&1; then
-    brew install --cask "$1"
+function _ln() {
+  SOURCE="${1}"
+  DEST="${2}"
+
+  if [ -L "${DEST}" ]; then
+    rm -f "${DEST}"
+  elif [ -e "${DEST}" ]; then
+    mv -f "${DEST}" "${DEST}~"
+  fi
+
+  mkdir -p "$(dirname ${DEST})"
+
+  ln -s "${SOURCE}" "${DEST}"
+}
+
+function install_dotfiles() {
+  gh auth login
+
+  GITDIR="${HOME}/.conceal"
+
+  if [ ! -d "${GITDIR}" ]; then
+    gh repo clone dotfiles.conceal "${GITDIR}" -- --recursive
+    pushd "${GITDIR}" >/dev/null 2>&1
+    gh auth setup-git
+    popd >/dev/null 2>&1
+  fi
+
+  chmod -R go-rwx "${GITDIR}/.ssh"
+
+  _ln "${GITDIR}/.config/openai.token"   "${HOME}/.config/openai.token"
+  _ln "${GITDIR}/.config/textlint"       "${HOME}/.config/textlint"
+  _ln "${GITDIR}/.ssh/aws"               "${HOME}/.ssh/aws"
+  _ln "${GITDIR}/.ssh/azure"             "${HOME}/.ssh/azure"
+  _ln "${GITDIR}/.ssh/backlog"           "${HOME}/.ssh/backlog"
+  _ln "${GITDIR}/.ssh/config"            "${HOME}/.ssh/config"
+  _ln "${GITDIR}/.w3m/bookmark.html"     "${HOME}/.w3m/bookmark.html"
+  _ln "${GITDIR}/intelephense"           "${HOME}/intelephense"
+
+  GITDIR="${HOME}/.dotfiles"
+
+  if [ ! -d "${GITDIR}" ]; then
+    gh repo clone dotfiles "${GITDIR}" -- --recursive
+    pushd "${GITDIR}" >/dev/null 2>&1
+    gh auth setup-git
+    popd >/dev/null 2>&1
+  fi
+
+  _ln "${GITDIR}/.aliases"               "${HOME}/.aliases"
+  _ln "${GITDIR}/.config/bat"            "${HOME}/.config/bat"
+  _ln "${GITDIR}/.config/fd"             "${HOME}/.config/fd"
+  _ln "${GITDIR}/.config/git"            "${HOME}/.config/git"
+  _ln "${GITDIR}/.config/git/config.mac" "${HOME}/.config/git/config"
+  _ln "${GITDIR}/.config/lf"             "${HOME}/.config/lf"
+  _ln "${GITDIR}/.config/pip"            "${HOME}/.config/pip"
+  _ln "${GITDIR}/.config/rg"             "${HOME}/.config/rg"
+  _ln "${GITDIR}/.config/sheldon"        "${HOME}/.config/sheldon"
+  _ln "${GITDIR}/.config/starship.toml"  "${HOME}/.config/starship.toml"
+  _ln "${GITDIR}/.config/tig"            "${HOME}/.config/tig"
+  _ln "${GITDIR}/.curlrc"                "${HOME}/.curlrc"
+  _ln "${GITDIR}/.inputrc"               "${HOME}/.inputrc"
+  _ln "${GITDIR}/.npm-rc"                "${HOME}/.npmrc"
+  _ln "${GITDIR}/.profile"               "${HOME}/.profile"
+  _ln "${GITDIR}/.ripgreprc"             "${HOME}/.ripgreprc"
+  _ln "${GITDIR}/.textlintrc"            "${HOME}/.textlintrc"
+  _ln "${GITDIR}/.tmux.conf"             "${HOME}/.tmux.conf"
+  _ln "${GITDIR}/.vim"                   "${HOME}/.vim"
+  _ln "${GITDIR}/.w3m/config"            "${HOME}/.w3m/config"
+  _ln "${GITDIR}/.w3m/keymap"            "${HOME}/.w3m/keymap"
+  _ln "${GITDIR}/.wgetrc"                "${HOME}/.wgetrc"
+  _ln "${GITDIR}/.zsh"                   "${HOME}/.zsh"
+  _ln "${GITDIR}/.zshenv"                "${HOME}/.zshenv"
+}
+
+function install_cask_package() {
+  if ! brew list --cask "${1}" >/dev/null 2>&1; then
+    brew install --cask "${1}"
+  fi
+}
+
+function install_brew_package() {
+  if ! brew list --formula "${1}" >/dev/null 2>&1; then
+    brew install --formula "${1}"
+  fi
+}
+
+function install_cargo_package() {
+  if ! cargo install --list | grep -q "${1}"; then
+    cargo install "${1}"
+  fi
+}
+
+function install_npm_package() {
+  if ! npm --global list "${1}" >/dev/null 2>&1; then
+    npm --global install "${1}"
+  fi
+}
+
+function uninstall_npm() {
+  if [ $(uname -s) = 'Darwin' ]; then
+    if brew list --formula node >/dev/null 2>&1; then
+      brew uninstall --formula node
+      brew autoremove
+    fi
+  fi
+}
+
+function install_pip_package() {
+  if ! ${HOME}/.local/bin/pip show "${1}"; then
+    ${HOME}/.local/bin/pip install "${1}"
   fi
 
   return 0
 }
 
-function brew_install() {
-  if ! brew info --formula "$1" >/dev/null 2>&1; then
-    brew install --formula "$1"
+export PATH="${HOME}/.cargo/bin":"${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
+
+if [ $(uname -s) = 'Darwin' ]; then
+  if ! type brew; then
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    test -d /opt/homebrew/etc && chmod go-w /opt/homebrew/etc
   fi
 
-  return 0
-}
+  install_brew_package gh
 
-function cargo_install() {
-  if ! $HOME/.cargo/bin/cargo install --list | grep -q "$1"; then
-    $HOME/.cargo/bin/cargo install "$1"
-  fi
+  install_dotfiles
 
-  return 0
-}
+  install_cask_package 1password
+  install_cask_package adguard
+  install_cask_package adguard-vpn
+  install_cask_package alfred
+  install_cask_package altserver
+  install_cask_package apidog
+  install_cask_package appcleaner
+  install_cask_package iterm2
+  install_cask_package macvim
+  install_cask_package microsoft-edge
+  install_cask_package microsoft-office
+  install_cask_package sequel-ace
+  install_cask_package visual-studio-code
 
-function npm_install() {
-  if ! npm --global list "$1" >/dev/null 2>&1; then
-    npm --global install "$1"
-  fi
-
-  return 0
-}
-
-function pip_install() {
-  if ! $HOME/.local/bin/pip show "$1"; then
-    $HOME/.local/bin/pip install "$1"
-  fi
-
-  return 0
-}
-
-export PATH=/opt/homebrew/bin:$PATH
-
-if ! type brew; then
-  bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  test -d /opt/homebrew/etc && chmod go-w /opt/homebrew/etc
+  install_brew_package cmake
+  install_brew_package composer
+  install_brew_package coreutils
+  install_brew_package docker
+  install_brew_package docker-completion
+  install_brew_package fzf
+  install_brew_package gawk
+  install_brew_package git-flow
+  install_brew_package jq
+  install_brew_package lf
+  install_brew_package mysql
+  install_brew_package node
+  install_brew_package p7zip
+  install_brew_package pandoc
+  install_brew_package poppler
+  install_brew_package tig
+  install_brew_package tmux
+  install_brew_package translate-shell
+  install_brew_package universal-ctags
+  install_brew_package w3m
+  install_brew_package wget
+  install_brew_package xz
 fi
 
-cask_install 1password
-cask_install adguard
-cask_install adguard-vpn
-cask_install alfred
-cask_install altserver
-cask_install apidog
-cask_install appcleaner
-cask_install iterm2
-cask_install macvim
-cask_install microsoft-edge
-cask_install microsoft-office
-cask_install sequel-ace
-cask_install visual-studio-code
-
-brew_install coreutils
-brew_install fzf
-brew_install lf
-brew_install tmux
-
-brew_install p7zip
-brew_install xz
-
-brew_install gawk
-brew_install jq
-brew_install pandoc
-brew_install poppler
-brew_install translate-shell
-brew_install universal-ctags
-
-brew_install curl
-brew_install w3m
-brew_install wget
-
-brew_install mysql
-brew_install sqlite
-
-brew_install node
-brew_install php
-brew_install composer
-brew_install python
-
-brew_install autoconf
-brew_install automake
-brew_install cmake
-brew_install docker
-brew_install docker-completion
-brew_install gh
-brew_install git
-brew_install git-flow
-brew_install tig
-brew_install llvm
-
-gh auth login
-
-GIT_DIR="$HOME/Documents/Conceal"
-
-if [ ! -d "$GIT_DIR" ]; then
-  gh repo clone dotfiles.conceal "$GIT_DIR" --recursive
-  pushd "$GIT_DIR"
-  gh auth setup-git
-  chmod +x ./install-dotfiles.sh
-  ./install-dotfiles.sh
-  popd
-fi
-
-GIT_DIR="$HOME/Documents/Dotfiles"
-
-if [ ! -d "$GIT_DIR" ]; then
-  gh repo clone dotfiles "$GIT_DIR" --recursive
-  pushd "$GIT_DIR"
-  chmod +x ./install-dotfiles.sh
-  ./install-dotfiles.sh
-  popd
-fi
-
-if [ ! -f "$HOME/.cargo/bin/cargo" ]; then
+if ! type cargo >/dev/null 2>&1; then
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
 
-cargo_install bat
-cargo_install cargo-update
-cargo_install fd-find
-cargo_install git-delta
-cargo_install lsd
-cargo_install ripgrep
-cargo_install sheldon
-cargo_install starship
-cargo_install zoxide
+install_cargo_package bat
+install_cargo_package cargo-update
+install_cargo_package fd-find
+install_cargo_package git-delta
+install_cargo_package lsd
+install_cargo_package ripgrep
+install_cargo_package sheldon
+install_cargo_package starship
+install_cargo_package zoxide
 
-export PATH="$HOME/.npm/bin:$PATH"
-export N_PREFIX="$HOME/.npm"
+export N_PREFIX="${HOME}/.npm"
 
-mkdir -p "$HOME/.npm/lib"
+mkdir -p "${HOME}/.npm/lib"
 
-npm_install n
-npm_install corepack
+install_npm_package n
+install_npm_package corepack
 
 n install lts
 
-brew uninstall --formula node
-brew autoremove
+uninstall_npm
 
-if [ ! -x $HOME/.local/bin/pip ]; then
+if ! type pip; then
   python3 -m venv ~/.local
 fi
 
-pip_install httpie
-pip_install pip3-autoremove
-pip_install pip_search
+install_pip_package httpie
+install_pip_package pip3-autoremove
+install_pip_package pip_search
 
-if [ ! -x "$HOME/.tmux/plugins/tpm/bin/install_plugins" ]; then
-  git clone https://github.com/tmux-plugins/tpm.git "$HOME/.tmux/plugins/tpm"
+if [ ! -x "${HOME}/.tmux/plugins/tpm/bin/install_plugins" ]; then
+  git clone https://github.com/tmux-plugins/tpm.git "${HOME}/.tmux/plugins/tpm"
 fi
 
-"$HOME/.tmux/plugins/tpm/bin/install_plugins"
+"${HOME}/.tmux/plugins/tpm/bin/install_plugins"

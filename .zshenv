@@ -1,2 +1,2 @@
 export SHELL_SESSIONS_DISABLE=1
-export ZDOTDIR="$HOME/.zsh"
+export ZDOTDIR="${HOME}/.zsh"
