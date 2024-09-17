@@ -114,7 +114,7 @@ function cleanup_packages() {
       brew autoremove
     fi
   elif [ $(uname -s) = 'Linux' ]; then
-    if type apt-get; then
+    if type apt-get >/dev/null 2>&1; then
       sudo apt-get purge --yes nodejs
       sudo apt-get purge --yes python3-venv
       sudo apt-get purge --yes python3-pip
@@ -132,7 +132,7 @@ function install_pip_package() {
 export PATH="${HOME}/.cargo/bin":"${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
 
 if [ $(uname -s) = 'Darwin' ]; then
-  if ! type brew; then
+  if ! type brew >/dev/null 2>&1; then
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     test -d /opt/homebrew/etc && chmod go-w /opt/homebrew/etc
@@ -180,7 +180,7 @@ if [ $(uname -s) = 'Darwin' ]; then
   install_brew_package wget
   install_brew_package xz
 elif [ $(uname -s) = 'Linux' ]; then
-  if type apt-get; then
+  if type apt-get >/dev/null 2>&1; then
     sudo apt-get update --yes
 
     install_apt_package gh
@@ -245,7 +245,7 @@ n install lts
 
 cleanup_packages
 
-if ! type pip; then
+if ! type pip >/dev/null 2>&1; then
   python3 -m venv ~/.local
 fi
 
