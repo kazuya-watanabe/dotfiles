@@ -132,7 +132,6 @@ Install-Winget-Package 7zip.7zip
 Install-Winget-Package AdGuard.AdGuard
 Install-Winget-Package AdGuard.AdGuardVPN
 Install-Winget-Package AgileBits.1Password
-Install-Winget-Package AgileBits.1Password
 Install-Winget-Package Amazon.Games
 Install-Winget-Package Atlassian.Sourcetree
 Install-Winget-Package Docker.DockerCLI
@@ -155,6 +154,7 @@ Install-Winget-Package OpenJS.NodeJS.LTS
 Install-Winget-Package Oracle.VirtualBox
 Install-Winget-Package Python.Python.3.12
 Install-Winget-Package Rustlang.Rustup
+Install-Winget-Package Starship.Starship
 Install-Winget-Package Valve.Steam
 Install-Winget-Package VideoLAN.VLC
 Install-Winget-Package vim.vim

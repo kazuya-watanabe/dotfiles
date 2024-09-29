@@ -7,11 +7,11 @@ augroup END
 
 " ENVIRONMENTS
 if has('win32')
-  set guifont=Hack_Nerd_Font_Mono:h12,Consolas:h12
-  set guifontwide=MS_Gothic:h12
+  set guifont=Hack_Nerd_Font_Mono:h10,Consolas:h10
+  set guifontwide=MS_Gothic:h10
 
   if exists('&renderoptions')
-    set renderoptions=type:directx,geom:1,renmode:5
+    set renderoptions=type:directx
   endif
 elseif has('gui_gtk')
   set guifont=Hack\ Nerd\ Font\ Mono\ 11,Monospace\ 11

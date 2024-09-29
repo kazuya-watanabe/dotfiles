@@ -39,3 +39,7 @@ Remove-Item alias:wget
 If ($Env:WT_SESSION) {
   $Env:NERDFONT = 1
 }
+
+If (Get-Command starship -ErrorAction SilentlyContinue) {
+  Invoke-Expression (&starship init powershell)
+}
