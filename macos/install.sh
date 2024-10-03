@@ -154,6 +154,7 @@ if [ $(uname -s) = 'Darwin' ]; then
   install_cask_package macvim
   install_cask_package microsoft-edge
   install_cask_package microsoft-office
+  install_cask_package postman
   install_cask_package sequel-ace
   install_cask_package visual-studio-code
 

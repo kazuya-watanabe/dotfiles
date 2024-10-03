@@ -128,7 +128,6 @@ Install-Winget-Package GitHub.cli
 Install-Dotfiles
 
 Install-Winget-Package 7zip.7zip
-#Install-Winget-Package Acronis.CyberProtectHomeOffice
 Install-Winget-Package AdGuard.AdGuard
 Install-Winget-Package AdGuard.AdGuardVPN
 Install-Winget-Package AgileBits.1Password
@@ -152,6 +151,7 @@ Install-Winget-Package Mozilla.Thunderbird
 Install-Winget-Package MusicBee.MusicBee
 Install-Winget-Package OpenJS.NodeJS.LTS
 Install-Winget-Package Oracle.VirtualBox
+Install-Winget-Package Postman.Postman
 Install-Winget-Package Python.Python.3.12
 Install-Winget-Package Rustlang.Rustup
 Install-Winget-Package Starship.Starship
@@ -165,8 +165,6 @@ Install-Cargo-Package fd-find
 Install-Cargo-Package git-delta
 Install-Cargo-Package lsd
 Install-Cargo-Package ripgrep
-#Install-Cargo-Package sheldon
-#Install-Cargo-Package starship
 Install-Cargo-Package zoxide
 
 Install-Npm-Package corepack
