@@ -91,3 +91,7 @@ if type gdircolors >/dev/null 2>&1; then
 elif type dircolors >/dev/null 2>&1; then
   eval "$(dircolors -b)"
 fi
+
+if [ -r "${HOME}/.conceal/.zsh/.zshrc-private" ]; then
+  source "${HOME}/.conceal/.zsh/.zshrc-private"
+fi
