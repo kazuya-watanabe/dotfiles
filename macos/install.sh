@@ -151,7 +151,7 @@ if [ $(uname -s) = 'Darwin' ]; then
   install_cask_package apidog
   install_cask_package appcleaner
   install_cask_package iterm2
-  install_cask_package macvim
+  install_cask_package karabiner-elements
   install_cask_package microsoft-edge
   install_cask_package microsoft-office
   install_cask_package postman
@@ -178,6 +178,7 @@ if [ $(uname -s) = 'Darwin' ]; then
   install_brew_package tmux
   install_brew_package translate-shell
   install_brew_package universal-ctags
+  install_brew_package vim
   install_brew_package w3m
   install_brew_package wget
   install_brew_package xz
