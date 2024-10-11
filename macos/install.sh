@@ -96,7 +96,7 @@ function install_cargo_package() {
 }
 
 function install_apt_package() {
-  if ! dpkg -l "${1}" >/dev/null 2>&1; then
+  if ! dpkg --status "${1}" >/dev/null 2>&1; then
     sudo apt-get install --yes "${1}"
   fi
 }
@@ -214,14 +214,12 @@ elif [ $(uname -s) = 'Linux' ]; then
     install_apt_package translate-shell
     install_apt_package universal-ctags
     install_apt_package unzip
+    install_apt_package vim
     install_apt_package w3m
     install_apt_package wget
     install_apt_package xz-utils
     install_apt_package zip
     install_apt_package zsh
-
-    sudo add-apt-repository --yes ppa:jonathonf/vim
-    install_apt_package vim
   else
     echo "Unsupported package manager"
     exit 1
@@ -251,7 +249,7 @@ install_npm_package corepack
 
 n install lts
 
-if ! type pip >/dev/null 2>&1; then
+if [ ! -f ${HOME}/.local/bin/pip ]; then
   python3 -m venv ${HOME}/.local
 fi
 
