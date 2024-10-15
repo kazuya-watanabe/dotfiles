@@ -341,8 +341,7 @@ Plug 'madox2/vim-ai'
 Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
 
 if &encoding == 'utf-8' && (has('gui_running') || exists('$NERDFONT'))
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'adelarsq/vim-devicons-emoji'
+  Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
 endif
 
 call plug#end()
