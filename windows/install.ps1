@@ -89,6 +89,17 @@ function Install-Winget-Package() {
   }
 }
 
+function Install-Scoop-Package() {
+  Param (
+    [String]
+    $Name
+  )
+
+  if (-not (scoop list | Select-String -Pattern $Name)) {
+    scoop install $Name
+  }
+}
+
 function Install-Cargo-Package() {
   Param (
     [String]
@@ -149,7 +160,7 @@ Install-Winget-Package Libretro.RetroArch
 Install-Winget-Package Microsoft.VisualStudioCode
 Install-Winget-Package Mozilla.Thunderbird
 Install-Winget-Package MusicBee.MusicBee
-Install-Winget-Package OpenJS.NodeJS.LTS
+Install-Winget-Package OliverSchwendener.ueli
 Install-Winget-Package Oracle.VirtualBox
 Install-Winget-Package Postman.Postman
 Install-Winget-Package Python.Python.3.12
@@ -158,6 +169,19 @@ Install-Winget-Package Starship.Starship
 Install-Winget-Package Valve.Steam
 Install-Winget-Package VideoLAN.VLC
 Install-Winget-Package vim.vim
+
+if (-not (Get-Command -Name scoop -ErrorAction SilentlyContinue)) {
+  irm get.scoop.sh -OutFile 'install.ps1'
+  .\install.ps1 -ScoopDir 'C:\Scoop'
+  Remove-Item -Path 'install.ps1' -Force
+  scoop bucket add versions
+}
+
+Install-Scoop-Package php82
+Install-Scoop-Package php83
+Install-Scoop-Package nodejs18
+Install-Scoop-Package nodejs20
+Install-Scoop-Package composer
 
 Install-Cargo-Package bat
 Install-Cargo-Package cargo-update
