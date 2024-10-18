@@ -168,6 +168,8 @@ Install-Winget-Package Rustlang.Rustup
 Install-Winget-Package Starship.Starship
 Install-Winget-Package Valve.Steam
 Install-Winget-Package VideoLAN.VLC
+Install-Winget-Package ajeetdsouza.zoxide
+Install-Winget-Package junegunn.fzf
 Install-Winget-Package vim.vim
 
 if (-not (Get-Command -Name scoop -ErrorAction SilentlyContinue)) {
@@ -182,6 +184,9 @@ Install-Scoop-Package php83
 Install-Scoop-Package nodejs18
 Install-Scoop-Package nodejs20
 Install-Scoop-Package composer
+
+scoop reset php83
+scoop reset nodejs20
 
 Install-Cargo-Package bat
 Install-Cargo-Package cargo-update

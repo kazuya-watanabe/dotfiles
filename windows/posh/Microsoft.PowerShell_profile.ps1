@@ -43,3 +43,7 @@ If ($Env:WT_SESSION) {
 If (Get-Command starship -ErrorAction SilentlyContinue) {
   Invoke-Expression (&starship init powershell)
 }
+
+if (Get-Command -Name zoxide -ErrorAction SilentlyContinue) {
+  Invoke-Expression (& { (zoxide init powershell | Out-String) })
+}
