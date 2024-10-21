@@ -47,3 +47,15 @@ If (Get-Command starship -ErrorAction SilentlyContinue) {
 if (Get-Command -Name zoxide -ErrorAction SilentlyContinue) {
   Invoke-Expression (& { (zoxide init powershell | Out-String) })
 }
+
+function gha() {
+  if (Test-Path -Path '.git' -PathType Container) {
+    $userEmail = $(git config user.email)
+
+    if ("$userEmail" -eq 'kazuya-watan@tanemaki.co.jp') {
+      gh auth switch --user tm-kazuya-watan
+    } else {
+      gh auth switch --user kazuya-watanabe
+    }
+  }
+}
