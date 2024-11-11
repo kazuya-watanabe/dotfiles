@@ -146,7 +146,6 @@ Install-Winget-Package Amazon.Games
 Install-Winget-Package Atlassian.Sourcetree
 Install-Winget-Package Docker.DockerCLI
 Install-Winget-Package Docker.DockerCompose
-Install-Winget-Package Electrum.Electrum
 Install-Winget-Package EpicGames.EpicGamesLauncher
 Install-Winget-Package Eraser.Eraser
 Install-Winget-Package GOG.Galaxy
@@ -179,10 +178,12 @@ if (-not (Get-Command -Name scoop -ErrorAction SilentlyContinue)) {
   scoop bucket add versions
 }
 
+Install-Scoop-Package php81
 Install-Scoop-Package php82
 Install-Scoop-Package php83
 Install-Scoop-Package nodejs18
 Install-Scoop-Package nodejs20
+Install-Scoop-Package nodejs22
 Install-Scoop-Package composer
 
 scoop reset php83

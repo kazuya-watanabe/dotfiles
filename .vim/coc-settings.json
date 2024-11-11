@@ -1,7 +1,7 @@
 {
   "codeLens.enable": true,
   "colors.enable": true,
-  "intelephense.environment.phpVersion": "8.3.0",
+  "intelephense.environment.phpVersion": "8.2.0",
   "intelephense.stubs":[
     "apache",
     "bcmath",
@@ -73,10 +73,8 @@
     "xsl",
     "Zend OPcache",
     "zip",
-    "zlib",
-    "random"
+    "zlib"
   ],
-  "powershell.integratedConsole.showOnStartup": false,
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.enable": true,
   "suggest.removeDuplicateItems": true
