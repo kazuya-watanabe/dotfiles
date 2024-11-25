@@ -71,8 +71,8 @@ function Install-Dotfiles() {
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\git\config.win')  -Path (Join-Path -Path $HOME -ChildPath '.config\git\config')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\pip')             -Path (Join-Path -Path $HOME -ChildPath '.config\pip')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\tig')             -Path (Join-Path -Path $HOME -ChildPath '.config\tig')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\vim')             -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.textlintrc')             -Path (Join-Path -Path $HOME -ChildPath '.textlintrc')
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.vim')                    -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
   _Link -Value (Join-Path -Path $GitDir -ChildPath 'windows\posh')            -Path (Join-Path -Path $HOME -ChildPath 'Documents\WindowsPowerShell')
 
   Copy-Item -Path (Join-Path -Path $GitDir -ChildPath 'windows\terminal\settings.json') -Destination (Join-Path -Path $HOME -ChildPath 'AppData\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json') -Force
