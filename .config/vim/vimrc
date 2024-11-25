@@ -25,7 +25,7 @@ let g:loaded_vimballPlugin = 1
 "let g:loaded_zipPlugin = 1
 
 " ENVIRONMENTS
-let g:user_vim_dir = '~/.vim'
+let g:user_vim_dir = '~/.config/vim'
 
 if has('win32')
   let g:user_vim_dir = '~/vimfiles'
