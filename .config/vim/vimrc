@@ -403,24 +403,6 @@ if s:IsPlugged('coc.nvim')
         \ 'coc-rust-analyzer',
         \ ]
 
-  "if executable('go')
-    "call extend(g:coc_global_extensions, ['coc-go', 'coc-golines'])
-  "endif
-
-  "if executable('php')
-    "call extend(g:coc_global_extensions, ['coc-phpls', 'coc-blade', '@yaegassy/coc-laravel'])
-
-    "autocmd FileType php,blade let b:coc_root_patterns = ['.git', '.env', 'composer.json', 'artisan']
-  "endif
-
-  "if executable('python3')
-    "call add(g:coc_global_extensions, 'coc-pyright')
-  "endif
-
-  "if executable('rustc')
-    "call add(g:coc_global_extensions, 'coc-rust-analyzer')
-  "endif
-
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
 
   autocmd vimrc CursorHold * call CocActionAsync('highlight')
@@ -435,8 +417,8 @@ if s:IsPlugged('coc.nvim')
 
   nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
 
-  inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1) : '<C-j>'
-  inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1) : '<C-k>'
+  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
+  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
   inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
   inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
 
@@ -448,7 +430,7 @@ if s:IsPlugged('coc.nvim')
   inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
   inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
   inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
-  inoremap <silent><expr> <C-.> coc#refresh()
+  inoremap <silent><expr> <C-@> coc#refresh()
 
   nmap <silent> [g <Plug>(coc-diagnostic-prev)
   nmap <silent> ]g <Plug>(coc-diagnostic-next)
@@ -457,14 +439,22 @@ if s:IsPlugged('coc.nvim')
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
   nmap <silent> gr <Plug>(coc-references)
-
   nmap <Leader>rn <Plug>(coc-rename)
-  nmap <Leader>re <Plug>(coc-refactor)
 
   xmap <Leader>f <Plug>(coc-format-selected)
   nmap <Leader>f <Plug>(coc-format-selected)
 
-  nmap <Leader>l <Plug>(coc-codelens-action)
+  xmap <leader>a  <Plug>(coc-codeaction-selected)
+  nmap <leader>a  <Plug>(coc-codeaction-selected)
+  nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+  nmap <leader>as  <Plug>(coc-codeaction-source)
+  nmap <leader>qf  <Plug>(coc-fix-current)
+
+  nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+  xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+  nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+  nmap <Leader>cl <Plug>(coc-codelens-action)
 
   command! -nargs=? Fold :call CocAction('fold', <f-args>)
   command! -nargs=0 Format :call CocActionAsync('format')
@@ -481,12 +471,6 @@ endif
 
 if s:IsPlugged('copilot.vim')
   highlight! link CopilotSuggestion PmenuSel
-
-  "inoremap <C-n> <Plug>(copilot-next)
-  "inoremap <C-p> <Plug>(copilot-previous)
-  "inoremap <C-\> <Plug>(copilot-suggest)
-  "inoremap <C-l> <Plug>(copilot-accept-word)
-  "inoremap <C-m> <Plug>(copilot-accept-line)
 endif
 
 if s:IsPlugged('fzf.vim')

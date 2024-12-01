@@ -202,5 +202,3 @@ Install-Npm-Package corepack
 Install-Pip-Package httpie
 Install-Pip-Package pip3-autoremove
 Install-Pip-Package pip_search
-
-Install-Module -Name PSReadLine -Scope CurrentUser -Force -SkipPublisherCheck
