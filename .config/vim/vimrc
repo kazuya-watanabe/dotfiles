@@ -290,7 +290,7 @@ let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
 nnoremap <silent> <Leader>f :<C-u>Files<CR>
 
 " nerdtree
-let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$']
+let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$', 'vendor']
 let g:NERDTreeWinSize = 30
 
 function! s:NERDTreeToggleVCS()
@@ -376,7 +376,7 @@ if get(s:, 'devicons_plugged')
   let g:ale_sign_error = '󰀨'
   let g:ale_sign_warning = '󰀦'
 
-  if ! exists('g:airline_symbols')
+  if ! get(g:, 'airline_symbols')
     let g:airline_symbols = {}
   endif
 

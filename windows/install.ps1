@@ -161,6 +161,7 @@ Install-Winget-Package Mozilla.Thunderbird
 Install-Winget-Package MusicBee.MusicBee
 Install-Winget-Package OliverSchwendener.ueli
 Install-Winget-Package Oracle.VirtualBox
+Install-Winget-Package OpenJS.NodeJS.LTS
 Install-Winget-Package Postman.Postman
 Install-Winget-Package Python.Python.3.12
 Install-Winget-Package Rustlang.Rustup
@@ -177,17 +178,6 @@ if (-not (Get-Command -Name scoop -ErrorAction SilentlyContinue)) {
   Remove-Item -Path 'install.ps1' -Force
   scoop bucket add versions
 }
-
-Install-Scoop-Package php81
-Install-Scoop-Package php82
-Install-Scoop-Package php83
-Install-Scoop-Package nodejs18
-Install-Scoop-Package nodejs20
-Install-Scoop-Package nodejs22
-Install-Scoop-Package composer
-
-scoop reset php83
-scoop reset nodejs20
 
 Install-Cargo-Package bat
 Install-Cargo-Package cargo-update
