@@ -2,8 +2,12 @@
 	autocrlf = false
 	editor = vim
 	ignoreCase = false
+	pager = delta
 	quotePath = false
 	symlinks = true
+
+[credential]
+	helper = 
 
 [delta]
 	navigate = true
@@ -41,3 +45,11 @@
 [mergetool "sourcetree"]
 	cmd = "'' "
 	trustExitCode = true
+
+[credential "https://github.com"]
+	helper = 
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential

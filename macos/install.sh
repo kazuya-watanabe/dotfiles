@@ -22,26 +22,6 @@ function _ln() {
 function install_dotfiles() {
   gh auth login
 
-  GITDIR="${HOME}/.conceal"
-
-  if [ ! -d "${GITDIR}" ]; then
-    gh repo clone dotfiles.conceal "${GITDIR}" -- --recursive
-    pushd "${GITDIR}" >/dev/null 2>&1
-    gh auth setup-git
-    popd >/dev/null 2>&1
-  fi
-
-  chmod -R go-rwx "${GITDIR}/.ssh"
-
-  _ln "${GITDIR}/.config/openai.token"   "${HOME}/.config/openai.token"
-  _ln "${GITDIR}/.config/textlint"       "${HOME}/.config/textlint"
-  _ln "${GITDIR}/.ssh/aws"               "${HOME}/.ssh/aws"
-  _ln "${GITDIR}/.ssh/azure"             "${HOME}/.ssh/azure"
-  _ln "${GITDIR}/.ssh/backlog"           "${HOME}/.ssh/backlog"
-  _ln "${GITDIR}/.ssh/config"            "${HOME}/.ssh/config"
-  _ln "${GITDIR}/.w3m/bookmark.html"     "${HOME}/.w3m/bookmark.html"
-  _ln "${GITDIR}/intelephense"           "${HOME}/intelephense"
-
   GITDIR="${HOME}/.dotfiles"
 
   if [ ! -d "${GITDIR}" ]; then
@@ -55,7 +35,6 @@ function install_dotfiles() {
   _ln "${GITDIR}/.config/bat"            "${HOME}/.config/bat"
   _ln "${GITDIR}/.config/fd"             "${HOME}/.config/fd"
   _ln "${GITDIR}/.config/git"            "${HOME}/.config/git"
-  _ln "${GITDIR}/.config/git/config.mac" "${HOME}/.config/git/config"
   _ln "${GITDIR}/.config/lf"             "${HOME}/.config/lf"
   _ln "${GITDIR}/.config/pip"            "${HOME}/.config/pip"
   _ln "${GITDIR}/.config/rg"             "${HOME}/.config/rg"
@@ -70,11 +49,27 @@ function install_dotfiles() {
   _ln "${GITDIR}/.ripgreprc"             "${HOME}/.ripgreprc"
   _ln "${GITDIR}/.textlintrc"            "${HOME}/.textlintrc"
   _ln "${GITDIR}/.tmux.conf"             "${HOME}/.tmux.conf"
-  _ln "${GITDIR}/.w3m/config"            "${HOME}/.w3m/config"
-  _ln "${GITDIR}/.w3m/keymap"            "${HOME}/.w3m/keymap"
+  _ln "${GITDIR}/.w3m"                   "${HOME}/.w3m"
   _ln "${GITDIR}/.wgetrc"                "${HOME}/.wgetrc"
   _ln "${GITDIR}/.zsh"                   "${HOME}/.zsh"
   _ln "${GITDIR}/.zshenv"                "${HOME}/.zshenv"
+
+  GITDIR="${HOME}/.conceal"
+
+  if [ ! -d "${GITDIR}" ]; then
+    gh repo clone dotfiles.conceal "${GITDIR}" -- --recursive
+    pushd "${GITDIR}" >/dev/null 2>&1
+    gh auth setup-git
+    popd >/dev/null 2>&1
+  fi
+
+  chmod -R go-rwx "${GITDIR}/.ssh"
+
+  _ln "${GITDIR}/.config/openai.token"   "${HOME}/.config/openai.token"
+  _ln "${GITDIR}/.config/textlint"       "${HOME}/.config/textlint"
+  _ln "${GITDIR}/.ssh"                   "${HOME}/.ssh"
+  _ln "${GITDIR}/.w3m/bookmark.html"     "${HOME}/.w3m/bookmark.html"
+  _ln "${GITDIR}/intelephense"           "${HOME}/intelephense"
 }
 
 function install_cask_package() {

@@ -52,10 +52,7 @@ function Install-Dotfiles() {
 
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\openai.token')    -Path (Join-Path -Path $HOME -ChildPath '.config\openai.token')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\textlint')        -Path (Join-Path -Path $HOME -ChildPath '.config\textlint')
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\aws')                -Path (Join-Path -Path $HOME -ChildPath '.ssh\aws')
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\azure')              -Path (Join-Path -Path $HOME -ChildPath '.ssh\azure')
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\backlog')            -Path (Join-Path -Path $HOME -ChildPath '.ssh\backlog')
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh\config.win')         -Path (Join-Path -Path $HOME -ChildPath '.ssh\config')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.ssh')                    -Path (Join-Path -Path $HOME -ChildPath '.ssh')
   _Link -Value (Join-Path -Path $GitDir -ChildPath 'intelephense')            -Path (Join-Path -Path $HOME -ChildPath 'intelephense')
 
   $GitDir= (Join-Path -Path $HOME -ChildPath '.dotfiles')
@@ -67,9 +64,11 @@ function Install-Dotfiles() {
     Pop-Location
   }
 
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\bat')             -Path (Join-Path -Path $HOME -ChildPath '.config\bat')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\fd')              -Path (Join-Path -Path $HOME -ChildPath '.config\fd')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\git')             -Path (Join-Path -Path $HOME -ChildPath '.config\git')
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\git\config.win')  -Path (Join-Path -Path $HOME -ChildPath '.config\git\config')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\pip')             -Path (Join-Path -Path $HOME -ChildPath '.config\pip')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\rg')              -Path (Join-Path -Path $HOME -ChildPath '.config\rg')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\tig')             -Path (Join-Path -Path $HOME -ChildPath '.config\tig')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\vim')             -Path (Join-Path -Path $HOME -ChildPath 'vimfiles')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.textlintrc')             -Path (Join-Path -Path $HOME -ChildPath '.textlintrc')
