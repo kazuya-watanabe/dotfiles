@@ -64,9 +64,10 @@ function Install-Dotfiles() {
     Pop-Location
   }
 
-  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\bat')             -Path (Join-Path -Path $HOME -ChildPath '.config\bat')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\bat')             -Path (Join-Path -Path $HOME -ChildPath 'AppData\Roaming\bat')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\fd')              -Path (Join-Path -Path $HOME -ChildPath '.config\fd')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\git')             -Path (Join-Path -Path $HOME -ChildPath '.config\git')
+  _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\lf')              -Path (Join-Path -Path $HOME -ChildPath 'AppData\Local\lf')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\pip')             -Path (Join-Path -Path $HOME -ChildPath '.config\pip')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\rg')              -Path (Join-Path -Path $HOME -ChildPath '.config\rg')
   _Link -Value (Join-Path -Path $GitDir -ChildPath '.config\tig')             -Path (Join-Path -Path $HOME -ChildPath '.config\tig')
@@ -159,8 +160,8 @@ Install-Winget-Package Microsoft.VisualStudioCode
 Install-Winget-Package Mozilla.Thunderbird
 Install-Winget-Package MusicBee.MusicBee
 Install-Winget-Package OliverSchwendener.ueli
-Install-Winget-Package Oracle.VirtualBox
 Install-Winget-Package OpenJS.NodeJS.LTS
+Install-Winget-Package Oracle.VirtualBox
 Install-Winget-Package Postman.Postman
 Install-Winget-Package Python.Python.3.12
 Install-Winget-Package Rustlang.Rustup
@@ -168,6 +169,8 @@ Install-Winget-Package Starship.Starship
 Install-Winget-Package Valve.Steam
 Install-Winget-Package VideoLAN.VLC
 Install-Winget-Package ajeetdsouza.zoxide
+Install-Winget-Package gokcehan.lf
+Install-Winget-Package jftuga.less
 Install-Winget-Package junegunn.fzf
 Install-Winget-Package vim.vim
 
@@ -191,3 +194,9 @@ Install-Npm-Package corepack
 Install-Pip-Package httpie
 Install-Pip-Package pip3-autoremove
 Install-Pip-Package pip_search
+
+[Environment]::SetEnvironmentVariable('EDITOR', 'vim', 'User')
+[Environment]::SetEnvironmentVariable('VISUAL', 'vim', 'User')
+[Environment]::SetEnvironmentVariable('PAGER', 'bat', 'User')
+[Environment]::SetEnvironmentVariable('OPENER', 'start', 'User')
+[Environment]::SetEnvironmentVariable('RIPGREP_CONFIG_PATH', (Join-Path -Path $HOME -ChildPath '.config\rg\ripgreprc'), 'User')

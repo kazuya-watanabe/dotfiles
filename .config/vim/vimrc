@@ -166,6 +166,7 @@ call plug#begin()
   Plug 'easymotion/vim-easymotion'
   Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
   Plug 'airblade/vim-gitgutter'
+  Plug 'sheerun/vim-polyglot'
   Plug 'tpope/vim-repeat'
   Plug 'honza/vim-snippets'
   Plug 'tpope/vim-surround'
