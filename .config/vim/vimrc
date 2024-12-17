@@ -99,9 +99,7 @@ else
   command! -nargs=* Vterminal vertical terminal ++close
 endif
 
-if executable('tig')
-  command! -nargs=* Tig terminal ++close tig <f-args>
-endif
+command! -nargs=* Tig terminal ++close tig <f-args>
 
 let g:mapleader = ','
 let g:maplocalleader = ' '
@@ -175,7 +173,7 @@ call plug#begin()
   Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
 
   if executable('npm')
-    Plug 'dense-analysis/ale', { 'do': 'npm install -g textlint textlint-rule-preset-ja-technical-writing textlint-rule-prh' }
+    Plug 'dense-analysis/ale'
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } | let s:coc_nvim_plugged = 1
   endif
 

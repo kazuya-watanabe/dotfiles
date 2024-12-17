@@ -11,3 +11,6 @@ elseif has('osx')
   set guifontwide=YuGo-Medium:h13
   set linespace=1
 endif
+
+set columns=160
+set lines=50
