@@ -38,7 +38,7 @@ fpath=(
 
 type sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
 
-test -r "${HOME}/.aliases" >/dev/null 2>&1 && source "${HOME}/.aliases"
+test -r "${HOME}/.aliases.sh" >/dev/null 2>&1 && source "${HOME}/.aliases.sh"
 
 setopt auto_name_dirs
 setopt bang_hist

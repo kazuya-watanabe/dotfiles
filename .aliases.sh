@@ -1,6 +1,5 @@
 if type bat >/dev/null 2>&1; then
   alias cat='bat'
-  alias less='bat'
 fi
 
 if type delta >/dev/null 2>&1; then

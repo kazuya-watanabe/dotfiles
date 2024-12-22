@@ -30,4 +30,4 @@
 --map-syntax '*rc:INI'
 --map-syntax '*config:INI'
 
---style 'numbers,changes'
+--style 'plain'

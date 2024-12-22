@@ -1,6 +1,7 @@
 export LANG=ja_JP.UTF-8
 export LC_ALL=ja_JP.UTF-8
 export TZ=Asia/Tokyo
+
 export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
@@ -12,7 +13,6 @@ umask 0022
 # bat
 if type bat >/dev/null 2>&1; then
   export MANPAGER='sh -c "col -bx | bat -l man -p"'
-  export PAGER=bat
 fi
 
 # cargo
