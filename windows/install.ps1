@@ -54,11 +54,11 @@ winget install --interactive --id Libretro.RetroArch
 winget install --interactive --id Microsoft.VisualStudioCode
 winget install --interactive --id Mozilla.Thunderbird.ja
 winget install --interactive --id OliverSchwendener.ueli
-winget install --interactive --id OpenJS.NodeJS.LTS
 winget install --interactive --id Oracle.VirtualBox
 winget install --interactive --id Postman.Postman
 winget install --interactive --id Python.Python.3.12
 winget install --interactive --id Rustlang.Rustup
+winget install --interactive --id Schniz.fnm
 winget install --interactive --id Starship.Starship
 winget install --interactive --id Valve.Steam
 winget install --interactive --id VideoLAN.VLC
@@ -83,7 +83,15 @@ cargo install lsd
 cargo install ripgrep
 cargo install zoxide
 
-npm --global install corepack
+fnm install 22
+fnm default 22
+
+$env:PATH = ((Join-Path - Path $HOME -ChildPath 'AppData\Roaming\fnm\aliases\default') + ';' + [Environment]::GetEnvironmentVariable('PATH', 'User'))
+[Environment]::SetEnvironmentVariable('PATH', $env:PATH, 'User')
+
+npm --global install textlint
+npm --global install textlint-rule-preset-ja-technical-writing
+npm --global install textlint-rule-prh
 
 pip install httpie
 pip install pip3-autoremove
