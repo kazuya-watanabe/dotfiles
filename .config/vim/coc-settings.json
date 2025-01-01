@@ -75,6 +75,10 @@
     "zip",
     "zlib"
   ],
+  "markdownlint.config": {
+    "default": true,
+    "line_length": false
+  },
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.enable": true,
   "suggest.removeDuplicateItems": true

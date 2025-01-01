@@ -36,7 +36,6 @@ New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath '.
 New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath '.ssh')                  -Path (Join-Path -Path $HOME -ChildPath '.ssh')
 New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath 'intelephense')          -Path (Join-Path -Path $HOME -ChildPath 'intelephense')
 
-winget install --interactive --id 7zip.7zip
 winget install --interactive --id AdGuard.AdGuard
 winget install --interactive --id AdGuard.AdGuardVPN
 winget install --interactive --id AgileBits.1Password
@@ -63,6 +62,7 @@ winget install --interactive --id Starship.Starship
 winget install --interactive --id Valve.Steam
 winget install --interactive --id VideoLAN.VLC
 winget install --interactive --id ajeetdsouza.zoxide
+winget install --interactive --id facebook.watchman
 winget install --interactive --id gokcehan.lf
 winget install --interactive --id jftuga.less
 winget install --interactive --id junegunn.fzf

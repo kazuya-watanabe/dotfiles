@@ -45,6 +45,7 @@ set smartcase
 set smartindent
 set smarttab
 set softtabstop=-1
+set nospell | set spelllang=en,cjk
 set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
@@ -158,6 +159,7 @@ call plug#begin()
   Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
   Plug 'preservim/nerdcommenter'
   Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'kamykn/spelunker.vim'
   Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown'
   Plug 'mbbill/undotree'
   Plug 'jeetsukumaran/vim-buffergator'
@@ -203,7 +205,7 @@ endif
 " coc.nvim
 if get(s:, 'coc_nvim_plugged')
   let g:coc_global_extensions = [
-        \ 'coc-diagnostic', 'coc-highlight', 'coc-lightbulb', 'coc-nav', 'coc-snippets', 'coc-symbol-line',
+        \ 'coc-highlight', 'coc-snippets',
         \ '@yaegassy/coc-ansible',
         \ 'coc-clangd', 'coc-cmake',
         \ 'coc-docker',
