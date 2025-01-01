@@ -68,13 +68,6 @@ winget install --interactive --id jftuga.less
 winget install --interactive --id junegunn.fzf
 winget install --interactive --id vim.vim
 
-if (-not (Get-Command -Name scoop -ErrorAction SilentlyContinue)) {
-  irm get.scoop.sh -OutFile 'install-scoop.ps1'
-  .\install-scoop.ps1 -ScoopDir 'C:\Scoop'
-  Remove-Item -Path 'install-scoop.ps1' -Force
-  scoop bucket add versions
-}
-
 cargo install bat
 cargo install cargo-update
 cargo install fd-find

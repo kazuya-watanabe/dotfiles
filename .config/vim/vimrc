@@ -175,6 +175,7 @@ call plug#begin()
   if executable('npm')
     Plug 'dense-analysis/ale'
     Plug 'neoclide/coc.nvim', { 'branch': 'release' } | let s:coc_nvim_plugged = 1
+    Plug 'prisma/vim-prisma'
   endif
 
   if executable('trans')
@@ -202,17 +203,23 @@ endif
 " coc.nvim
 if get(s:, 'coc_nvim_plugged')
   let g:coc_global_extensions = [
-        \ 'coc-highlight',
-        \ 'coc-snippets',
-        \ 'coc-vimlsp',
-        \ 'coc-webview', 'coc-markdown-preview-enhanced',
-        \ 'coc-tsserver', 'coc-vetur',
-        \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
-        \ 'coc-html', 'coc-css',
+        \ 'coc-diagnostic', 'coc-highlight', 'coc-lightbulb', 'coc-nav', 'coc-snippets', 'coc-symbol-line',
+        \ '@yaegassy/coc-ansible',
+        \ 'coc-clangd', 'coc-cmake',
+        \ 'coc-docker',
         \ 'coc-go', 'coc-golines',
-        \ 'coc-phpls', 'coc-blade', '@yaegassy/coc-laravel',
-        \ 'coc-pyright',
+        \ 'coc-html', 'coc-html-css-support', 'coc-htmlhint', 'coc-class-css', 'coc-css', 'coc-cssmodules', 'coc-stylelint', '@yaegassy/coc-tailwindcss3', 'coc-unocss',
+        \ 'coc-java',
+        \ 'coc-json', 'coc-toml', 'coc-yaml',
+        \ 'coc-markdown-preview-enhanced', 'coc-markdownlint', 'coc-webview',
+        \ 'coc-omnisharp',
+        \ 'coc-phpls', '@yaegassy/coc-phpstan', 'coc-php-cs-fixer', 'coc-blade', '@yaegassy/coc-laravel',
+        \ 'coc-pyright', 'coc-pydocstring', '@yaegassy/coc-ruff', 'coc-htmldjango',
         \ 'coc-rust-analyzer',
+        \ 'coc-sh',
+        \ 'coc-sql', 'coc-sqlfluff',
+        \ 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-angular', '@yaegassy/coc-volar', 'coc-prisma',
+        \ 'coc-vimlsp',
         \ ]
 
   command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
