@@ -41,6 +41,7 @@ winget install --interactive --id AdGuard.AdGuardVPN
 winget install --interactive --id AgileBits.1Password
 winget install --interactive --id Amazon.Games
 winget install --interactive --id Atlassian.Sourcetree
+winget install --interactive --id BurntSushi.ripgrep.MSVC
 winget install --interactive --id Docker.DockerCLI
 winget install --interactive --id Docker.DockerCompose
 winget install --interactive --id EpicGames.EpicGamesLauncher
@@ -56,25 +57,21 @@ winget install --interactive --id OliverSchwendener.ueli
 winget install --interactive --id Oracle.VirtualBox
 winget install --interactive --id Postman.Postman
 winget install --interactive --id Python.Python.3.12
-winget install --interactive --id Rustlang.Rustup
 winget install --interactive --id Schniz.fnm
 winget install --interactive --id Starship.Starship
 winget install --interactive --id Valve.Steam
 winget install --interactive --id VideoLAN.VLC
 winget install --interactive --id ajeetdsouza.zoxide
+winget install --interactive --id ajeetdsouza.zoxide
+winget install --interactive --id dandavison.delta
 winget install --interactive --id facebook.watchman
 winget install --interactive --id gokcehan.lf
 winget install --interactive --id jftuga.less
 winget install --interactive --id junegunn.fzf
+winget install --interactive --id lsd-rs.lsd
+winget install --interactive --id sharkdp.bat
+winget install --interactive --id sharkdp.fd
 winget install --interactive --id vim.vim
-
-cargo install bat
-cargo install cargo-update
-cargo install fd-find
-cargo install git-delta
-cargo install lsd
-cargo install ripgrep
-cargo install zoxide
 
 fnm install 22
 fnm default 22
