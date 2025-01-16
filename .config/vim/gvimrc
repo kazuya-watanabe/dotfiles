@@ -1,8 +1,8 @@
 scriptencoding utf-8
 
 if has('win32')
-  set guifont=Hack_Nerd_Font_Mono:h10.5,Consolas:h10.5
-  set guifontwide=MS_Gothic:h10.5
+  set guifont=Hack_Nerd_Font_Mono:h12,Consolas:h12
+  set guifontwide=MS_Gothic:h12
   set renderoptions=type:directx
 elseif has('gui_gtk')
   set guifont=Hack\ Nerd\ Font\ Mono\ 11,Monospace\ 11
@@ -14,3 +14,6 @@ endif
 
 set columns=160
 set lines=50
+
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim

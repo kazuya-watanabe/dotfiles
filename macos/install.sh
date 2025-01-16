@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-export PATH="${HOME}/.cargo/bin":"${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
+export PATH="${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
 
 if ! type brew >/dev/null 2>&1; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -66,50 +66,49 @@ brew install --cask appcleaner
 brew install --cask iterm2
 brew install --cask karabiner-elements
 brew install --cask logitech-g-hub
+brew install --cask macvim
 brew install --cask microsoft-edge
 brew install --cask microsoft-office
 brew install --cask postman
 brew install --cask sequel-ace
 brew install --cask visual-studio-code
 
+brew install --formula bat
 brew install --formula cmake
 brew install --formula composer
 brew install --formula coreutils
 brew install --formula docker
 brew install --formula docker-completion
+brew install --formula fd
 brew install --formula fzf
 brew install --formula gawk
+brew install --formula git-delta
 brew install --formula git-flow
 brew install --formula go
 brew install --formula jq
+brew install --formula lesspipe
 brew install --formula lf
+brew install --formula lima
+brew install --formula lsd
 brew install --formula mysql
 brew install --formula node
 brew install --formula p7zip
 brew install --formula pandoc
+brew install --formula php@8.2
 brew install --formula poppler
+brew install --formula ripgrep
+brew install --formula sheldon
+brew install --formula starship
 brew install --formula tig
 brew install --formula tmux
 brew install --formula translate-shell
 brew install --formula universal-ctags
 brew install --formula vim
 brew install --formula w3m
+brew install --formula watchman
 brew install --formula wget
 brew install --formula xz
-
-if ! type cargo >/dev/null 2>&1; then
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-fi
-
-cargo install bat
-cargo install cargo-update
-cargo install fd-find
-cargo install git-delta
-cargo install lsd
-cargo install ripgrep
-cargo install sheldon
-cargo install starship
-cargo install zoxide
+brew install --formula zoxide
 
 export N_PREFIX="${HOME}/.npm"
 
