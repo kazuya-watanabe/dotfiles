@@ -61,7 +61,6 @@ brew install --cask 1password
 brew install --cask adguard
 brew install --cask adguard-vpn
 brew install --cask alfred
-brew install --cask altserver
 brew install --cask appcleaner
 brew install --cask iterm2
 brew install --cask karabiner-elements
