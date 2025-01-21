@@ -45,7 +45,7 @@ set smartcase
 set smartindent
 set smarttab
 set softtabstop=-1
-set nospell | set spelllang=en,cjk
+set spell | set spelllang=en,cjk
 set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
@@ -159,7 +159,6 @@ call plug#begin()
   Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
   Plug 'preservim/nerdcommenter'
   Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'kamykn/spelunker.vim'
   Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown'
   Plug 'mbbill/undotree'
   Plug 'jeetsukumaran/vim-buffergator'
@@ -176,7 +175,7 @@ call plug#begin()
 
   if executable('npm')
     Plug 'dense-analysis/ale'
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' } | let s:coc_nvim_plugged = 1
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
     Plug 'prisma/vim-prisma'
   endif
 
@@ -185,7 +184,7 @@ call plug#begin()
   endif
 
   if has('gui_running') || exists('$NERDFONT')
-    Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji' | let s:devicons_plugged = 1
+    Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
   endif
 call plug#end()
 
@@ -203,92 +202,90 @@ if len(getcompletion(s:colors_name, 'color'))
 endif
 
 " coc.nvim
-if get(s:, 'coc_nvim_plugged')
-  let g:coc_global_extensions = [
-        \ 'coc-highlight', 'coc-snippets',
-        \ '@yaegassy/coc-ansible',
-        \ 'coc-clangd', 'coc-cmake',
-        \ 'coc-docker',
-        \ 'coc-go', 'coc-golines',
-        \ 'coc-html', 'coc-html-css-support', 'coc-htmlhint', 'coc-class-css', 'coc-css', 'coc-cssmodules', 'coc-stylelint', '@yaegassy/coc-tailwindcss3', 'coc-unocss',
-        \ 'coc-java',
-        \ 'coc-json', 'coc-toml', 'coc-yaml',
-        \ 'coc-markdown-preview-enhanced', 'coc-markdownlint', 'coc-webview',
-        \ 'coc-omnisharp',
-        \ 'coc-phpls', '@yaegassy/coc-phpstan', 'coc-php-cs-fixer', 'coc-blade', '@yaegassy/coc-laravel',
-        \ 'coc-pyright', 'coc-pydocstring', '@yaegassy/coc-ruff', 'coc-htmldjango',
-        \ 'coc-rust-analyzer',
-        \ 'coc-sh',
-        \ 'coc-sql', 'coc-sqlfluff',
-        \ 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-angular', '@yaegassy/coc-volar', 'coc-prisma',
-        \ 'coc-vimlsp',
-        \ ]
+let g:coc_global_extensions = [
+      \ 'coc-highlight', 'coc-snippets',
+      \ '@yaegassy/coc-ansible',
+      \ 'coc-clangd', 'coc-cmake',
+      \ 'coc-docker',
+      \ 'coc-go', 'coc-golines',
+      \ 'coc-html', 'coc-html-css-support', 'coc-htmlhint', 'coc-class-css', 'coc-css', 'coc-cssmodules', 'coc-stylelint', '@yaegassy/coc-tailwindcss3', 'coc-unocss',
+      \ 'coc-java',
+      \ 'coc-json', 'coc-toml', 'coc-yaml',
+      \ 'coc-markdown-preview-enhanced', 'coc-markdownlint', 'coc-webview',
+      \ 'coc-omnisharp',
+      \ 'coc-phpls', '@yaegassy/coc-phpstan', 'coc-php-cs-fixer', 'coc-blade', '@yaegassy/coc-laravel',
+      \ 'coc-pyright', 'coc-pydocstring', '@yaegassy/coc-ruff', 'coc-htmldjango',
+      \ 'coc-rust-analyzer',
+      \ 'coc-sh',
+      \ 'coc-sql', 'coc-sqlfluff',
+      \ 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-angular', '@yaegassy/coc-volar', 'coc-prisma',
+      \ 'coc-vimlsp',
+      \ ]
 
-  command! -nargs=0 MDPreview CocCommand markdown-preview-enhanced.openPreview
+command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
 
-  autocmd vimrc CursorHold * call CocActionAsync('highlight')
+autocmd vimrc CursorHold * call CocActionAsync('highlight')
 
-  function! s:ShowDocumentation()
-    if CocAction('hasProvider', 'hover')
-      call CocActionAsync('definitionHover')
-    else
-      call feedkeys('K', 'in')
-    endif
-  endfunction
-
-  nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
-
-  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
-  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
-  inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
-  inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
-
-  inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<Right>'
-  inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<Left>'
-  inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
-  inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
-
-  inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
-  inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
-  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
-  inoremap <silent><expr> <C-@> coc#refresh()
-
-  nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-  nmap <Leader>rn <Plug>(coc-rename)
-
-  xmap <Leader>f <Plug>(coc-format-selected)
-  nmap <Leader>f <Plug>(coc-format-selected)
-
-  xmap <leader>a  <Plug>(coc-codeaction-selected)
-  nmap <leader>a  <Plug>(coc-codeaction-selected)
-  nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-  nmap <leader>as  <Plug>(coc-codeaction-source)
-  nmap <leader>qf  <Plug>(coc-fix-current)
-
-  nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-  xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-  nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-
-  nmap <Leader>cl <Plug>(coc-codelens-action)
-
-  command! -nargs=? Fold :call CocAction('fold', <f-args>)
-  command! -nargs=0 Format :call CocActionAsync('format')
-  command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
-
-  if (get(g:, 'coc_service_initialized', 0) == 0) && exists(':CocStart')
-    CocStart
+function! s:ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('definitionHover')
+  else
+    call feedkeys('K', 'in')
   endif
+endfunction
 
-  inoremap <C-l> <Plug>(coc-snippets-expand-jump)
+nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
 
-  let g:coc_snippet_prev = '<C-h>'
+inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
+inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
+inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
+inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
+
+inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<Right>'
+inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<Left>'
+inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
+inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
+
+inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
+inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
+inoremap <silent><expr> <C-@> coc#refresh()
+
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+nmap <Leader>rn <Plug>(coc-rename)
+
+xmap <Leader>f <Plug>(coc-format-selected)
+nmap <Leader>f <Plug>(coc-format-selected)
+
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+nmap <leader>as  <Plug>(coc-codeaction-source)
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+nmap <Leader>cl <Plug>(coc-codelens-action)
+
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
+command! -nargs=0 Format :call CocActionAsync('format')
+command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+if (get(g:, 'coc_service_initialized', 0) == 0) && exists(':CocStart')
+  CocStart
 endif
+
+inoremap <C-l> <Plug>(coc-snippets-expand-jump)
+
+let g:coc_snippet_prev = '<C-h>'
 
 " fzf.vim
 let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
@@ -370,145 +367,138 @@ endfunction
 nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
 
 " vim-devicons
-if get(s:, 'devicons_plugged')
-  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
-  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
-  set showbreak=↪∙∙∙
+set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
+set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+set showbreak=↪∙∙∙
 
-  let g:webdevicons_enable = 1
-  let g:webdevicons_enable_airline_statusline = 1
-  let g:webdevicons_enable_airline_tabline = 1
-  let g:webdevicons_enable_nerdtree = 1
-  let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_airline_statusline = 1
+let g:webdevicons_enable_airline_tabline = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_conceal_nerdtree_brackets = 1
 
-  let g:ale_sign_error = '󰀨'
-  let g:ale_sign_warning = '󰀦'
+let g:ale_sign_error = '󰀨'
+let g:ale_sign_warning = '󰀦'
 
-  if ! get(g:, 'airline_symbols')
-    let g:airline_symbols = {}
-  endif
-
-  let g:airline_powerline_fonts = 1
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = '󰘬'
-  let g:airline_symbols.colnr = ''
-  let g:airline_symbols.dirty = '󰐗'
-  let g:airline_symbols.linenr = ''
-  let g:airline_symbols.maxlinenr = ' '
-  let g:airline_symbols.notexists = '󰱼'
-  let g:airline_symbols.paste = '󰆒'
-  let g:airline_symbols.readonly = '󰌾'
-  let g:airline_symbols.spell = '󰓆'
-  let g:airline_symbols.whitespace = '󱁐'
-  let g:airline#extensions#coc#error_symbol = '󰀩 '
-  let g:airline#extensions#coc#warning_symbol = '󰀦 '
-  let g:airline#extensions#tabline#close_symbol = '󰅖'
-  let g:airline#extensions#tabline#overflow_marker = '…'
-  let g:airline#extensions#tabline#tabs_label = '󰓩'
-
-  let g:NERDTreeDirArrowCollapsible = ''
-  let g:NERDTreeDirArrowExpandable = ''
-  let g:NERDTreeGitStatusIndicatorMapCustom = {
-        \ 'Modified': '󰧟',
-        \ 'Staged': '󰐕',
-        \ 'Untracked': '󰓎',
-        \ 'Renamed': '󰁔',
-        \ 'Unmerged': '󰦎',
-        \ 'Deleted': '󰆴',
-        \ 'Dirty': '󰂚',
-        \ 'Ignored': '󰅖',
-        \ 'Clean': '󰄬',
-        \ 'Unknown': '?',
-        \ }
-  let g:NERDTreeGitStatusUseNerdFonts = 1
-
-  let g:vista_icon_indent = ['└ ', '├ ']
-  let g:vista_fold_toggle_icons = ['', '']
-  let g:vista#renderer#icons = {
-        \ 'func': '󰊕',
-        \ 'function': '󰊕',
-        \ 'functions': '󰊕',
-        \ 'var': '',
-        \ 'variable': '',
-        \ 'variables': '',
-        \ 'const': '',
-        \ 'constant': '',
-        \ 'constructor': '󰑶',
-        \ 'method': '',
-        \ 'package': '',
-        \ 'packages': '',
-        \ 'enum': '',
-        \ 'enummember': '',
-        \ 'enumerator': '',
-        \ 'module': '',
-        \ 'modules': '',
-        \ 'type': '',
-        \ 'typedef': '',
-        \ 'types': '',
-        \ 'field': '',
-        \ 'fields': '',
-        \ 'macro': '󰎤',
-        \ 'macros': '󰎤',
-        \ 'map': '󰙅',
-        \ 'class': '',
-        \ 'augroup': '󰙅',
-        \ 'struct': '',
-        \ 'union': '󰕤',
-        \ 'member': '',
-        \ 'target': '󰎔',
-        \ 'property': '',
-        \ 'interface': '',
-        \ 'namespace': '',
-        \ 'subroutine': '󰒰',
-        \ 'implementation': '',
-        \ 'typeParameter': '',
-        \ 'default': ''
-        \ }
-
-  call coc#config('suggest.completionItemKindLabels', {
-        \ 'keyword': '',
-        \ 'variable': '',
-        \ 'value': '󰎠',
-        \ 'operator': 'ψ',
-        \ 'constructor': '󰑶',
-        \ 'function': '󰊕',
-        \ 'reference': '',
-        \ 'constant': '',
-        \ 'method': '',
-        \ 'struct': '',
-        \ 'class': '',
-        \ 'interface': '',
-        \ 'text': '',
-        \ 'enum': '',
-        \ 'enumMember': '',
-        \ 'module': '',
-        \ 'color': '',
-        \ 'property': '',
-        \ 'field': '',
-        \ 'unit': '',
-        \ 'event': '󰥕',
-        \ 'file': '󰈤',
-        \ 'folder': '󰉖',
-        \ 'snippet': '󰅩',
-        \ 'typeParameter': '',
-        \ 'default': ''
-        \ })
+if ! get(g:, 'airline_symbols')
+  let g:airline_symbols = {}
 endif
+
+let g:airline_powerline_fonts = 1
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = '󰘬'
+let g:airline_symbols.colnr = ''
+let g:airline_symbols.dirty = '󰐗'
+let g:airline_symbols.linenr = ''
+let g:airline_symbols.maxlinenr = ' '
+let g:airline_symbols.notexists = '󰱼'
+let g:airline_symbols.paste = '󰆒'
+let g:airline_symbols.readonly = '󰌾'
+let g:airline_symbols.spell = '󰓆'
+let g:airline_symbols.whitespace = '󱁐'
+let g:airline#extensions#coc#error_symbol = '󰀩 '
+let g:airline#extensions#coc#warning_symbol = '󰀦 '
+let g:airline#extensions#tabline#close_symbol = '󰅖'
+let g:airline#extensions#tabline#overflow_marker = '…'
+let g:airline#extensions#tabline#tabs_label = '󰓩'
+
+let g:NERDTreeDirArrowCollapsible = ''
+let g:NERDTreeDirArrowExpandable = ''
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+      \ 'Modified': '󰧟',
+      \ 'Staged': '󰐕',
+      \ 'Untracked': '󰓎',
+      \ 'Renamed': '󰁔',
+      \ 'Unmerged': '󰦎',
+      \ 'Deleted': '󰆴',
+      \ 'Dirty': '󰂚',
+      \ 'Ignored': '󰅖',
+      \ 'Clean': '󰄬',
+      \ 'Unknown': '?',
+      \ }
+let g:NERDTreeGitStatusUseNerdFonts = 1
+
+let g:vista_icon_indent = ['└ ', '├ ']
+let g:vista_fold_toggle_icons = ['', '']
+let g:vista#renderer#icons = {
+      \ 'func': '󰊕',
+      \ 'function': '󰊕',
+      \ 'functions': '󰊕',
+      \ 'var': '',
+      \ 'variable': '',
+      \ 'variables': '',
+      \ 'const': '',
+      \ 'constant': '',
+      \ 'constructor': '󰑶',
+      \ 'method': '',
+      \ 'package': '',
+      \ 'packages': '',
+      \ 'enum': '',
+      \ 'enummember': '',
+      \ 'enumerator': '',
+      \ 'module': '',
+      \ 'modules': '',
+      \ 'type': '',
+      \ 'typedef': '',
+      \ 'types': '',
+      \ 'field': '',
+      \ 'fields': '',
+      \ 'macro': '󰎤',
+      \ 'macros': '󰎤',
+      \ 'map': '󰙅',
+      \ 'class': '',
+      \ 'augroup': '󰙅',
+      \ 'struct': '',
+      \ 'union': '󰕤',
+      \ 'member': '',
+      \ 'target': '󰎔',
+      \ 'property': '',
+      \ 'interface': '',
+      \ 'namespace': '',
+      \ 'subroutine': '󰒰',
+      \ 'implementation': '',
+      \ 'typeParameter': '',
+      \ 'default': ''
+      \ }
+
+call coc#config('suggest.completionItemKindLabels', {
+      \ 'keyword': '',
+      \ 'variable': '',
+      \ 'value': '󰎠',
+      \ 'operator': 'ψ',
+      \ 'constructor': '󰑶',
+      \ 'function': '󰊕',
+      \ 'reference': '',
+      \ 'constant': '',
+      \ 'method': '',
+      \ 'struct': '',
+      \ 'class': '',
+      \ 'interface': '',
+      \ 'text': '',
+      \ 'enum': '',
+      \ 'enumMember': '',
+      \ 'module': '',
+      \ 'color': '',
+      \ 'property': '',
+      \ 'field': '',
+      \ 'unit': '',
+      \ 'event': '󰥕',
+      \ 'file': '󰈤',
+      \ 'folder': '󰉖',
+      \ 'snippet': '󰅩',
+      \ 'typeParameter': '',
+      \ 'default': ''
+      \ })
 
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
 
 " vista.vim
+let g:vista_default_executive = 'coc'
 let g:vista_sidebar_width = 30
-
-if get(s:, 'coc_nvim_plugged')
-  let g:vista_default_executive = 'coc'
-elseif executable('ctags')
-  let g:vista_default_executive = 'ctags'
-endif
 
 function! s:Vista()
   try
