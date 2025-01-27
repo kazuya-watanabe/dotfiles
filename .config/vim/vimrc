@@ -45,7 +45,7 @@ set smartcase
 set smartindent
 set smarttab
 set softtabstop=-1
-set spell | set spelllang=en,cjk
+set nospell | set spelllang=en,cjk
 set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
@@ -90,6 +90,7 @@ augroup vimrc
   autocmd BufNewFile,BufRead *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932 completeslash=backslash
   autocmd BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
   autocmd FileType dbout,fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
+  autocmd FileType html,markdown,txt setlocal spell
 augroup END
 
 command! -nargs=* Grep grep <args> | cwindow

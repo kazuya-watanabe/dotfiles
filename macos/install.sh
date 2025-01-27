@@ -89,7 +89,7 @@ brew install --formula lesspipe
 brew install --formula lf
 brew install --formula lima
 brew install --formula lsd
-brew install --formula mysql
+brew install --formula mysql-client@8.4
 brew install --formula node
 brew install --formula p7zip
 brew install --formula pandoc
@@ -125,9 +125,10 @@ if [ ! -f ${HOME}/.local/bin/pip ]; then
   python3 -m venv ${HOME}/.local
 fi
 
-pip install pip3-autoremove
-pip install pip_search
 pip install httpie
+pip install pip3-autoremove
+pip install pipenv
+pip install yt-dlp
 
 if brew list --formula node >/dev/null 2>&1; then
   brew uninstall --formula node
