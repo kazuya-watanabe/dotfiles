@@ -9,15 +9,15 @@ set autoread
 set backspace=indent,eol,start
 set nobackup
 set belloff=all
-set clipboard& | set clipboard^=unnamed
+set clipboard^=unnamed
 set cmdheight=2
 set completeopt=menuone,longest,preview
-set diffopt& | set diffopt+=vertical,algorithm:histogram
+set diffopt^=vertical,algorithm:histogram
 set display=lastline
 set encoding=utf-8
 set expandtab
 set fileignorecase
-set formatoptions& | set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
+set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
 set nofoldenable
 set history=10000
 set hlsearch
@@ -29,12 +29,13 @@ set laststatus=2
 set lazyredraw
 set list
 set listchars=tab:>-,trail:-,extends:>,precedes:<
-set nrformats& | set nrformats-=octal
+set nrformats-=octal
 set number
+set relativenumber
 set ruler
 set scrolloff=5
 set shiftwidth=2
-set shortmess& | set shortmess+=acI
+set shortmess+=acI
 set showbreak=>\ 
 set showcmd
 set showmatch
@@ -43,7 +44,7 @@ set smartcase
 set smartindent
 set smarttab
 set softtabstop=-1
-set nospell | set spelllang=en,cjk
+set spelllang=en,cjk
 set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
@@ -53,7 +54,7 @@ set ttimeoutlen=100
 set noundofile
 set updatetime=300
 set virtualedit=block
-set whichwrap& | set whichwrap+=<,>,~,[,]
+set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
@@ -62,7 +63,7 @@ set wrap
 set nowritebackup
 
 if executable('rg')
-  set grepformat& | set grepformat+=%f:%l:%c:%m
+  set grepformat=%f:%l:%c:%m
   set grepprg=rg\ --vimgrep
 endif
 
@@ -71,7 +72,7 @@ if exists('+macmeta')
 endif
 
 if has('gui_running')
-  set guioptions& | set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
+  set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
 endif
 
 if has('win32')
@@ -135,16 +136,6 @@ nnoremap <silent> <Tab> :<C-u>tabnext<CR>
 nnoremap Y y$
 nnoremap [q :<C-u>cprevious<CR>
 nnoremap ]q :<C-u>cnext<CR>
-nnoremap <silent> <LocalLeader>1 :<C-u>1tabnext<CR>
-nnoremap <silent> <LocalLeader>2 :<C-u>2tabnext<CR>
-nnoremap <silent> <LocalLeader>3 :<C-u>3tabnext<CR>
-nnoremap <silent> <LocalLeader>4 :<C-u>4tabnext<CR>
-nnoremap <silent> <LocalLeader>5 :<C-u>5tabnext<CR>
-nnoremap <silent> <LocalLeader>6 :<C-u>6tabnext<CR>
-nnoremap <silent> <LocalLeader>7 :<C-u>7tabnext<CR>
-nnoremap <silent> <LocalLeader>8 :<C-u>8tabnext<CR>
-nnoremap <silent> <LocalLeader>9 :<C-u>9tabnext<CR>
-nnoremap <silent> <LocalLeader>0 :<C-u>$tabnext<CR>
 nnoremap <LocalLeader>h <C-w>h
 nnoremap <LocalLeader>j <C-w>j
 nnoremap <LocalLeader>k <C-w>k
@@ -198,7 +189,7 @@ let s:colors_name = 'PaperColor'
 if len(getcompletion(s:colors_name, 'color'))
   set background=dark
 
-  execute 'colorscheme ' . s:colors_name
+  execute 'colorscheme ' .. s:colors_name
 endif
 
 " coc.nvim
@@ -279,7 +270,7 @@ command! -nargs=? Fold :call CocAction('fold', <f-args>)
 command! -nargs=0 Format :call CocActionAsync('format')
 command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
-if (get(g:, 'coc_service_initialized', 0) == 0) && exists(':CocStart')
+if ! has_key(g:, 'coc_service_initialized') && exists(':CocStart')
   CocStart
 endif
 
@@ -338,16 +329,6 @@ let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#tabline#show_splits = 0
 let g:airline#extensions#tabline#show_tab_count = 0
 
-if exists(':AirlineRefresh')
-  AirlineRefresh
-endif
-
-if has('gui_running')
-  let g:airline_theme = g:colors_name
-
-  autocmd vimrc GUIEnter * call airline#switch_matching_theme()
-endif
-
 " vim-buffergator
 let g:buffergator_autodismiss_on_select = 0
 let g:buffergator_autoexpand_on_split = 0
@@ -396,7 +377,7 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:ale_sign_error = '󰀨'
 let g:ale_sign_warning = '󰀦'
 
-if ! get(g:, 'airline_symbols')
+if ! has_key(g:, 'airline_symbols')
   let g:airline_symbols = {}
 endif
 
