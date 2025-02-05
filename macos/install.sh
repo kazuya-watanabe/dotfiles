@@ -126,6 +126,7 @@ if [ ! -f ${HOME}/.local/bin/pip ]; then
 fi
 
 pip install httpie
+pip install openai
 pip install pip3-autoremove
 pip install pipenv
 pip install yt-dlp

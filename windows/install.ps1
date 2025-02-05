@@ -84,8 +84,10 @@ npm --global install textlint-rule-preset-ja-technical-writing
 npm --global install textlint-rule-prh
 
 pip install httpie
+pip install openai
 pip install pip3-autoremove
-pip install pip_search
+pip install pipenv
+pip install yt-dlp
 
 [Environment]::SetEnvironmentVariable('EDITOR', 'vim', 'User')
 [Environment]::SetEnvironmentVariable('VISUAL', 'vim', 'User')
