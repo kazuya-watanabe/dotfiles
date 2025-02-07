@@ -62,7 +62,6 @@ winget install --interactive --id Starship.Starship
 winget install --interactive --id Valve.Steam
 winget install --interactive --id VideoLAN.VLC
 winget install --interactive --id ajeetdsouza.zoxide
-winget install --interactive --id ajeetdsouza.zoxide
 winget install --interactive --id dandavison.delta
 winget install --interactive --id facebook.watchman
 winget install --interactive --id gokcehan.lf
@@ -91,5 +90,5 @@ pip install yt-dlp
 
 [Environment]::SetEnvironmentVariable('EDITOR', 'vim', 'User')
 [Environment]::SetEnvironmentVariable('VISUAL', 'vim', 'User')
-[Environment]::SetEnvironmentVariable('PAGER', 'bat', 'User')
+[Environment]::SetEnvironmentVariable('PAGER', 'less', 'User')
 [Environment]::SetEnvironmentVariable('RIPGREP_CONFIG_PATH', (Join-Path -Path $HOME -ChildPath '.config\rg\ripgreprc'), 'User')
