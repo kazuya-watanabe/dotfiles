@@ -125,11 +125,11 @@ if [ ! -f ${HOME}/.local/bin/pip ]; then
   python3 -m venv ${HOME}/.local
 fi
 
-pip install httpie
-pip install openai
-pip install pip3-autoremove
-pip install pipenv
-pip install yt-dlp
+pip3 install --user --break-system-packages httpie
+pip3 install --user --break-system-packages openai
+pip3 install --user --break-system-packages pip3-autoremove
+pip3 install --user --break-system-packages pipenv
+pip3 install --user --break-system-packages yt-dlp
 
 if brew list --formula node >/dev/null 2>&1; then
   brew uninstall --formula node
