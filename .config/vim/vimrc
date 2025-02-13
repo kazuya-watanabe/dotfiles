@@ -141,16 +141,16 @@ nnoremap <LocalLeader>k <C-w>k
 nnoremap <LocalLeader>l <C-w>l
 nnoremap <Leader>sh :<C-u>Vterminal<CR>
 
-call plug#begin()
+call plug#begin('~/.local/vim-plug')
   Plug 'rafi/awesome-vim-colorschemes'
   Plug 'github/copilot.vim'
   Plug 'editorconfig/editorconfig-vim'
-  Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
+  Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'Rg' ] }
   Plug 'preservim/nerdcommenter'
-  Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown'
-  Plug 'mbbill/undotree'
-  Plug 'jeetsukumaran/vim-buffergator'
+  Plug 'preservim/nerdtree', { 'on': [ 'NERDTreeToggle', 'NERDTreeToggleVCS' ] } | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown', { 'for': [ 'markdown', 'text' ] }
+  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+  Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorToggle' }
   Plug 'CoderCookE/vim-chatgpt'
   Plug 'easymotion/vim-easymotion'
   Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
