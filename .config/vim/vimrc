@@ -126,7 +126,6 @@ inoremap <C-e> <End>
 inoremap <C-f> <Right>
 inoremap <C-n> <Down>
 inoremap <C-p> <Up>
-inoremap <F15> <Nop>
 
 nnoremap <C-w>- <C-w>s
 nnoremap <C-w>\| <C-w>v

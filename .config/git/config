@@ -2,7 +2,6 @@
 	autocrlf = false
 	editor = vim
 	ignoreCase = false
-	pager = delta
 	quotePath = false
 	symlinks = true
 
@@ -10,9 +9,8 @@
 	helper = 
 
 [delta]
-	navigate = true
-	line-numbers = true
 	keep-plus-minus-markers = true
+	navigate = true
 
 [diff]
 	algorithm = histogram
@@ -26,6 +24,12 @@
 
 [merge]
 	conflictstyle = diff3
+
+[pager]
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
 
 [pull]
 	ff = only

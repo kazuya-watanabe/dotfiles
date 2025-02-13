@@ -32,6 +32,9 @@ export LESS_ADVANCED_PREPROCESSOR=1
 # n
 export N_PREFIX="${HOME}/.npm"
 
+# python3
+export PATH="$(python3 -m site --user-base)/bin":${PATH}
+
 # ripgrep
 export RIPGREP_CONFIG_PATH="${HOME}/.config/rg/ripgreprc"
 
