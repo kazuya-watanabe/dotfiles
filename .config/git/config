@@ -5,8 +5,13 @@
 	quotePath = false
 	symlinks = true
 
-[credential]
+[credential "https://github.com"]
 	helper = 
+	helper = !gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !gh auth git-credential
 
 [delta]
 	keep-plus-minus-markers = true
@@ -42,18 +47,3 @@
 [user]
 	name = Kazuya Watanabe
 	email = kazuya.watanabe@workram.com
-
-[difftool "sourcetree"]
-	cmd = "'' "
-
-[mergetool "sourcetree"]
-	cmd = "'' "
-	trustExitCode = true
-
-[credential "https://github.com"]
-	helper = 
-	helper = !gh auth git-credential
-
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !gh auth git-credential

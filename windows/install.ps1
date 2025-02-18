@@ -31,14 +31,13 @@ If (-not (Test-Path -Path $GitDir)) {
   gh repo clone dotfiles.conceal $GitDir -- --recursive
 }
 
-New-Item -Force -ItemType HardLink -Value (Join-Path -Path $GitDir -ChildPath '.config\openai.token')  -Path (Join-Path -Path $HOME -ChildPath '.config\openai.token')
-New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath '.config\textlint')      -Path (Join-Path -Path $HOME -ChildPath '.config\textlint')
-New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath '.ssh')                  -Path (Join-Path -Path $HOME -ChildPath '.ssh')
-New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath 'intelephense')          -Path (Join-Path -Path $HOME -ChildPath 'intelephense')
+New-Item -Force -ItemType HardLink -Value (Join-Path -Path $GitDir -ChildPath '.config\openai.token') -Path (Join-Path -Path $HOME -ChildPath '.config\openai.token')
+New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath '.config\textlint') -Path (Join-Path -Path $HOME -ChildPath '.config\textlint')
+New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath '.ssh') -Path (Join-Path -Path $HOME -ChildPath '.ssh')
+New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath 'intelephense') -Path (Join-Path -Path $HOME -ChildPath 'intelephense')
 
 winget install --interactive --id AdGuard.AdGuard
 winget install --interactive --id AdGuard.AdGuardVPN
-winget install --interactive --id AgileBits.1Password
 winget install --interactive --id Amazon.Games
 winget install --interactive --id Atlassian.Sourcetree
 winget install --interactive --id BurntSushi.ripgrep.MSVC
@@ -48,13 +47,10 @@ winget install --interactive --id EpicGames.EpicGamesLauncher
 winget install --interactive --id GOG.Galaxy
 winget install --interactive --id GeekUninstaller.GeekUninstaller
 winget install --interactive --id GnuPG.Gpg4win
-winget install --interactive --id Golang.Go
 winget install --interactive --id HeidiSQL.HeidiSQL
 winget install --interactive --id Libretro.RetroArch
-winget install --interactive --id Microsoft.VisualStudioCode
 winget install --interactive --id Mozilla.Thunderbird.ja
 winget install --interactive --id OliverSchwendener.ueli
-winget install --interactive --id Oracle.VirtualBox
 winget install --interactive --id Postman.Postman
 winget install --interactive --id Python.Python.3.12
 winget install --interactive --id Schniz.fnm
@@ -71,6 +67,7 @@ winget install --interactive --id lsd-rs.lsd
 winget install --interactive --id sharkdp.bat
 winget install --interactive --id sharkdp.fd
 winget install --interactive --id vim.vim
+winget install --interactive --id UniversalCtags.Ctags
 
 fnm install 22
 fnm default 22
@@ -88,7 +85,4 @@ pip install pip3-autoremove
 pip install pipenv
 pip install yt-dlp
 
-[Environment]::SetEnvironmentVariable('EDITOR', 'vim', 'User')
-[Environment]::SetEnvironmentVariable('VISUAL', 'vim', 'User')
-[Environment]::SetEnvironmentVariable('PAGER', 'less', 'User')
 [Environment]::SetEnvironmentVariable('RIPGREP_CONFIG_PATH', (Join-Path -Path $HOME -ChildPath '.config\rg\ripgreprc'), 'User')

@@ -105,8 +105,6 @@ command! -nargs=* Tig terminal ++close tig <f-args>
 let g:mapleader = ','
 let g:maplocalleader = ' '
 
-noremap j gj
-noremap k gk
 noremap n nzz
 noremap N Nzz
 noremap <C-@> <C-]>
@@ -145,13 +143,15 @@ call plug#begin('~/.local/vim-plug')
   Plug 'rafi/awesome-vim-colorschemes'
   Plug 'github/copilot.vim'
   Plug 'editorconfig/editorconfig-vim'
-  Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'Rg' ] }
+  Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'GFiles', 'Buffers', 'Rg', 'RG', 'Commands' ] }
   Plug 'preservim/nerdcommenter'
   Plug 'preservim/nerdtree', { 'on': [ 'NERDTreeToggle', 'NERDTreeToggleVCS' ] } | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'godlygeek/tabular' | Plug 'preservim/vim-markdown', { 'for': [ 'markdown', 'text' ] }
+  Plug 'preservim/tagbar', { 'on': [ 'TagbarToggle' ] }
+  Plug 'preservim/vim-markdown', { 'for': [ 'markdown', 'text' ] } | Plug 'godlygeek/tabular'
   Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-  Plug 'jeetsukumaran/vim-buffergator', { 'on': 'BuffergatorToggle' }
+  Plug 'jeetsukumaran/vim-buffergator', { 'on': [ 'BuffergatorToggle' ] }
   Plug 'CoderCookE/vim-chatgpt'
+  Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
   Plug 'easymotion/vim-easymotion'
   Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
   Plug 'airblade/vim-gitgutter'
@@ -160,7 +160,6 @@ call plug#begin('~/.local/vim-plug')
   Plug 'honza/vim-snippets'
   Plug 'tpope/vim-surround'
   Plug 'vim-jp/vimdoc-ja'
-  Plug 'liuchengxu/vista.vim'
   Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
 
   if executable('npm')
@@ -311,7 +310,7 @@ let g:undotree_WindowLayout = 3
 
 function! s:UndotreeToggle()
   try
-    Vista!
+    TagbarClose
   catch
   endtry
 
@@ -322,6 +321,7 @@ nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
 
 " vim-airline
 let g:airline_experimental = 1
+let g:airline_extensions = [ 'branch', 'tabline' ]
 let g:airline#extensions#tabline#fnamemod = ':t'
 let g:airline#extensions#tabline#show_buffers = 0
 let g:airline#extensions#tabline#show_close_button = 0
@@ -417,47 +417,30 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
       \ }
 let g:NERDTreeGitStatusUseNerdFonts = 1
 
-let g:vista_icon_indent = ['└ ', '├ ']
-let g:vista_fold_toggle_icons = ['', '']
-let g:vista#renderer#icons = {
-      \ 'func': '󰊕',
-      \ 'function': '󰊕',
-      \ 'functions': '󰊕',
-      \ 'var': '',
-      \ 'variable': '',
-      \ 'variables': '',
+let g:tagbar_visibility_symbols = {
+      \ 'public'    : '',
+      \ 'protected' : '',
+      \ 'private'   : ''
+      \ }
+
+let g:tagbar_iconchars = ['', '']
+
+let g:tagbar_scopestrs = {
+      \ 'class': '',
       \ 'const': '',
       \ 'constant': '',
-      \ 'constructor': '󰑶',
-      \ 'method': '',
-      \ 'package': '',
-      \ 'packages': '',
       \ 'enum': '',
-      \ 'enummember': '',
-      \ 'enumerator': '',
-      \ 'module': '',
-      \ 'modules': '',
-      \ 'type': '',
-      \ 'typedef': '',
-      \ 'types': '',
       \ 'field': '',
-      \ 'fields': '',
-      \ 'macro': '󰎤',
-      \ 'macros': '󰎤',
-      \ 'map': '󰙅',
-      \ 'class': '',
-      \ 'augroup': '󰙅',
-      \ 'struct': '',
-      \ 'union': '󰕤',
-      \ 'member': '',
-      \ 'target': '󰎔',
-      \ 'property': '',
-      \ 'interface': '',
-      \ 'namespace': '',
-      \ 'subroutine': '󰒰',
+      \ 'func': '󰊕',
+      \ 'function': '󰊕',
+      \ 'getter': '',
       \ 'implementation': '',
-      \ 'typeParameter': '',
-      \ 'default': ''
+      \ 'interface': '',
+      \ 'map': '󰙅',
+      \ 'member': '',
+      \ 'method': '',
+      \ 'setter': '',
+      \ 'variable': '',
       \ }
 
 call coc#config('suggest.completionItemKindLabels', {
@@ -492,17 +475,16 @@ call coc#config('suggest.completionItemKindLabels', {
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
 
-" vista.vim
-let g:vista_default_executive = 'coc'
-let g:vista_sidebar_width = 30
+" tagbar
+let g:tagbar_width = 30
 
-function! s:Vista()
+function! s:TagbarToggle()
   try
     UndotreeHide
   catch
   endtry
 
-  Vista!!
+  TagbarToggle
 endfunction
 
-nnoremap <silent> <Leader>t :<C-u>call <SID>Vista()<CR>
+nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>

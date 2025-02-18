@@ -57,10 +57,10 @@ test ! -e "${HOME}/.ssh" && ln -fsv "${GITDIR}/.ssh" "${HOME}/.ssh"
 test ! -e "${HOME}/.w3m/bookmark.html" && ln -fsv "${GITDIR}/.w3m/bookmark.html" "${HOME}/.w3m/bookmark.html"
 test ! -e "${HOME}/intelephense" && ln -fsv "${GITDIR}/intelephense" "${HOME}/intelephense"
 
-brew install --cask 1password
 brew install --cask adguard
 brew install --cask adguard-vpn
 brew install --cask alfred
+brew install --cask apidog
 brew install --cask appcleaner
 brew install --cask iterm2
 brew install --cask karabiner-elements
@@ -68,13 +68,10 @@ brew install --cask logitech-g-hub
 brew install --cask macvim
 brew install --cask microsoft-edge
 brew install --cask microsoft-office
-brew install --cask postman
 brew install --cask sequel-ace
-brew install --cask visual-studio-code
 
 brew install --formula bat
 brew install --formula cmake
-brew install --formula composer
 brew install --formula coreutils
 brew install --formula docker
 brew install --formula docker-completion
@@ -89,11 +86,9 @@ brew install --formula lesspipe
 brew install --formula lf
 brew install --formula lima
 brew install --formula lsd
-brew install --formula mysql-client@8.4
 brew install --formula node
 brew install --formula p7zip
 brew install --formula pandoc
-brew install --formula php@8.2
 brew install --formula poppler
 brew install --formula ripgrep
 brew install --formula sheldon
