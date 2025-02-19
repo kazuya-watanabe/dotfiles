@@ -1,6 +1,7 @@
 set hidden
 set icons
 set previewer ~/.config/lf/preview.sh
+set sixel
 
 map d
 map dd cut

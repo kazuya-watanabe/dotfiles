@@ -84,6 +84,7 @@ brew install --formula go
 brew install --formula jq
 brew install --formula lesspipe
 brew install --formula lf
+brew install --formula libsixel
 brew install --formula lima
 brew install --formula lsd
 brew install --formula node
@@ -124,6 +125,7 @@ pip3 install --user --break-system-packages httpie
 pip3 install --user --break-system-packages openai
 pip3 install --user --break-system-packages pip3-autoremove
 pip3 install --user --break-system-packages pipenv
+pip3 install --user --break-system-packages xlsx2csv
 pip3 install --user --break-system-packages yt-dlp
 
 if brew list --formula node >/dev/null 2>&1; then

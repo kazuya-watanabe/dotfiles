@@ -6,7 +6,7 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
-export PATH="${HOME}/.cargo/bin":"${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
+export PATH="${HOME}/.npm/bin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
 
 umask 0022
 

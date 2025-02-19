@@ -1,27 +1,8 @@
 plugins=(
+  fzf
   starship
   vi-mode
   zoxide
-  )
-
-typeset -U path PATH
-
-path=(
-  "${HOME}/.cargo/bin"(N-/)
-  "${HOME}/.npm/bin"(N-/)
-  "${HOME}/.local/bin"(N-/)
-  "${HOME}/.local/sbin"(N-/)
-  "${HOME}/bin"(N-/)
-  "${HOME}/sbin"(N-/)
-  /opt/homebrew/bin(N-/)
-  /opt/homebrew/sbin(N-/)
-  /usr/local/bin(N-/)
-  /usr/local/sbin(N-/)
-  /usr/bin(N-/)
-  /usr/sbin(N-/)
-  /bin(N-/)
-  /sbin(N-/)
-  ${path}
   )
 
 typeset -U fpath FPATH
