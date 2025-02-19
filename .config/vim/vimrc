@@ -260,13 +260,13 @@ function! s:LoadPlugins(timer)
   command! -nargs=0 Format :call CocActionAsync('format')
   command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
-  if ! has_key(g:, 'coc_service_initialized') && exists(':CocStart')
-    CocStart
-  endif
-
   inoremap <C-l> <Plug>(coc-snippets-expand-jump)
 
   let g:coc_snippet_prev = '<C-h>'
+
+  if has('gui_running')
+    CocStart
+  endif
 
   " fzf.vim
   let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
