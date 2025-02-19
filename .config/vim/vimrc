@@ -139,352 +139,359 @@ nnoremap <LocalLeader>k <C-w>k
 nnoremap <LocalLeader>l <C-w>l
 nnoremap <Leader>sh :<C-u>Vterminal<CR>
 
-call plug#begin('~/.local/vim-plug')
-  Plug 'rafi/awesome-vim-colorschemes'
-  Plug 'github/copilot.vim'
-  Plug 'editorconfig/editorconfig-vim'
-  Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim', { 'on': [ 'Files', 'GFiles', 'Buffers', 'Rg', 'RG', 'Commands' ] }
-  Plug 'preservim/nerdcommenter'
-  Plug 'preservim/nerdtree', { 'on': [ 'NERDTreeToggle', 'NERDTreeToggleVCS' ] } | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-  Plug 'preservim/tagbar', { 'on': [ 'TagbarToggle' ] }
-  Plug 'preservim/vim-markdown', { 'for': [ 'markdown', 'text' ] } | Plug 'godlygeek/tabular'
-  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
-  Plug 'jeetsukumaran/vim-buffergator', { 'on': [ 'BuffergatorToggle' ] }
-  Plug 'CoderCookE/vim-chatgpt'
-  Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
-  Plug 'easymotion/vim-easymotion'
-  Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'sheerun/vim-polyglot'
-  Plug 'tpope/vim-repeat'
-  Plug 'honza/vim-snippets'
-  Plug 'tpope/vim-surround'
-  Plug 'vim-jp/vimdoc-ja'
-  Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline#extensions#tabline#enabled = 1
+function! s:LoadPlugins(timer)
+  call plug#begin('~/.local/vim-plug')
+    Plug 'rafi/awesome-vim-colorschemes'
+    Plug 'github/copilot.vim'
+    Plug 'editorconfig/editorconfig-vim'
+    Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
+    Plug 'preservim/nerdcommenter'
+    Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'preservim/tagbar'
+    Plug 'preservim/vim-markdown' | Plug 'godlygeek/tabular'
+    Plug 'mbbill/undotree'
+    Plug 'jeetsukumaran/vim-buffergator'
+    Plug 'CoderCookE/vim-chatgpt'
+    Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-repeat'
+    Plug 'honza/vim-snippets'
+    Plug 'tpope/vim-surround'
+    Plug 'vim-jp/vimdoc-ja'
+    Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline_extensions = [ 'branch', 'tabline' ]
 
-  if executable('npm')
-    Plug 'dense-analysis/ale'
-    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-    Plug 'prisma/vim-prisma'
+    if executable('npm')
+      Plug 'dense-analysis/ale'
+      Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+      Plug 'prisma/vim-prisma'
+    endif
+
+    if executable('trans')
+      Plug 'echuraev/translate-shell.vim'
+    endif
+
+    if has('gui_running') || exists('$NERDFONT')
+      Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
+    endif
+  call plug#end()
+
+  " ale
+  let g:ale_completion_enabled = 1
+  let g:ale_linters = { 'markdown': [ 'textlint' ] }
+
+  " coc.nvim
+  let g:coc_global_extensions = [
+        \ 'coc-highlight', 'coc-snippets',
+        \ '@yaegassy/coc-ansible',
+        \ 'coc-clangd', 'coc-cmake',
+        \ 'coc-docker',
+        \ 'coc-go', 'coc-golines',
+        \ 'coc-html', 'coc-html-css-support', 'coc-htmlhint', 'coc-class-css', 'coc-css', 'coc-cssmodules', 'coc-stylelint', '@yaegassy/coc-tailwindcss3', 'coc-unocss',
+        \ 'coc-java',
+        \ 'coc-json', 'coc-toml', 'coc-yaml',
+        \ 'coc-markdown-preview-enhanced', 'coc-markdownlint', 'coc-webview',
+        \ 'coc-omnisharp',
+        \ 'coc-phpls', '@yaegassy/coc-phpstan', 'coc-php-cs-fixer', 'coc-blade', '@yaegassy/coc-laravel',
+        \ 'coc-pyright', 'coc-pydocstring', '@yaegassy/coc-ruff', 'coc-htmldjango',
+        \ 'coc-rust-analyzer',
+        \ 'coc-sh',
+        \ 'coc-sql', 'coc-sqlfluff',
+        \ 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-angular', '@yaegassy/coc-volar', 'coc-prisma',
+        \ 'coc-vimlsp',
+        \ ]
+
+  command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
+
+  autocmd vimrc CursorHold * call CocActionAsync('highlight')
+
+  function! s:ShowDocumentation()
+    if CocAction('hasProvider', 'hover')
+      call CocActionAsync('definitionHover')
+    else
+      call feedkeys('K', 'in')
+    endif
+  endfunction
+
+  nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
+
+  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
+  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
+  inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
+  inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
+
+  inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<Right>'
+  inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<Left>'
+  inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
+  inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
+
+  inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
+  inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
+  inoremap <silent><expr> <C-@> coc#refresh()
+
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+  nmap <Leader>rn <Plug>(coc-rename)
+
+  xmap <Leader>f <Plug>(coc-format-selected)
+  nmap <Leader>f <Plug>(coc-format-selected)
+
+  xmap <leader>a  <Plug>(coc-codeaction-selected)
+  nmap <leader>a  <Plug>(coc-codeaction-selected)
+  nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+  nmap <leader>as  <Plug>(coc-codeaction-source)
+  nmap <leader>qf  <Plug>(coc-fix-current)
+
+  nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+  xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+  nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+  nmap <Leader>cl <Plug>(coc-codelens-action)
+
+  command! -nargs=? Fold :call CocAction('fold', <f-args>)
+  command! -nargs=0 Format :call CocActionAsync('format')
+  command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+  if ! has_key(g:, 'coc_service_initialized') && exists(':CocStart')
+    CocStart
   endif
 
-  if executable('trans')
-    Plug 'echuraev/translate-shell.vim'
+  inoremap <C-l> <Plug>(coc-snippets-expand-jump)
+
+  let g:coc_snippet_prev = '<C-h>'
+
+  " fzf.vim
+  let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
+  let g:fzf_layout = { 'down': '40%' }
+  let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
+
+  nnoremap <silent> <Leader>f :<C-u>Files<CR>
+
+  " nerdtree
+  let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$', 'vendor']
+  let g:NERDTreeWinSize = 30
+
+  function! s:NERDTreeToggleVCS()
+    try
+      BuffergatorClose
+    catch
+    endtry
+
+    NERDTreeToggleVCS
+  endfunction
+
+  nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+
+  " translate-shell.vim
+  let g:trans_default_direction = ':ja'
+  let g:trans_advanced_options = '-brief'
+  let g:trans_join_lines = 1
+
+  " undotree
+  let g:undotree_SetFocusWhenToggle = 1
+  let g:undotree_SplitWidth = 30
+  let g:undotree_WindowLayout = 3
+
+  function! s:UndotreeToggle()
+    try
+      TagbarClose
+    catch
+    endtry
+
+    UndotreeToggle
+  endfunction
+
+  nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
+
+  " vim-airline
+  let g:airline_experimental = 1
+  let g:airline#extensions#tabline#fnamemod = ':t'
+  let g:airline#extensions#tabline#show_buffers = 0
+  let g:airline#extensions#tabline#show_close_button = 0
+  let g:airline#extensions#tabline#show_splits = 0
+  let g:airline#extensions#tabline#show_tab_count = 0
+
+  " vim-buffergator
+  let g:buffergator_autodismiss_on_select = 0
+  let g:buffergator_autoexpand_on_split = 0
+  let g:buffergator_autoupdate = 1
+  let g:buffergator_suppress_keymaps = 1
+  let g:buffergator_vsplit_size = 30
+
+  function! s:BuffergatorToggle()
+    try
+      NERDTreeClose
+    catch
+    endtry
+
+    BuffergatorToggle
+  endfunction
+
+  nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+
+  " vim-chatgpt
+  let s:openai_token_file = expand('~/.config/openai.token')
+
+  if filereadable(s:openai_token_file)
+    let g:openai_api_key = readfile(s:openai_token_file, '', 1)[0]
+    let g:chat_gpt_max_tokens = 2000
+    let g:chat_gpt_model = 'gpt-4o'
+    let g:chat_gpt_session_mode = 1
+    let g:chat_gpt_temperature = 0.1
+    let g:chat_gpt_lang = 'Japanese'
+    let g:chat_gpt_split_direction = 'vertical'
+    let g:split_ratio = 4
+
+    vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
   endif
 
-  if has('gui_running') || exists('$NERDFONT')
-    Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
+  " vim-devicons
+  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
+  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+  set showbreak=↪∙∙∙
+
+  let g:webdevicons_enable = 1
+  let g:webdevicons_enable_airline_statusline = 1
+  let g:webdevicons_enable_airline_tabline = 1
+  let g:webdevicons_enable_nerdtree = 1
+  let g:webdevicons_conceal_nerdtree_brackets = 1
+
+  let g:ale_sign_error = '󰀨'
+  let g:ale_sign_warning = '󰀦'
+
+  if ! has_key(g:, 'airline_symbols')
+    let g:airline_symbols = {}
   endif
-call plug#end()
 
-" ale
-let g:ale_completion_enabled = 1
-let g:ale_linters = { 'markdown': [ 'textlint' ] }
+  let g:airline_powerline_fonts = 1
+  let g:airline_left_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_sep = ''
+  let g:airline_right_alt_sep = ''
+  let g:airline_symbols.branch = '󰘬'
+  let g:airline_symbols.colnr = ''
+  let g:airline_symbols.dirty = '󰐗'
+  let g:airline_symbols.linenr = ''
+  let g:airline_symbols.maxlinenr = ' '
+  let g:airline_symbols.notexists = '󰱼'
+  let g:airline_symbols.paste = '󰆒'
+  let g:airline_symbols.readonly = '󰌾'
+  let g:airline_symbols.spell = '󰓆'
+  let g:airline_symbols.whitespace = '󱁐'
+  let g:airline#extensions#coc#error_symbol = '󰀩 '
+  let g:airline#extensions#coc#warning_symbol = '󰀦 '
+  let g:airline#extensions#tabline#close_symbol = '󰅖'
+  let g:airline#extensions#tabline#overflow_marker = '…'
+  let g:airline#extensions#tabline#tabs_label = '󰓩'
 
-" awesome-vim-colorsches
-let s:colors_name = 'PaperColor'
+  let g:NERDTreeDirArrowCollapsible = ''
+  let g:NERDTreeDirArrowExpandable = ''
+  let g:NERDTreeGitStatusIndicatorMapCustom = {
+        \ 'Modified': '󰧟',
+        \ 'Staged': '󰐕',
+        \ 'Untracked': '󰓎',
+        \ 'Renamed': '󰁔',
+        \ 'Unmerged': '󰦎',
+        \ 'Deleted': '󰆴',
+        \ 'Dirty': '󰂚',
+        \ 'Ignored': '󰅖',
+        \ 'Clean': '󰄬',
+        \ 'Unknown': '?',
+        \ }
+  let g:NERDTreeGitStatusUseNerdFonts = 1
 
-if len(getcompletion(s:colors_name, 'color'))
-  set background=dark
+  let g:tagbar_visibility_symbols = {
+        \ 'public'    : '',
+        \ 'protected' : '',
+        \ 'private'   : ''
+        \ }
 
-  execute 'colorscheme ' .. s:colors_name
-endif
+  let g:tagbar_iconchars = ['', '']
 
-" coc.nvim
-let g:coc_global_extensions = [
-      \ 'coc-highlight', 'coc-snippets',
-      \ '@yaegassy/coc-ansible',
-      \ 'coc-clangd', 'coc-cmake',
-      \ 'coc-docker',
-      \ 'coc-go', 'coc-golines',
-      \ 'coc-html', 'coc-html-css-support', 'coc-htmlhint', 'coc-class-css', 'coc-css', 'coc-cssmodules', 'coc-stylelint', '@yaegassy/coc-tailwindcss3', 'coc-unocss',
-      \ 'coc-java',
-      \ 'coc-json', 'coc-toml', 'coc-yaml',
-      \ 'coc-markdown-preview-enhanced', 'coc-markdownlint', 'coc-webview',
-      \ 'coc-omnisharp',
-      \ 'coc-phpls', '@yaegassy/coc-phpstan', 'coc-php-cs-fixer', 'coc-blade', '@yaegassy/coc-laravel',
-      \ 'coc-pyright', 'coc-pydocstring', '@yaegassy/coc-ruff', 'coc-htmldjango',
-      \ 'coc-rust-analyzer',
-      \ 'coc-sh',
-      \ 'coc-sql', 'coc-sqlfluff',
-      \ 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-angular', '@yaegassy/coc-volar', 'coc-prisma',
-      \ 'coc-vimlsp',
-      \ ]
+  let g:tagbar_scopestrs = {
+        \ 'class': '',
+        \ 'const': '',
+        \ 'constant': '',
+        \ 'enum': '',
+        \ 'field': '',
+        \ 'func': '󰊕',
+        \ 'function': '󰊕',
+        \ 'getter': '',
+        \ 'implementation': '',
+        \ 'interface': '',
+        \ 'map': '󰙅',
+        \ 'member': '',
+        \ 'method': '',
+        \ 'setter': '',
+        \ 'variable': '',
+        \ }
 
-command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
+  call coc#config('suggest.completionItemKindLabels', {
+        \ 'keyword': '',
+        \ 'variable': '',
+        \ 'value': '󰎠',
+        \ 'operator': 'ψ',
+        \ 'constructor': '󰑶',
+        \ 'function': '󰊕',
+        \ 'reference': '',
+        \ 'constant': '',
+        \ 'method': '',
+        \ 'struct': '',
+        \ 'class': '',
+        \ 'interface': '',
+        \ 'text': '',
+        \ 'enum': '',
+        \ 'enumMember': '',
+        \ 'module': '',
+        \ 'color': '',
+        \ 'property': '',
+        \ 'field': '',
+        \ 'unit': '',
+        \ 'event': '󰥕',
+        \ 'file': '󰈤',
+        \ 'folder': '󰉖',
+        \ 'snippet': '󰅩',
+        \ 'typeParameter': '',
+        \ 'default': ''
+        \ })
 
-autocmd vimrc CursorHold * call CocActionAsync('highlight')
+  " vim-markdown
+  let g:vim_markdown_folding_disabled = 1
 
-function! s:ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('definitionHover')
-  else
-    call feedkeys('K', 'in')
+  " tagbar
+  let g:tagbar_width = 30
+
+  function! s:TagbarToggle()
+    try
+      UndotreeHide
+    catch
+    endtry
+
+    TagbarToggle
+  endfunction
+
+  nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
+
+  " awesome-vim-colorsches
+  let s:colors_name = 'PaperColor'
+
+  if len(getcompletion(s:colors_name, 'color'))
+    set background=dark
+
+    execute 'colorscheme ' .. s:colors_name
   endif
 endfunction
 
-nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
-
-inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
-inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
-inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
-inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
-
-inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<Right>'
-inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<Left>'
-inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
-inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
-
-inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
-inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
-inoremap <silent><expr> <C-@> coc#refresh()
-
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-nmap <Leader>rn <Plug>(coc-rename)
-
-xmap <Leader>f <Plug>(coc-format-selected)
-nmap <Leader>f <Plug>(coc-format-selected)
-
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-nmap <leader>as  <Plug>(coc-codeaction-source)
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-
-nmap <Leader>cl <Plug>(coc-codelens-action)
-
-command! -nargs=? Fold :call CocAction('fold', <f-args>)
-command! -nargs=0 Format :call CocActionAsync('format')
-command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
-
-if ! has_key(g:, 'coc_service_initialized') && exists(':CocStart')
-  CocStart
+if has('gui_running')
+  autocmd vimrc GUIEnter * call timer_start(10, function('s:LoadPlugins'))
+else
+  call timer_start(0, function('s:LoadPlugins'))
 endif
-
-inoremap <C-l> <Plug>(coc-snippets-expand-jump)
-
-let g:coc_snippet_prev = '<C-h>'
-
-" fzf.vim
-let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
-let g:fzf_layout = { 'down': '40%' }
-let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
-
-nnoremap <silent> <Leader>f :<C-u>Files<CR>
-
-" nerdtree
-let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$', 'vendor']
-let g:NERDTreeWinSize = 30
-
-function! s:NERDTreeToggleVCS()
-  try
-    BuffergatorClose
-  catch
-  endtry
-
-  NERDTreeToggleVCS
-endfunction
-
-nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
-
-" translate-shell.vim
-let g:trans_default_direction = ':ja'
-let g:trans_advanced_options = '-brief'
-let g:trans_join_lines = 1
-
-" undotree
-let g:undotree_SetFocusWhenToggle = 1
-let g:undotree_SplitWidth = 30
-let g:undotree_WindowLayout = 3
-
-function! s:UndotreeToggle()
-  try
-    TagbarClose
-  catch
-  endtry
-
-  UndotreeToggle
-endfunction
-
-nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
-
-" vim-airline
-let g:airline_experimental = 1
-let g:airline_extensions = [ 'branch', 'tabline' ]
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tabline#show_buffers = 0
-let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#tabline#show_splits = 0
-let g:airline#extensions#tabline#show_tab_count = 0
-
-" vim-buffergator
-let g:buffergator_autodismiss_on_select = 0
-let g:buffergator_autoexpand_on_split = 0
-let g:buffergator_autoupdate = 1
-let g:buffergator_suppress_keymaps = 1
-let g:buffergator_vsplit_size = 30
-
-function! s:BuffergatorToggle()
-  try
-    NERDTreeClose
-  catch
-  endtry
-
-  BuffergatorToggle
-endfunction
-
-nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
-
-" vim-chatgpt
-let s:openai_token_file = expand('~/.config/openai.token')
-
-if filereadable(s:openai_token_file)
-  let g:openai_api_key = readfile(s:openai_token_file, '', 1)[0]
-  let g:chat_gpt_max_tokens = 2000
-  let g:chat_gpt_model = 'gpt-4o'
-  let g:chat_gpt_session_mode = 1
-  let g:chat_gpt_temperature = 0.1
-  let g:chat_gpt_lang = 'Japanese'
-  let g:chat_gpt_split_direction = 'vertical'
-  let g:split_ratio = 4
-
-  vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
-endif
-
-" vim-devicons
-set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
-set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
-set showbreak=↪∙∙∙
-
-let g:webdevicons_enable = 1
-let g:webdevicons_enable_airline_statusline = 1
-let g:webdevicons_enable_airline_tabline = 1
-let g:webdevicons_enable_nerdtree = 1
-let g:webdevicons_conceal_nerdtree_brackets = 1
-
-let g:ale_sign_error = '󰀨'
-let g:ale_sign_warning = '󰀦'
-
-if ! has_key(g:, 'airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-let g:airline_powerline_fonts = 1
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = '󰘬'
-let g:airline_symbols.colnr = ''
-let g:airline_symbols.dirty = '󰐗'
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.maxlinenr = ' '
-let g:airline_symbols.notexists = '󰱼'
-let g:airline_symbols.paste = '󰆒'
-let g:airline_symbols.readonly = '󰌾'
-let g:airline_symbols.spell = '󰓆'
-let g:airline_symbols.whitespace = '󱁐'
-let g:airline#extensions#coc#error_symbol = '󰀩 '
-let g:airline#extensions#coc#warning_symbol = '󰀦 '
-let g:airline#extensions#tabline#close_symbol = '󰅖'
-let g:airline#extensions#tabline#overflow_marker = '…'
-let g:airline#extensions#tabline#tabs_label = '󰓩'
-
-let g:NERDTreeDirArrowCollapsible = ''
-let g:NERDTreeDirArrowExpandable = ''
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-      \ 'Modified': '󰧟',
-      \ 'Staged': '󰐕',
-      \ 'Untracked': '󰓎',
-      \ 'Renamed': '󰁔',
-      \ 'Unmerged': '󰦎',
-      \ 'Deleted': '󰆴',
-      \ 'Dirty': '󰂚',
-      \ 'Ignored': '󰅖',
-      \ 'Clean': '󰄬',
-      \ 'Unknown': '?',
-      \ }
-let g:NERDTreeGitStatusUseNerdFonts = 1
-
-let g:tagbar_visibility_symbols = {
-      \ 'public'    : '',
-      \ 'protected' : '',
-      \ 'private'   : ''
-      \ }
-
-let g:tagbar_iconchars = ['', '']
-
-let g:tagbar_scopestrs = {
-      \ 'class': '',
-      \ 'const': '',
-      \ 'constant': '',
-      \ 'enum': '',
-      \ 'field': '',
-      \ 'func': '󰊕',
-      \ 'function': '󰊕',
-      \ 'getter': '',
-      \ 'implementation': '',
-      \ 'interface': '',
-      \ 'map': '󰙅',
-      \ 'member': '',
-      \ 'method': '',
-      \ 'setter': '',
-      \ 'variable': '',
-      \ }
-
-call coc#config('suggest.completionItemKindLabels', {
-      \ 'keyword': '',
-      \ 'variable': '',
-      \ 'value': '󰎠',
-      \ 'operator': 'ψ',
-      \ 'constructor': '󰑶',
-      \ 'function': '󰊕',
-      \ 'reference': '',
-      \ 'constant': '',
-      \ 'method': '',
-      \ 'struct': '',
-      \ 'class': '',
-      \ 'interface': '',
-      \ 'text': '',
-      \ 'enum': '',
-      \ 'enumMember': '',
-      \ 'module': '',
-      \ 'color': '',
-      \ 'property': '',
-      \ 'field': '',
-      \ 'unit': '',
-      \ 'event': '󰥕',
-      \ 'file': '󰈤',
-      \ 'folder': '󰉖',
-      \ 'snippet': '󰅩',
-      \ 'typeParameter': '',
-      \ 'default': ''
-      \ })
-
-" vim-markdown
-let g:vim_markdown_folding_disabled = 1
-
-" tagbar
-let g:tagbar_width = 30
-
-function! s:TagbarToggle()
-  try
-    UndotreeHide
-  catch
-  endtry
-
-  TagbarToggle
-endfunction
-
-nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
