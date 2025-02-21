@@ -13,7 +13,7 @@ case "$1" in
     pandoc --standalone --from=docx --to=markdown "$1" | bat --color=always --style=plain --language markdown
     ;;
   *.pptx)
-    pandoc --standalone --from=pptx --to=markdown "$1" | bat --color=always --style=plain --language markdown
+    pptx2md --disable-image --output /dev/stdout "$1" | bat --color=always --style=plain --language markdown
     ;;
   *.xlsx)
     xlsx2csv "$1" | bat --color=always --style=plain --language csv
@@ -29,6 +29,12 @@ case "$1" in
     ;;
   *.mp3 | *.flac | *.wav | *.m4a | *.mp4 | *.mkv | *.avi | *.webm | *.mov | *.wmv | *.flv | *.m4v)
     ffprobe -hide_banner -i "$1" 2>&1
+    ;;
+  *.json)
+    jq . "$1" | bat --color=always --style=plain --language json
+    ;;
+  *.svg)
+    svg2png -w 400 "$1" | img2sixel -w 400
     ;;
   *)
     case "$(file -Lb --mime-type -- "$1")" in

@@ -76,11 +76,13 @@ brew install --formula coreutils
 brew install --formula docker
 brew install --formula docker-completion
 brew install --formula fd
+brew install --formula ffmpeg
 brew install --formula fzf
 brew install --formula gawk
 brew install --formula git-delta
 brew install --formula git-flow
 brew install --formula go
+brew install --formula imagemagick
 brew install --formula jq
 brew install --formula lesspipe
 brew install --formula lf
@@ -94,6 +96,7 @@ brew install --formula poppler
 brew install --formula ripgrep
 brew install --formula sheldon
 brew install --formula starship
+brew install --formula svg2png
 brew install --formula tig
 brew install --formula tmux
 brew install --formula translate-shell
@@ -125,6 +128,7 @@ pip3 install --user --break-system-packages httpie
 pip3 install --user --break-system-packages openai
 pip3 install --user --break-system-packages pip3-autoremove
 pip3 install --user --break-system-packages pipenv
+pip3 install --user --break-system-packages pptx2md
 pip3 install --user --break-system-packages xlsx2csv
 pip3 install --user --break-system-packages yt-dlp
 
