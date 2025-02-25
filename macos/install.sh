@@ -112,11 +112,12 @@ export N_PREFIX="${HOME}/.npm"
 
 mkdir -pv "${HOME}/.npm/lib"
 
-npm --global install n
 npm --global install corepack
+npm --global install n
 npm --global install textlint
 npm --global install textlint-rule-preset-ja-technical-writing
 npm --global install textlint-rule-prh
+npm --global install trash-cli
 
 n install lts
 
@@ -126,7 +127,6 @@ fi
 
 pip3 install --user --break-system-packages httpie
 pip3 install --user --break-system-packages openai
-pip3 install --user --break-system-packages pip3-autoremove
 pip3 install --user --break-system-packages pipenv
 pip3 install --user --break-system-packages pptx2md
 pip3 install --user --break-system-packages xlsx2csv

@@ -78,6 +78,7 @@ $env:PATH = ((Join-Path - Path $HOME -ChildPath 'AppData\Roaming\fnm\aliases\def
 npm --global install textlint
 npm --global install textlint-rule-preset-ja-technical-writing
 npm --global install textlint-rule-prh
+npm --global install trash-cli
 
 pip install httpie
 pip install openai

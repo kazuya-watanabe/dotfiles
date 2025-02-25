@@ -1,22 +1,61 @@
+set dircounts
 set hidden
 set icons
+set ifs "\n"
+set incsearch
+set incfilter
 set previewer ~/.config/lf/preview.sh
+set scrolloff 10
+set shellopts '-eu'
 set sixel
+set tabstop 4
+set timefmt '2006/01/02 15:04'
 
+cmd extract ${{
+  set -f
+  case $f in
+    *.tar.bz | *.tar.bz2 | *.tbz | *.tbz2)
+      tar xjvf $f
+      ;;
+    *.tar.gz | *.tgz)
+      tar xzvf $f
+      ;;
+    *.tar.xz | *.txz)
+      tar xJvf $f
+      ;;
+    *.zip)
+      unzip $f
+      ;;
+    *.7z)
+      7z x $f
+      ;;
+  esac
+}}
+
+cmd tar ${{
+  set -f
+  file=$(basename $f)
+  tar czf $file.tar.gz $file
+}}
+
+cmd zip ${{
+  set -f
+  file=$(basename $f)
+  zip -r $file.zip $file
+}}
+
+cmd 7z ${{
+  set -f
+  file=$(basename $f)
+  7z a -r $file.7z $file
+}}
+
+map <enter> shell
 map d
 map dd cut
 map dD delete
-
-map a :push %mkdir<space>
-
-cmd git_branch ${{
-    git branch | fzf | xargs git checkout
-    pwd_shell=$(pwd | sed 's/\\/\\\\/g;s/"/\\"/g')
-    lf -remote "send $id updir"
-    lf -remote "send $id cd \"$pwd_shell\""
-}}
-
-map gb :git_branch
-map gp ${{clear; git pull --rebase || true; echo "press ENTER"; read ENTER}}
-map gs ${{clear; git status; echo "press ENTER"; read ENTER}}
-map gl ${{clear; git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit; echo "press ENTER"; read ENTER}}
+map dl $trash $fx
+map x extract
+map at tar
+map az zip
+map a7 7z
