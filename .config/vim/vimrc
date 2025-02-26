@@ -2,7 +2,13 @@ syntax enable
 
 filetype plugin indent on
 
-packadd! matchit
+let g:loaded_2html_plugin = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_logiPat = 1
+let g:loaded_manpager_plugin = 1
+let g:loaded_netrw = 1 | let g:loaded_netrwPlugin = 1
+let g:loaded_tutor_mode_plugin = 1
+let g:loaded_vimballPlugin = 1
 
 set autoindent
 set autoread
@@ -140,33 +146,32 @@ nnoremap <LocalLeader>l <C-w>l
 nnoremap <Leader>sh :<C-u>Vterminal<CR>
 
 function! s:LoadPlugins(timer)
+  packadd comment
+  packadd! editorconfig
+  packadd! matchit
+  packadd nohlsearch
+
   call plug#begin('~/.local/vim-plug')
     Plug 'rafi/awesome-vim-colorschemes'
     Plug 'github/copilot.vim'
-    Plug 'editorconfig/editorconfig-vim'
     Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
-    Plug 'preservim/nerdcommenter'
     Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'preservim/tagbar'
-    Plug 'preservim/vim-markdown' | Plug 'godlygeek/tabular'
     Plug 'mbbill/undotree'
     Plug 'jeetsukumaran/vim-buffergator'
     Plug 'CoderCookE/vim-chatgpt'
-    Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
     Plug 'easymotion/vim-easymotion'
-    Plug 'tpope/vim-fugitive' | Plug 'kazuya-watanabe/gflow.vim'
+    Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-repeat'
-    Plug 'honza/vim-snippets'
     Plug 'tpope/vim-surround'
     Plug 'vim-jp/vimdoc-ja'
     Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline_extensions = [ 'branch', 'tabline' ]
 
     if executable('npm')
       Plug 'dense-analysis/ale'
-      Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-      Plug 'prisma/vim-prisma'
+      Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
     endif
 
     if executable('trans')
@@ -185,23 +190,50 @@ function! s:LoadPlugins(timer)
   " coc.nvim
   let g:coc_global_extensions = [
         \ 'coc-highlight', 'coc-snippets',
-        \ '@yaegassy/coc-ansible',
-        \ 'coc-clangd', 'coc-cmake',
-        \ 'coc-docker',
-        \ 'coc-go', 'coc-golines',
-        \ 'coc-html', 'coc-html-css-support', 'coc-htmlhint', 'coc-class-css', 'coc-css', 'coc-cssmodules', 'coc-stylelint', '@yaegassy/coc-tailwindcss3', 'coc-unocss',
-        \ 'coc-java',
-        \ 'coc-json', 'coc-toml', 'coc-yaml',
-        \ 'coc-markdown-preview-enhanced', 'coc-markdownlint', 'coc-webview',
-        \ 'coc-omnisharp',
-        \ 'coc-phpls', '@yaegassy/coc-phpstan', 'coc-php-cs-fixer', 'coc-blade', '@yaegassy/coc-laravel',
-        \ 'coc-pyright', 'coc-pydocstring', '@yaegassy/coc-ruff', 'coc-htmldjango',
-        \ 'coc-rust-analyzer',
-        \ 'coc-sh',
-        \ 'coc-sql', 'coc-sqlfluff',
-        \ 'coc-tsserver', 'coc-eslint', 'coc-prettier', 'coc-angular', '@yaegassy/coc-volar', 'coc-prisma',
-        \ 'coc-vimlsp',
+        \ 'coc-markdown-preview-enhanced', 'coc-webview',
         \ ]
+
+  if executable('bash')
+    call extend(g:coc_global_extensions, [ 'coc-sh', ])
+  endif
+
+  if executable('clangd')
+    call extend(g:coc_global_extensions, [ 'coc-clangd', ])
+  endif
+
+  if executable('cmake')
+    call extend(g:coc_global_extensions, [ 'coc-cmake', ])
+  endif
+
+  if executable('docker')
+    call extend(g:coc_global_extensions, [ 'coc-docker', ])
+  endif
+
+  if executable('javac')
+    call extend(g:coc_global_extensions, [ 'coc-java', ])
+  endif
+
+  if executable('node')
+    call extend(g:coc_global_extensions, [ 'coc-tsserver', 'coc-angular', 'coc-prisma', 'coc-vetur', ])
+
+    Plug 'pantharshit00/vim-prisma'
+  endif
+
+  if executable('php')
+    call extend(g:coc_global_extensions, [ 'coc-phpls', ])
+  endif
+
+  if executable('python')
+    call extend(g:coc_global_extensions, [ 'coc-pyright', ])
+  endif
+
+  if executable('rustc')
+    call extend(g:coc_global_extensions, [ 'coc-rust-analyzer', ])
+  endif
+
+  if executable('sqlite3') || executable('psql') || executable('mysql')
+    call extend(g:coc_global_extensions, [ 'coc-sql', ])
+  endif
 
   command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
 
@@ -343,8 +375,8 @@ function! s:LoadPlugins(timer)
   if filereadable(s:openai_token_file)
     let g:openai_api_key = readfile(s:openai_token_file, '', 1)[0]
     let g:chat_gpt_max_tokens = 2000
-    let g:chat_gpt_model = 'gpt-4o'
-    let g:chat_gpt_session_mode = 1
+    let g:chat_gpt_model = 'gpt-4o-mini'
+    let g:chat_gpt_session_mode = 0
     let g:chat_gpt_temperature = 0.1
     let g:chat_gpt_lang = 'Japanese'
     let g:chat_gpt_split_direction = 'vertical'
@@ -493,5 +525,5 @@ endfunction
 if has('gui_running')
   autocmd vimrc GUIEnter * call timer_start(10, function('s:LoadPlugins'))
 else
-  call timer_start(0, function('s:LoadPlugins'))
+  call timer_start(10, function('s:LoadPlugins'))
 endif

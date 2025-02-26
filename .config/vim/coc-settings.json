@@ -1,7 +1,6 @@
 {
   "codeLens.enable": true,
-  "colors.enable": true,
-  "intelephense.environment.phpVersion": "8.2.0",
+  "intelephense.environment.phpVersion": "8.3.0",
   "intelephense.stubs":[
     "apache",
     "bcmath",
@@ -75,10 +74,6 @@
     "zip",
     "zlib"
   ],
-  "markdownlint.config": {
-    "default": true,
-    "line_length": false
-  },
   "snippets.snipmate.enable": false,
   "snippets.ultisnips.enable": true,
   "suggest.removeDuplicateItems": true
