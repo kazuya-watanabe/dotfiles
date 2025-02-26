@@ -1,5 +1,4 @@
 plugins=(
-  fzf
   starship
   vi-mode
   zoxide
@@ -66,6 +65,10 @@ bindkey -M viins '^R' history-incremental-pattern-search-backward
 bindkey -M viins '^U' backward-kill-line
 bindkey -M viins '^W' backward-kill-word
 bindkey -M viins '^Y' yank
+
+if type fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
 
 if type gdircolors >/dev/null 2>&1; then
   eval "$(gdircolors -b)"

@@ -6,7 +6,7 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
-export PATH="${HOME}/.npm/bin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
+export PATH="${HOME}/.local/bin":"${HOME}/.npm/bin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
 
 umask 0022
 
@@ -33,7 +33,7 @@ export LESS_ADVANCED_PREPROCESSOR=1
 export N_PREFIX="${HOME}/.npm"
 
 # python3
-export PATH="$(python3 -m site --user-base)/bin":${PATH}
+export PYTHONUSERBASE="${HOME}/.local"
 
 # ripgrep
 export RIPGREP_CONFIG_PATH="${HOME}/.config/rg/ripgreprc"

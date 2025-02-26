@@ -121,12 +121,11 @@ npm --global install trash-cli
 
 n install lts
 
-if [ ! -f ${HOME}/.local/bin/pip ]; then
-  python3 -m venv ${HOME}/.local
-fi
+export PYTHONUSERBASE="${HOME}/.local"
 
 pip3 install --user --break-system-packages httpie
 pip3 install --user --break-system-packages openai
+pip3 install --user --break-system-packages pip3-autoremove
 pip3 install --user --break-system-packages pipenv
 pip3 install --user --break-system-packages pptx2md
 pip3 install --user --break-system-packages xlsx2csv
