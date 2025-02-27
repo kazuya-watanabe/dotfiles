@@ -1,5 +1,4 @@
 syntax enable
-
 filetype plugin indent on
 
 let g:loaded_2html_plugin = 1
@@ -139,10 +138,6 @@ nnoremap <silent> <Tab> :<C-u>tabnext<CR>
 nnoremap Y y$
 nnoremap [q :<C-u>cprevious<CR>
 nnoremap ]q :<C-u>cnext<CR>
-nnoremap <LocalLeader>h <C-w>h
-nnoremap <LocalLeader>j <C-w>j
-nnoremap <LocalLeader>k <C-w>k
-nnoremap <LocalLeader>l <C-w>l
 nnoremap <Leader>sh :<C-u>Vterminal<CR>
 
 function! s:LoadPlugins(timer)
@@ -235,69 +230,108 @@ function! s:LoadPlugins(timer)
     call extend(g:coc_global_extensions, [ 'coc-sql', ])
   endif
 
-  command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
-
-  autocmd vimrc CursorHold * call CocActionAsync('highlight')
-
-  function! s:ShowDocumentation()
-    if CocAction('hasProvider', 'hover')
-      call CocActionAsync('definitionHover')
-    else
-      call feedkeys('K', 'in')
-    endif
-  endfunction
-
-  nnoremap <silent> K :<C-u>call <SID>ShowDocumentation()<CR>
-
-  inoremap <silent><expr> <C-n> coc#pum#visible() ? coc#pum#next(1) : '<C-n>'
-  inoremap <silent><expr> <C-p> coc#pum#visible() ? coc#pum#prev(1) : '<C-p>'
-  inoremap <silent><expr> <Down> coc#pum#visible() ? coc#pum#next(0) : '<Down>'
-  inoremap <silent><expr> <Up> coc#pum#visible() ? coc#pum#prev(0) : '<Up>'
-
-  inoremap <silent><expr> <C-f> coc#pum#visible() ? coc#pum#scroll(1) : '<Right>'
-  inoremap <silent><expr> <C-b> coc#pum#visible() ? coc#pum#scroll(0) : '<Left>'
-  inoremap <silent><expr> <PageDown> coc#pum#visible() ? coc#pum#scroll(1) : '<PageDown>'
-  inoremap <silent><expr> <PageUp> coc#pum#visible() ? coc#pum#scroll(0) : '<PageUp>'
-
-  inoremap <silent><expr> <C-e> coc#pum#visible() ? coc#pum#cancel() : '<End>'
-  inoremap <silent><expr> <C-y> coc#pum#visible() ? coc#pum#confirm() : '<C-y>'
-  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : '<CR>'
-  inoremap <silent><expr> <C-@> coc#refresh()
-
-  nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-  nmap <Leader>rn <Plug>(coc-rename)
-
-  xmap <Leader>f <Plug>(coc-format-selected)
-  nmap <Leader>f <Plug>(coc-format-selected)
-
-  xmap <leader>a  <Plug>(coc-codeaction-selected)
-  nmap <leader>a  <Plug>(coc-codeaction-selected)
-  nmap <leader>ac  <Plug>(coc-codeaction-cursor)
-  nmap <leader>as  <Plug>(coc-codeaction-source)
-  nmap <leader>qf  <Plug>(coc-fix-current)
-
-  nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
-  xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-  nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
-
-  nmap <Leader>cl <Plug>(coc-codelens-action)
-
-  command! -nargs=? Fold :call CocAction('fold', <f-args>)
-  command! -nargs=0 Format :call CocActionAsync('format')
-  command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
-
-  inoremap <C-l> <Plug>(coc-snippets-expand-jump)
-
-  let g:coc_snippet_prev = '<C-h>'
-
-  if has('gui_running')
+  if has('gui_running') && exists(':CocStart')
     CocStart
+  endif
+
+  if exists(':CocCommand')
+    function! s:CheckBackspace() abort
+      let col = col('.') - 1
+
+      return !col || getline('.')[col - 1]  =~# '\s'
+    endfunction
+
+    function! s:ShowDocumentation()
+      if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+      else
+        call feedkeys('K', 'in')
+      endif
+    endfunction
+
+    inoremap <silent><expr> <TAB>
+          \ coc#pum#visible() ? coc#pum#next(1) :
+          \ <SID>CheckBackspace() ? "\<Tab>" :
+          \ coc#refresh()
+
+    inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+    inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+          \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+    if has('nvim')
+      inoremap <silent><expr> <c-space> coc#refresh()
+    else
+      inoremap <silent><expr> <c-@> coc#refresh()
+    endif
+
+    nmap <silent><nowait> [g <Plug>(coc-diagnostic-prev)
+    nmap <silent><nowait> ]g <Plug>(coc-diagnostic-next)
+
+    nmap <silent><nowait> gd <Plug>(coc-definition)
+    nmap <silent><nowait> gy <Plug>(coc-type-definition)
+    nmap <silent><nowait> gi <Plug>(coc-implementation)
+    nmap <silent><nowait> gr <Plug>(coc-references)
+
+    nnoremap <silent> K :call <SID>ShowDocumentation()<CR>
+
+    nmap <leader>rn <Plug>(coc-rename)
+
+    xmap <leader>f  <Plug>(coc-format-selected)
+    nmap <leader>f  <Plug>(coc-format-selected)
+
+    xmap <leader>a  <Plug>(coc-codeaction-selected)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+    nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+    nmap <leader>as  <Plug>(coc-codeaction-source)
+    nmap <leader>qf  <Plug>(coc-fix-current)
+
+    nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+    xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+    nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+
+    nmap <leader>cl  <Plug>(coc-codelens-action)
+
+    xmap if <Plug>(coc-funcobj-i)
+    omap if <Plug>(coc-funcobj-i)
+    xmap af <Plug>(coc-funcobj-a)
+    omap af <Plug>(coc-funcobj-a)
+    xmap ic <Plug>(coc-classobj-i)
+    omap ic <Plug>(coc-classobj-i)
+    xmap ac <Plug>(coc-classobj-a)
+    omap ac <Plug>(coc-classobj-a)
+
+    if has('nvim-0.4.0') || has('patch-8.2.0750')
+      nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+      inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+      inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+      vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+      vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    endif
+
+    nmap <silent> <C-s> <Plug>(coc-range-select)
+    xmap <silent> <C-s> <Plug>(coc-range-select)
+
+    nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+    nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+    nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+    nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+    nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+    nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+    nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+
+    command! -nargs=0 Format :call CocActionAsync('format')
+    command! -nargs=? Fold :call CocAction('fold', <f-args>)
+    command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+    command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
+
+    augroup vimrc
+      autocmd!
+      autocmd CursorHold * silent call CocActionAsync('highlight')
+      autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    augroup end
   endif
 
   " fzf.vim
@@ -305,22 +339,26 @@ function! s:LoadPlugins(timer)
   let g:fzf_layout = { 'down': '40%' }
   let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
 
-  nnoremap <silent> <Leader>f :<C-u>Files<CR>
+  if exists(':Files')
+    nnoremap <silent> <Leader>f :<C-u>Files<CR>
+  endif
 
   " nerdtree
   let g:NERDTreeIgnore = ['\~$', '\.sw.$', '\.git$', '\.venv$', 'node_modules$', 'vendor']
   let g:NERDTreeWinSize = 30
 
-  function! s:NERDTreeToggleVCS()
-    try
-      BuffergatorClose
-    catch
-    endtry
+  if exists(':NERDTreeToggleVCS')
+    function! s:NERDTreeToggleVCS()
+      try
+        BuffergatorClose
+      catch
+      endtry
 
-    NERDTreeToggleVCS
-  endfunction
+      NERDTreeToggleVCS
+    endfunction
 
-  nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+    nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+  endif
 
   " translate-shell.vim
   let g:trans_default_direction = ':ja'
@@ -332,16 +370,18 @@ function! s:LoadPlugins(timer)
   let g:undotree_SplitWidth = 30
   let g:undotree_WindowLayout = 3
 
-  function! s:UndotreeToggle()
-    try
-      TagbarClose
-    catch
-    endtry
+  if exists(':UndotreeToggle')
+    function! s:UndotreeToggle()
+      try
+        TagbarClose
+      catch
+      endtry
 
-    UndotreeToggle
-  endfunction
+      UndotreeToggle
+    endfunction
 
-  nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
+    nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
+  endif
 
   " vim-airline
   let g:airline_experimental = 1
@@ -358,16 +398,18 @@ function! s:LoadPlugins(timer)
   let g:buffergator_suppress_keymaps = 1
   let g:buffergator_vsplit_size = 30
 
-  function! s:BuffergatorToggle()
-    try
-      NERDTreeClose
-    catch
-    endtry
+  if exists(':BuffergatorToggle')
+    function! s:BuffergatorToggle()
+      try
+        NERDTreeClose
+      catch
+      endtry
 
-    BuffergatorToggle
-  endfunction
+      BuffergatorToggle
+    endfunction
 
-  nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+    nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+  endif
 
   " vim-chatgpt
   let s:openai_token_file = expand('~/.config/openai.token')
@@ -386,10 +428,6 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-devicons
-  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
-  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
-  set showbreak=↪∙∙∙
-
   let g:webdevicons_enable = 1
   let g:webdevicons_enable_airline_statusline = 1
   let g:webdevicons_enable_airline_tabline = 1
@@ -466,34 +504,40 @@ function! s:LoadPlugins(timer)
         \ 'variable': '',
         \ }
 
-  call coc#config('suggest.completionItemKindLabels', {
-        \ 'keyword': '',
-        \ 'variable': '',
-        \ 'value': '󰎠',
-        \ 'operator': 'ψ',
-        \ 'constructor': '󰑶',
-        \ 'function': '󰊕',
-        \ 'reference': '',
-        \ 'constant': '',
-        \ 'method': '',
-        \ 'struct': '',
-        \ 'class': '',
-        \ 'interface': '',
-        \ 'text': '',
-        \ 'enum': '',
-        \ 'enumMember': '',
-        \ 'module': '',
-        \ 'color': '',
-        \ 'property': '',
-        \ 'field': '',
-        \ 'unit': '',
-        \ 'event': '󰥕',
-        \ 'file': '󰈤',
-        \ 'folder': '󰉖',
-        \ 'snippet': '󰅩',
-        \ 'typeParameter': '',
-        \ 'default': ''
-        \ })
+  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
+  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+  set showbreak=↪∙∙∙
+
+  if exists('*coc#config')
+    call coc#config('suggest.completionItemKindLabels', {
+          \ 'keyword': '',
+          \ 'variable': '',
+          \ 'value': '󰎠',
+          \ 'operator': 'ψ',
+          \ 'constructor': '󰑶',
+          \ 'function': '󰊕',
+          \ 'reference': '',
+          \ 'constant': '',
+          \ 'method': '',
+          \ 'struct': '',
+          \ 'class': '',
+          \ 'interface': '',
+          \ 'text': '',
+          \ 'enum': '',
+          \ 'enumMember': '',
+          \ 'module': '',
+          \ 'color': '',
+          \ 'property': '',
+          \ 'field': '',
+          \ 'unit': '',
+          \ 'event': '󰥕',
+          \ 'file': '󰈤',
+          \ 'folder': '󰉖',
+          \ 'snippet': '󰅩',
+          \ 'typeParameter': '',
+          \ 'default': ''
+          \ })
+  endif
 
   " vim-markdown
   let g:vim_markdown_folding_disabled = 1
@@ -501,16 +545,18 @@ function! s:LoadPlugins(timer)
   " tagbar
   let g:tagbar_width = 30
 
-  function! s:TagbarToggle()
-    try
-      UndotreeHide
-    catch
-    endtry
+  if exists(':TagbarToggle')
+    function! s:TagbarToggle()
+      try
+        UndotreeHide
+      catch
+      endtry
 
-    TagbarToggle
-  endfunction
+      TagbarToggle
+    endfunction
 
-  nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
+    nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
+  endif
 
   " awesome-vim-colorsches
   let s:colors_name = 'PaperColor'
