@@ -101,7 +101,6 @@ brew install --formula tig
 brew install --formula tmux
 brew install --formula translate-shell
 brew install --formula universal-ctags
-brew install --formula vim
 brew install --formula w3m
 brew install --formula watchman
 brew install --formula wget
