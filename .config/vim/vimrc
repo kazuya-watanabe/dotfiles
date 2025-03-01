@@ -13,11 +13,13 @@ set autoindent
 set autoread
 set backspace=indent,eol,start
 set nobackup
+set backupdir=$MYVIMDIR/backup
 set belloff=all
 set clipboard^=unnamed
 set cmdheight=2
 set completeopt=menuone,longest,preview
 set diffopt^=vertical,algorithm:histogram
+set directory=$MYVIMDIR/swap
 set display=lastline
 set encoding=utf-8
 set expandtab
@@ -57,9 +59,11 @@ set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).'][
 set noswapfile
 set ttimeout
 set ttimeoutlen=100
+set undodir=$MYVIMDIR/undo
 set undofile
 set updatetime=300
-set viminfo+=n~/.local/share/vim/viminfo
+set viewdir=$MYVIMDIR/view
+set viminfo+=n$MYVIMDIR/viminfo
 set virtualedit=block
 set whichwrap+=<,>,~,[,]
 set wildignorecase
@@ -85,6 +89,10 @@ endif
 if has('win32')
   set completeslash=slash
   set fileformats=unix,dos
+
+  if has('vcon')
+    set termguicolors
+  endif
 endif
 
 augroup vimrc
