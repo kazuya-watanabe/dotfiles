@@ -7,9 +7,8 @@ if has('win32')
 elseif has('gui_gtk')
   set guifont=Hack\ Nerd\ Font\ Mono\ 11,Monospace\ 11
 elseif has('osx')
-  set guifont=Hack\ Nerd\ Font\ Mono:h13,Menlo:h13
-  set guifontwide=YuGo-Medium:h13
-  set linespace=1
+  set guifont=Hack\ Nerd\ Font\ Mono:h14,Menlo:h14
+  set guifontwide=YuGo-Medium:h14
 endif
 
 set columns=160

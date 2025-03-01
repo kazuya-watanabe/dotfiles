@@ -87,10 +87,6 @@ if has('win32')
   set fileformats=unix,dos
 endif
 
-if has('vcon')
-  set termguicolors
-endif
-
 augroup vimrc
   autocmd!
   autocmd BufNewFile,BufRead *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932 completeslash=backslash
@@ -107,7 +103,9 @@ else
   command! -nargs=* Vterminal vertical terminal ++close
 endif
 
-command! -nargs=* Tig terminal ++close tig <f-args>
+if executable('tig')
+  command! -nargs=* Tig terminal ++close tig <f-args>
+endif
 
 let g:mapleader = ','
 let g:maplocalleader = ' '
@@ -129,8 +127,8 @@ inoremap <C-b> <Left>
 inoremap <C-d> <Del>
 inoremap <C-e> <End>
 inoremap <C-f> <Right>
-inoremap <C-n> <Down>
-inoremap <C-p> <Up>
+imap <C-n> <Down>
+imap <C-p> <Up>
 
 nnoremap <C-w>- <C-w>s
 nnoremap <C-w>\| <C-w>v
@@ -149,11 +147,10 @@ function! s:LoadPlugins(timer)
   packadd nohlsearch
 
   call plug#begin('~/.local/vim-plug')
-    Plug 'rafi/awesome-vim-colorschemes'
     Plug 'github/copilot.vim'
     Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
     Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-    Plug 'tpope/vim-obsession'
+    Plug 'NLKNguyen/papercolor-theme'
     Plug 'preservim/tagbar'
     Plug 'mbbill/undotree'
     Plug 'jeetsukumaran/vim-buffergator'
@@ -365,6 +362,22 @@ function! s:LoadPlugins(timer)
     nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
   endif
 
+  " tagbar
+  let g:tagbar_width = 30
+
+  if exists(':TagbarToggle')
+    function! s:TagbarToggle()
+      try
+        UndotreeHide
+      catch
+      endtry
+
+      TagbarToggle
+    endfunction
+
+    nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
+  endif
+
   " translate-shell.vim
   let g:trans_default_direction = ':ja'
   let g:trans_advanced_options = '-brief'
@@ -488,9 +501,7 @@ function! s:LoadPlugins(timer)
         \ 'protected' : '',
         \ 'private'   : ''
         \ }
-
   let g:tagbar_iconchars = ['', '']
-
   let g:tagbar_scopestrs = {
         \ 'class': '',
         \ 'const': '',
@@ -544,27 +555,9 @@ function! s:LoadPlugins(timer)
           \ })
   endif
 
-  " vim-markdown
-  let g:vim_markdown_folding_disabled = 1
-
-  " tagbar
-  let g:tagbar_width = 30
-
-  if exists(':TagbarToggle')
-    function! s:TagbarToggle()
-      try
-        UndotreeHide
-      catch
-      endtry
-
-      TagbarToggle
-    endfunction
-
-    nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
-  endif
-
-  " awesome-vim-colorsches
+  " papercolor-theme
   let s:colors_name = 'PaperColor'
+  let g:airline_theme = tolower(s:colors_name)
 
   if len(getcompletion(s:colors_name, 'color'))
     set background=dark
