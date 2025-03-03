@@ -1,5 +1,3 @@
-scriptencoding utf-8
-
 if has('win32')
   set guifont=Hack_Nerd_Font_Mono:h12,Consolas:h12
   set guifontwide=MS_Gothic:h12
