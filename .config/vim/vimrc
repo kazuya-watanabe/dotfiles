@@ -169,6 +169,7 @@ function! s:LoadPlugins(timer)
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
+    Plug 'dhruvasagar/vim-table-mode'
     Plug 'vim-jp/vimdoc-ja'
     Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline_extensions = [ 'branch', 'tabline' ]
 
