@@ -24,6 +24,7 @@ set display=lastline
 set encoding=utf-8
 set expandtab
 set fileignorecase
+set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
 set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
 set nofoldenable
 set history=10000
@@ -35,7 +36,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:>-,trail:-,extends:>,precedes:<
+set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
 set nrformats-=octal
 set number
 set relativenumber
@@ -44,7 +45,7 @@ set scrolloff=5
 set sessionoptions-=help
 set shiftwidth=2
 set shortmess+=acI
-set showbreak=>\ 
+set showbreak=↪∙∙∙
 set showcmd
 set showmatch
 set sidescrolloff=5
@@ -154,24 +155,29 @@ function! s:LoadPlugins(timer)
   packadd! matchit
   packadd nohlsearch
 
-  call plug#begin('~/.local/vim-plug')
-    Plug 'github/copilot.vim'
-    Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
-    Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+  if executable('git') && plug#begin('~/.local/vim-plug')
     Plug 'NLKNguyen/papercolor-theme'
-    Plug 'preservim/tagbar'
-    Plug 'mbbill/undotree'
-    Plug 'jeetsukumaran/vim-buffergator'
-    Plug 'CoderCookE/vim-chatgpt'
-    Plug 'easymotion/vim-easymotion'
-    Plug 'tpope/vim-fugitive'
     Plug 'airblade/vim-gitgutter'
+    Plug 'dhruvasagar/vim-table-mode'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'github/copilot.vim'
+    Plug 'jeetsukumaran/vim-buffergator'
+    Plug 'mbbill/undotree'
+    Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
-    Plug 'dhruvasagar/vim-table-mode'
-    Plug 'vim-jp/vimdoc-ja'
     Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline_extensions = [ 'branch', 'tabline' ]
+    Plug 'vim-jp/vimdoc-ja'
+
+    if executable('ctags')
+      Plug 'preservim/tagbar'
+    endif
+
+    if executable('fzf')
+      Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
+    endif
 
     if executable('npm')
       Plug 'dense-analysis/ale'
@@ -182,14 +188,49 @@ function! s:LoadPlugins(timer)
       Plug 'echuraev/translate-shell.vim'
     endif
 
-    if has('gui_running') || exists('$NERDFONT')
-      Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
+    if has('python3')
+      Plug 'CoderCookE/vim-chatgpt'
     endif
-  call plug#end()
+
+    Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
+
+    call plug#end()
+  endif
 
   " ale
   let g:ale_completion_enabled = 1
+  let g:ale_completion_symbols = {
+        \ '<default>': 'v',
+        \ 'class': '',
+        \ 'color': '',
+        \ 'constant': '',
+        \ 'constructor': '',
+        \ 'enum member': '',
+        \ 'enum': '',
+        \ 'event': '󰥕',
+        \ 'field': '󰖷',
+        \ 'file': '󰈔',
+        \ 'folder': '󰉋',
+        \ 'function': '󰊕',
+        \ 'interface': '',
+        \ 'keyword': '',
+        \ 'method': '',
+        \ 'module': '',
+        \ 'operator': '',
+        \ 'property': '',
+        \ 'reference': '',
+        \ 'snippet': '󰅩',
+        \ 'struct': '',
+        \ 'text': '',
+        \ 'type_parameter': '',
+        \ 'unit': '',
+        \ 'value': '',
+        \ 'variable': '',
+        \ }
   let g:ale_linters = { 'markdown': [ 'textlint' ] }
+  let g:ale_sign_error = ''
+  let g:ale_sign_info = ''
+  let g:ale_sign_warning = ''
 
   " coc.nvim
   let g:coc_global_extensions = [ 'coc-highlight', 'coc-snippets', 'coc-markdown-preview-enhanced', 'coc-webview', ]
@@ -339,6 +380,35 @@ function! s:LoadPlugins(timer)
       autocmd CursorHold * silent call CocActionAsync('highlight')
       autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     augroup end
+
+    call coc#config('suggest.completionItemKindLabels', {
+          \ 'class': '',
+          \ 'color': '',
+          \ 'constant': '',
+          \ 'constructor': '',
+          \ 'default': '',
+          \ 'enum': '',
+          \ 'enumMember': '',
+          \ 'event': '󰥕',
+          \ 'field': '󰖷',
+          \ 'file': '󰈔',
+          \ 'folder': '󰉋',
+          \ 'function': '󰊕',
+          \ 'interface': '',
+          \ 'keyword': '',
+          \ 'method': '',
+          \ 'module': '',
+          \ 'operator': '',
+          \ 'property': '',
+          \ 'reference': '',
+          \ 'snippet': '󰅩',
+          \ 'struct': '',
+          \ 'text': '',
+          \ 'typeParameter': '',
+          \ 'unit': '',
+          \ 'value': '',
+          \ 'variable': '',
+          \ })
   endif
 
   " fzf.vim
@@ -351,6 +421,21 @@ function! s:LoadPlugins(timer)
   endif
 
   " nerdtree
+  let g:NERDTreeDirArrowCollapsible = ''
+  let g:NERDTreeDirArrowExpandable = ''
+  let g:NERDTreeGitStatusIndicatorMapCustom = {
+        \ 'Modified': '󰧟',
+        \ 'Staged': '󰐕',
+        \ 'Untracked': '󰓎',
+        \ 'Renamed': '󰁔',
+        \ 'Unmerged': '󰦎',
+        \ 'Deleted': '',
+        \ 'Dirty': '󰂚',
+        \ 'Ignored': '󰅖',
+        \ 'Clean': '󰄬',
+        \ 'Unknown': '?',
+        \ }
+  let g:NERDTreeGitStatusUseNerdFonts = 1
   let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
   let g:NERDTreeShowHidden = 1
   let g:NERDTreeWinSize = 30
@@ -369,6 +454,29 @@ function! s:LoadPlugins(timer)
   endif
 
   " tagbar
+  let g:tagbar_iconchars = ['', '']
+  let g:tagbar_scopestrs = {
+        \ 'class': '',
+        \ 'const': '',
+        \ 'constant': '',
+        \ 'enum': '',
+        \ 'field': '󰖷',
+        \ 'func': '󰊕',
+        \ 'function': '󰊕',
+        \ 'getter': '󰖷',
+        \ 'implementation': '',
+        \ 'interface': '',
+        \ 'map': '󰙅',
+        \ 'member': '',
+        \ 'method': '',
+        \ 'setter': '󰖷',
+        \ 'variable': '',
+        \ }
+  let g:tagbar_visibility_symbols = {
+        \ 'public'    : '',
+        \ 'protected' : '',
+        \ 'private'   : '',
+        \ }
   let g:tagbar_width = 30
 
   if exists(':TagbarToggle')
@@ -408,12 +516,36 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-airline
-  let g:airline_experimental = 1
+  let g:airline#extensions#tabline#close_symbol = '󰅖'
   let g:airline#extensions#tabline#fnamemod = ':t'
+  let g:airline#extensions#tabline#overflow_marker = '…'
   let g:airline#extensions#tabline#show_buffers = 0
   let g:airline#extensions#tabline#show_close_button = 0
   let g:airline#extensions#tabline#show_splits = 0
   let g:airline#extensions#tabline#show_tab_count = 0
+  let g:airline#extensions#tabline#tabs_label = '󰓩'
+  let g:airline_experimental = 1
+  let g:airline_left_alt_sep = ''
+  let g:airline_left_sep = ''
+  let g:airline_powerline_fonts = 1
+  let g:airline_right_alt_sep = ''
+  let g:airline_right_sep = ''
+
+  if ! exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+  let g:airline_symbols.branch = ''
+  let g:airline_symbols.colnr = ''
+  let g:airline_symbols.crypt = '󰌾'
+  let g:airline_symbols.dirty = '󰂚'
+  let g:airline_symbols.linenr = ''
+  let g:airline_symbols.maxlinenr = ' '
+  let g:airline_symbols.notexists = ''
+  let g:airline_symbols.paste = '󰅇'
+  let g:airline_symbols.readonly = '󰒘'
+  let g:airline_symbols.spell = '󰓆'
+  let g:airline_symbols.whitespace = '󱁐'
 
   " vim-buffergator
   let g:buffergator_autodismiss_on_select = 0
@@ -457,109 +589,6 @@ function! s:LoadPlugins(timer)
   let g:webdevicons_enable_airline_tabline = 1
   let g:webdevicons_enable_nerdtree = 1
   let g:webdevicons_conceal_nerdtree_brackets = 1
-
-  let g:ale_sign_error = '󰀨'
-  let g:ale_sign_warning = '󰀦'
-
-  if ! has_key(g:, 'airline_symbols')
-    let g:airline_symbols = {}
-  endif
-
-  let g:airline_powerline_fonts = 1
-  let g:airline_left_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_right_alt_sep = ''
-  let g:airline_symbols.branch = '󰘬'
-  let g:airline_symbols.colnr = ''
-  let g:airline_symbols.dirty = '󰐗'
-  let g:airline_symbols.linenr = ''
-  let g:airline_symbols.maxlinenr = ' '
-  let g:airline_symbols.notexists = '󰱼'
-  let g:airline_symbols.paste = '󰆒'
-  let g:airline_symbols.readonly = '󰌾'
-  let g:airline_symbols.spell = '󰓆'
-  let g:airline_symbols.whitespace = '󱁐'
-  let g:airline#extensions#coc#error_symbol = '󰀩 '
-  let g:airline#extensions#coc#warning_symbol = '󰀦 '
-  let g:airline#extensions#tabline#close_symbol = '󰅖'
-  let g:airline#extensions#tabline#overflow_marker = '…'
-  let g:airline#extensions#tabline#tabs_label = '󰓩'
-
-  let g:NERDTreeDirArrowCollapsible = ''
-  let g:NERDTreeDirArrowExpandable = ''
-  let g:NERDTreeGitStatusIndicatorMapCustom = {
-        \ 'Modified': '󰧟',
-        \ 'Staged': '󰐕',
-        \ 'Untracked': '󰓎',
-        \ 'Renamed': '󰁔',
-        \ 'Unmerged': '󰦎',
-        \ 'Deleted': '󰆴',
-        \ 'Dirty': '󰂚',
-        \ 'Ignored': '󰅖',
-        \ 'Clean': '󰄬',
-        \ 'Unknown': '?',
-        \ }
-  let g:NERDTreeGitStatusUseNerdFonts = 1
-
-  let g:tagbar_visibility_symbols = {
-        \ 'public'    : '',
-        \ 'protected' : '',
-        \ 'private'   : ''
-        \ }
-  let g:tagbar_iconchars = ['', '']
-  let g:tagbar_scopestrs = {
-        \ 'class': '',
-        \ 'const': '',
-        \ 'constant': '',
-        \ 'enum': '',
-        \ 'field': '',
-        \ 'func': '󰊕',
-        \ 'function': '󰊕',
-        \ 'getter': '',
-        \ 'implementation': '',
-        \ 'interface': '',
-        \ 'map': '󰙅',
-        \ 'member': '',
-        \ 'method': '',
-        \ 'setter': '',
-        \ 'variable': '',
-        \ }
-
-  set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
-  set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
-  set showbreak=↪∙∙∙
-
-  if exists('*coc#config')
-    call coc#config('suggest.completionItemKindLabels', {
-          \ 'keyword': '',
-          \ 'variable': '',
-          \ 'value': '󰎠',
-          \ 'operator': 'ψ',
-          \ 'constructor': '󰑶',
-          \ 'function': '󰊕',
-          \ 'reference': '',
-          \ 'constant': '',
-          \ 'method': '',
-          \ 'struct': '',
-          \ 'class': '',
-          \ 'interface': '',
-          \ 'text': '',
-          \ 'enum': '',
-          \ 'enumMember': '',
-          \ 'module': '',
-          \ 'color': '',
-          \ 'property': '',
-          \ 'field': '',
-          \ 'unit': '',
-          \ 'event': '󰥕',
-          \ 'file': '󰈤',
-          \ 'folder': '󰉖',
-          \ 'snippet': '󰅩',
-          \ 'typeParameter': '',
-          \ 'default': ''
-          \ })
-  endif
 
   " papercolor-theme
   let s:colors_name = 'PaperColor'
