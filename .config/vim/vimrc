@@ -163,7 +163,7 @@ function! s:LoadPlugins(timer)
     Plug 'github/copilot.vim'
     Plug 'jeetsukumaran/vim-buffergator'
     Plug 'mbbill/undotree'
-    Plug 'preservim/nerdtree' | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'preservim/nerdtree' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-repeat'
@@ -192,45 +192,14 @@ function! s:LoadPlugins(timer)
       Plug 'CoderCookE/vim-chatgpt'
     endif
 
-    Plug 'ryanoasis/vim-devicons' | Plug 'adelarsq/vim-devicons-emoji'
+    Plug 'ryanoasis/vim-devicons'
 
     call plug#end()
   endif
 
   " ale
   let g:ale_completion_enabled = 1
-  let g:ale_completion_symbols = {
-        \ '<default>': 'v',
-        \ 'class': '',
-        \ 'color': '',
-        \ 'constant': '',
-        \ 'constructor': '',
-        \ 'enum member': '',
-        \ 'enum': '',
-        \ 'event': '󰥕',
-        \ 'field': '󰖷',
-        \ 'file': '󰈔',
-        \ 'folder': '󰉋',
-        \ 'function': '󰊕',
-        \ 'interface': '',
-        \ 'keyword': '',
-        \ 'method': '',
-        \ 'module': '',
-        \ 'operator': '',
-        \ 'property': '',
-        \ 'reference': '',
-        \ 'snippet': '󰅩',
-        \ 'struct': '',
-        \ 'text': '',
-        \ 'type_parameter': '',
-        \ 'unit': '',
-        \ 'value': '',
-        \ 'variable': '',
-        \ }
   let g:ale_linters = { 'markdown': [ 'textlint' ] }
-  let g:ale_sign_error = ''
-  let g:ale_sign_info = ''
-  let g:ale_sign_warning = ''
 
   " coc.nvim
   let g:coc_global_extensions = [ 'coc-highlight', 'coc-snippets', 'coc-markdown-preview-enhanced', 'coc-webview', ]
@@ -380,35 +349,6 @@ function! s:LoadPlugins(timer)
       autocmd CursorHold * silent call CocActionAsync('highlight')
       autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     augroup end
-
-    call coc#config('suggest.completionItemKindLabels', {
-          \ 'class': '',
-          \ 'color': '',
-          \ 'constant': '',
-          \ 'constructor': '',
-          \ 'default': '',
-          \ 'enum': '',
-          \ 'enumMember': '',
-          \ 'event': '󰥕',
-          \ 'field': '󰖷',
-          \ 'file': '󰈔',
-          \ 'folder': '󰉋',
-          \ 'function': '󰊕',
-          \ 'interface': '',
-          \ 'keyword': '',
-          \ 'method': '',
-          \ 'module': '',
-          \ 'operator': '',
-          \ 'property': '',
-          \ 'reference': '',
-          \ 'snippet': '󰅩',
-          \ 'struct': '',
-          \ 'text': '',
-          \ 'typeParameter': '',
-          \ 'unit': '',
-          \ 'value': '',
-          \ 'variable': '',
-          \ })
   endif
 
   " fzf.vim
@@ -421,21 +361,6 @@ function! s:LoadPlugins(timer)
   endif
 
   " nerdtree
-  let g:NERDTreeDirArrowCollapsible = ''
-  let g:NERDTreeDirArrowExpandable = ''
-  let g:NERDTreeGitStatusIndicatorMapCustom = {
-        \ 'Modified': '󰧟',
-        \ 'Staged': '󰐕',
-        \ 'Untracked': '󰓎',
-        \ 'Renamed': '󰁔',
-        \ 'Unmerged': '󰦎',
-        \ 'Deleted': '',
-        \ 'Dirty': '󰂚',
-        \ 'Ignored': '󰅖',
-        \ 'Clean': '󰄬',
-        \ 'Unknown': '?',
-        \ }
-  let g:NERDTreeGitStatusUseNerdFonts = 1
   let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
   let g:NERDTreeShowHidden = 1
   let g:NERDTreeWinSize = 30
@@ -454,29 +379,6 @@ function! s:LoadPlugins(timer)
   endif
 
   " tagbar
-  let g:tagbar_iconchars = ['', '']
-  let g:tagbar_scopestrs = {
-        \ 'class': '',
-        \ 'const': '',
-        \ 'constant': '',
-        \ 'enum': '',
-        \ 'field': '󰖷',
-        \ 'func': '󰊕',
-        \ 'function': '󰊕',
-        \ 'getter': '󰖷',
-        \ 'implementation': '',
-        \ 'interface': '',
-        \ 'map': '󰙅',
-        \ 'member': '',
-        \ 'method': '',
-        \ 'setter': '󰖷',
-        \ 'variable': '',
-        \ }
-  let g:tagbar_visibility_symbols = {
-        \ 'public'    : '',
-        \ 'protected' : '',
-        \ 'private'   : '',
-        \ }
   let g:tagbar_width = 30
 
   if exists(':TagbarToggle')
@@ -516,36 +418,16 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-airline
-  let g:airline#extensions#tabline#close_symbol = '󰅖'
-  let g:airline#extensions#tabline#fnamemod = ':t'
-  let g:airline#extensions#tabline#overflow_marker = '…'
   let g:airline#extensions#tabline#show_buffers = 0
   let g:airline#extensions#tabline#show_close_button = 0
   let g:airline#extensions#tabline#show_splits = 0
   let g:airline#extensions#tabline#show_tab_count = 0
-  let g:airline#extensions#tabline#tabs_label = '󰓩'
   let g:airline_experimental = 1
   let g:airline_left_alt_sep = ''
   let g:airline_left_sep = ''
   let g:airline_powerline_fonts = 1
   let g:airline_right_alt_sep = ''
   let g:airline_right_sep = ''
-
-  if ! exists('g:airline_symbols')
-    let g:airline_symbols = {}
-  endif
-
-  let g:airline_symbols.branch = ''
-  let g:airline_symbols.colnr = ''
-  let g:airline_symbols.crypt = '󰌾'
-  let g:airline_symbols.dirty = '󰂚'
-  let g:airline_symbols.linenr = ''
-  let g:airline_symbols.maxlinenr = ' '
-  let g:airline_symbols.notexists = ''
-  let g:airline_symbols.paste = '󰅇'
-  let g:airline_symbols.readonly = '󰒘'
-  let g:airline_symbols.spell = '󰓆'
-  let g:airline_symbols.whitespace = '󱁐'
 
   " vim-buffergator
   let g:buffergator_autodismiss_on_select = 0
