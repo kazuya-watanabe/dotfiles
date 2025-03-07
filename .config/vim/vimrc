@@ -24,7 +24,6 @@ set display=lastline
 set encoding=utf-8
 set expandtab
 set fileignorecase
-set fillchars=vert:,fold:,foldopen:,foldclose:,foldsep:,diff:,eob:∙
 set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
 set nofoldenable
 set history=10000
@@ -36,7 +35,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:,trail:∙,extends:󰄾,precedes:󰄽
+set listchars=tab:>-,trail:-,extends:>,precedes:<
 set nrformats-=octal
 set number
 set relativenumber
@@ -45,7 +44,7 @@ set scrolloff=5
 set sessionoptions-=help
 set shiftwidth=2
 set shortmess+=acI
-set showbreak=↪∙∙∙
+set showbreak=>\ 
 set showcmd
 set showmatch
 set sidescrolloff=5
@@ -163,7 +162,7 @@ function! s:LoadPlugins(timer)
     Plug 'github/copilot.vim'
     Plug 'jeetsukumaran/vim-buffergator'
     Plug 'mbbill/undotree'
-    Plug 'preservim/nerdtree' | Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'preservim/nerdtree'
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-repeat'
@@ -191,8 +190,6 @@ function! s:LoadPlugins(timer)
     if has('python3')
       Plug 'CoderCookE/vim-chatgpt'
     endif
-
-    Plug 'ryanoasis/vim-devicons'
 
     call plug#end()
   endif
@@ -226,8 +223,6 @@ function! s:LoadPlugins(timer)
 
   if executable('node')
     call extend(g:coc_global_extensions, [ 'coc-tsserver', 'coc-angular', 'coc-prisma', 'coc-vetur', ])
-
-    Plug 'pantharshit00/vim-prisma'
   endif
 
   if executable('php')
@@ -251,12 +246,6 @@ function! s:LoadPlugins(timer)
   endif
 
   if exists(':CocCommand')
-    function! s:CheckBackspace() abort
-      let col = col('.') - 1
-
-      return !col || getline('.')[col - 1]  =~# '\s'
-    endfunction
-
     function! s:ShowDocumentation()
       if CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
@@ -345,7 +334,6 @@ function! s:LoadPlugins(timer)
     command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
 
     augroup vimrc
-      autocmd!
       autocmd CursorHold * silent call CocActionAsync('highlight')
       autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     augroup end
@@ -358,6 +346,10 @@ function! s:LoadPlugins(timer)
 
   if exists(':Files')
     nnoremap <silent> <Leader>f :<C-u>Files<CR>
+    nnoremap <silent> <Leader>h :<C-u>History<CR>
+    nnoremap <silent> <Leader>c :<C-u>History:<CR>
+    nnoremap <silent> <Leader>s :<C-u>History/<CR>
+    nnoremap <silent> <Leader>w :<C-u>Windows<CR>
   endif
 
   " nerdtree
@@ -368,7 +360,7 @@ function! s:LoadPlugins(timer)
   if exists(':NERDTreeToggleVCS')
     function! s:NERDTreeToggleVCS()
       try
-        BuffergatorClose
+        BuffergatorTabsClose
       catch
       endtry
 
@@ -418,14 +410,15 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-airline
+  let g:airline#extensions#tabline#formatter = 'short_path_improved'
   let g:airline#extensions#tabline#show_buffers = 0
   let g:airline#extensions#tabline#show_close_button = 0
   let g:airline#extensions#tabline#show_splits = 0
   let g:airline#extensions#tabline#show_tab_count = 0
   let g:airline_experimental = 1
+  let g:airline_powerline_fonts = 1
   let g:airline_left_alt_sep = ''
   let g:airline_left_sep = ''
-  let g:airline_powerline_fonts = 1
   let g:airline_right_alt_sep = ''
   let g:airline_right_sep = ''
 
@@ -436,14 +429,14 @@ function! s:LoadPlugins(timer)
   let g:buffergator_suppress_keymaps = 1
   let g:buffergator_vsplit_size = 30
 
-  if exists(':BuffergatorToggle')
+  if exists(':BuffergatorTabsToggle')
     function! s:BuffergatorToggle()
       try
         NERDTreeClose
       catch
       endtry
 
-      BuffergatorToggle
+      BuffergatorTabsToggle
     endfunction
 
     nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
@@ -464,13 +457,6 @@ function! s:LoadPlugins(timer)
 
     vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
   endif
-
-  " vim-devicons
-  let g:webdevicons_enable = 1
-  let g:webdevicons_enable_airline_statusline = 1
-  let g:webdevicons_enable_airline_tabline = 1
-  let g:webdevicons_enable_nerdtree = 1
-  let g:webdevicons_conceal_nerdtree_brackets = 1
 
   " papercolor-theme
   let s:colors_name = 'PaperColor'
