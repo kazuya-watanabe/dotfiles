@@ -25,7 +25,6 @@ set encoding=utf-8
 set expandtab
 set fileignorecase
 set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
-set nofoldenable
 set history=10000
 set hlsearch
 set ignorecase
@@ -339,7 +338,7 @@ function! s:LoadPlugins(timer)
     augroup end
   endif
 
-  " fzf.vim
+  " fzf
   let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
   let g:fzf_layout = { 'down': '40%' }
   let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
@@ -410,17 +409,17 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-airline
-  let g:airline#extensions#tabline#formatter = 'short_path_improved'
+  let g:airline#extensions#tabline#formatter = 'short_path'
   let g:airline#extensions#tabline#show_buffers = 0
   let g:airline#extensions#tabline#show_close_button = 0
   let g:airline#extensions#tabline#show_splits = 0
   let g:airline#extensions#tabline#show_tab_count = 0
   let g:airline_experimental = 1
   let g:airline_powerline_fonts = 1
-  let g:airline_left_alt_sep = ''
   let g:airline_left_sep = ''
-  let g:airline_right_alt_sep = ''
   let g:airline_right_sep = ''
+  let g:airline_left_alt_sep = ''
+  let g:airline_right_alt_sep = ''
 
   " vim-buffergator
   let g:buffergator_autodismiss_on_select = 0
