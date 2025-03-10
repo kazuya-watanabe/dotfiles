@@ -177,7 +177,7 @@ function! s:LoadPlugins(timer)
       Plug 'junegunn/fzf' | Plug 'junegunn/fzf.vim'
     endif
 
-    if executable('npm')
+    if executable('node')
       Plug 'dense-analysis/ale'
       Plug 'neoclide/coc.nvim', { 'branch': 'release' } | Plug 'honza/vim-snippets'
     endif
@@ -198,46 +198,74 @@ function! s:LoadPlugins(timer)
   let g:ale_linters = { 'markdown': [ 'textlint' ] }
 
   " coc.nvim
-  let g:coc_global_extensions = [ 'coc-highlight', 'coc-snippets', 'coc-markdown-preview-enhanced', 'coc-webview', ]
+  let g:coc_global_extensions = [
+        \ 'coc-highlight', 'coc-snippets',
+        \ 'coc-markdown-preview-enhanced', 'coc-webview',
+        \ 'coc-vimlsp',
+        \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
+        \ 'coc-html', 'coc-css',
+        \ ]
 
-  if executable('bash')
-    call extend(g:coc_global_extensions, [ 'coc-sh', ])
+  if ! has('win32') && executable('bash')
+    call add(g:coc_global_extensions, 'coc-sh')
   endif
 
   if executable('clangd')
-    call extend(g:coc_global_extensions, [ 'coc-clangd', ])
+    call add(g:coc_global_extensions, 'coc-clangd')
   endif
 
   if executable('cmake')
-    call extend(g:coc_global_extensions, [ 'coc-cmake', ])
+    call add(g:coc_global_extensions, 'coc-cmake')
   endif
 
   if executable('docker')
-    call extend(g:coc_global_extensions, [ 'coc-docker', ])
+    call add(g:coc_global_extensions, 'coc-docker')
+  endif
+
+  if executable('dotnet')
+    call add(g:coc_global_extensions, 'coc-omnisharp')
+  endif
+
+  if executable('go')
+    call add(g:coc_global_extensions, 'coc-go')
   endif
 
   if executable('javac')
-    call extend(g:coc_global_extensions, [ 'coc-java', ])
+    call add(g:coc_global_extensions, 'coc-java')
+  endif
+
+  if executable('lua') || executable('luajit')
+    call add(g:coc_global_extensions, 'coc-lua')
   endif
 
   if executable('node')
-    call extend(g:coc_global_extensions, [ 'coc-tsserver', 'coc-angular', 'coc-prisma', 'coc-vetur', ])
+    call extend(g:coc_global_extensions, [
+          \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
+          \ 'coc-angular', 'coc-prisma', '@yaegassy/coc-volar',
+          \ ])
+  endif
+
+  if executable('perl')
+    call add(g:coc_global_extensions, 'coc-perl')
   endif
 
   if executable('php')
-    call extend(g:coc_global_extensions, [ 'coc-phpls', ])
+    call extend(g:coc_global_extensions, [
+          \ 'coc-phpls', 'coc-phpactor', 'coc-php-cs-fixer', '@yaegassy/coc-phpstan',
+          \ '@yaegassy/coc-laravel', 'coc-blade',
+          \ ])
   endif
 
   if executable('python')
-    call extend(g:coc_global_extensions, [ 'coc-pyright', ])
+    call extend(g:coc_global_extensions, [ 'coc-pyright', 'coc-pydocstring', ])
   endif
 
   if executable('rustc')
-    call extend(g:coc_global_extensions, [ 'coc-rust-analyzer', ])
+    call add(g:coc_global_extensions, 'coc-rust-analyzer')
   endif
 
   if executable('sqlite3') || executable('psql') || executable('mysql')
-    call extend(g:coc_global_extensions, [ 'coc-sql', ])
+    call add(g:coc_global_extensions, 'coc-sql')
   endif
 
   if has('gui_running') && exists(':CocStart')
