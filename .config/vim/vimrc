@@ -34,7 +34,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:>-,trail:-,extends:>,precedes:<
+set listchars=tab:>-,trail:_,extends:>,precedes:<,conceal:-
 set nrformats-=octal
 set number
 set relativenumber
@@ -43,7 +43,7 @@ set scrolloff=5
 set sessionoptions-=help
 set shiftwidth=2
 set shortmess+=acI
-set showbreak=>\ 
+set showbreak=>--\ 
 set showcmd
 set showmatch
 set sidescrolloff=5
