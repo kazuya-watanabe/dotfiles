@@ -476,10 +476,10 @@ function! s:LoadPlugins(timer)
     let g:openai_api_key = readfile(s:openai_token_file, '', 1)[0]
     let g:chat_gpt_max_tokens = 2000
     let g:chat_gpt_model = 'gpt-4o-mini'
-    let g:chat_gpt_session_mode = 0
+    let g:chat_gpt_session_mode = 1
     let g:chat_gpt_temperature = 0.1
     let g:chat_gpt_lang = 'Japanese'
-    let g:chat_gpt_split_direction = 'vertical'
+    let g:chat_gpt_split_direction = 'horizontal'
     let g:split_ratio = 4
 
     vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
