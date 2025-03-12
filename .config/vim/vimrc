@@ -381,13 +381,14 @@ function! s:LoadPlugins(timer)
 
   " nerdtree
   let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
+  let g:NERDTreeQuitOnOpen = 1
   let g:NERDTreeShowHidden = 1
   let g:NERDTreeWinSize = 30
 
   if exists(':NERDTreeToggleVCS')
     function! s:NERDTreeToggleVCS()
       try
-        BuffergatorTabsClose
+        BuffergatorClose
       catch
       endtry
 
@@ -450,7 +451,6 @@ function! s:LoadPlugins(timer)
   let g:airline_right_alt_sep = ''
 
   " vim-buffergator
-  let g:buffergator_autodismiss_on_select = 0
   let g:buffergator_autoexpand_on_split = 0
   let g:buffergator_autoupdate = 1
   let g:buffergator_suppress_keymaps = 1
@@ -463,7 +463,7 @@ function! s:LoadPlugins(timer)
       catch
       endtry
 
-      BuffergatorTabsToggle
+      BuffergatorToggle
     endfunction
 
     nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
