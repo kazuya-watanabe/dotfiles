@@ -206,7 +206,7 @@ function! s:LoadPlugins(timer)
         \ 'coc-html', 'coc-css',
         \ ]
 
-  if ! has('win32') && executable('bash')
+  if !has('win32') && executable('bash')
     call add(g:coc_global_extensions, 'coc-sh')
   endif
 
@@ -256,7 +256,7 @@ function! s:LoadPlugins(timer)
           \ ])
   endif
 
-  if executable('python')
+  if executable('python3') || executable('python')
     call extend(g:coc_global_extensions, [ 'coc-pyright', 'coc-pydocstring', ])
   endif
 
@@ -399,6 +399,7 @@ function! s:LoadPlugins(timer)
   endif
 
   " tagbar
+  let g:tagbar_autofocus = 1
   let g:tagbar_width = 30
 
   if exists(':TagbarToggle')
@@ -415,8 +416,8 @@ function! s:LoadPlugins(timer)
   endif
 
   " translate-shell.vim
-  let g:trans_default_direction = ':ja'
   let g:trans_advanced_options = '-brief'
+  let g:trans_default_direction = ':ja'
   let g:trans_join_lines = 1
 
   " undotree
@@ -472,12 +473,12 @@ function! s:LoadPlugins(timer)
   " vim-chatgpt
   let s:openai_token_file = expand('~/.config/openai.token')
 
-  if filereadable(s:openai_token_file)
+  if filereadable(s:openai_token_file) && exists(':Ask')
     let g:openai_api_key = readfile(s:openai_token_file, '', 1)[0]
     let g:chat_gpt_max_tokens = 2000
     let g:chat_gpt_model = 'gpt-4o-mini'
     let g:chat_gpt_session_mode = 1
-    let g:chat_gpt_temperature = 0.1
+    let g:chat_gpt_temperature = 0.4
     let g:chat_gpt_lang = 'Japanese'
     let g:chat_gpt_split_direction = 'horizontal'
     let g:split_ratio = 4
@@ -489,7 +490,7 @@ function! s:LoadPlugins(timer)
   let s:colors_name = 'PaperColor'
   let g:airline_theme = tolower(s:colors_name)
 
-  if len(getcompletion(s:colors_name, 'color'))
+  if !empty(getcompletion(s:colors_name, 'color'))
     set background=dark
 
     execute 'colorscheme ' .. s:colors_name
