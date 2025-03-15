@@ -1,9 +1,10 @@
 --follow
-
---glob=!.git/*
---glob=!node_modules/*
---glob=!vendor/*
-
 --hidden
-
 --smart-case
+
+--glob=!.git/
+--glob=!.venv/
+--glob=!build/
+--glob=!dist/
+--glob=!node_modules/
+--glob=!vendor/

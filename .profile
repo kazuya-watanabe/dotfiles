@@ -21,7 +21,7 @@ if [ -r "${HOME}/.cargo/env" ]; then
 fi
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f --exclude .git/'
+export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f --exclude .git/ --exclude .venv/ --exclude build/ --exclude dist/ --exclude node_modules/ --exclude vendor/'
 
 # less
 export PAGER=less

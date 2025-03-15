@@ -103,12 +103,7 @@ augroup vimrc
 augroup END
 
 command! -nargs=* Grep grep <args> | cwindow
-
-if has('win32')
-  command! -nargs=* Vterminal vertical terminal ++close powershell
-else
-  command! -nargs=* Vterminal vertical terminal ++close
-endif
+command! -nargs=* Vterminal vertical terminal ++close <args>
 
 if executable('tig')
   command! -nargs=* Tig terminal ++close tig <f-args>
@@ -145,7 +140,12 @@ nnoremap <silent> <Tab> :<C-u>tabnext<CR>
 nnoremap Y y$
 nnoremap [q :<C-u>cprevious<CR>
 nnoremap ]q :<C-u>cnext<CR>
-nnoremap <Leader>sh :<C-u>Vterminal<CR>
+
+if has('win32')
+  nnoremap <Leader>sh :<C-u>Vterminal powershell.exe<CR>
+else
+  nnoremap <Leader>sh :<C-u>Vterminal<CR>
+endif
 
 function! s:LoadPlugins(timer)
   packadd comment
@@ -154,12 +154,12 @@ function! s:LoadPlugins(timer)
   packadd nohlsearch
 
   if executable('git') && plug#begin('~/.local/vim-plug')
-    Plug 'NLKNguyen/papercolor-theme'
     Plug 'airblade/vim-gitgutter'
     Plug 'dhruvasagar/vim-table-mode'
     Plug 'easymotion/vim-easymotion'
     Plug 'github/copilot.vim'
     Plug 'jeetsukumaran/vim-buffergator'
+    Plug 'joshdick/onedark.vim'
     Plug 'mbbill/undotree'
     Plug 'preservim/nerdtree'
     Plug 'sheerun/vim-polyglot'
@@ -206,10 +206,6 @@ function! s:LoadPlugins(timer)
         \ 'coc-html', 'coc-css',
         \ ]
 
-  if !has('win32') && executable('bash')
-    call add(g:coc_global_extensions, 'coc-sh')
-  endif
-
   if executable('clangd')
     call add(g:coc_global_extensions, 'coc-clangd')
   endif
@@ -241,7 +237,7 @@ function! s:LoadPlugins(timer)
   if executable('node')
     call extend(g:coc_global_extensions, [
           \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
-          \ 'coc-angular', 'coc-prisma', '@yaegassy/coc-volar',
+          \ 'coc-angular', 'coc-prisma', '@yaegassy/coc-volar', '@yaegassy/coc-tailwindcss3',
           \ ])
   endif
 
@@ -258,6 +254,10 @@ function! s:LoadPlugins(timer)
 
   if executable('python3') || executable('python')
     call extend(g:coc_global_extensions, [ 'coc-pyright', 'coc-pydocstring', ])
+  endif
+
+  if executable('ruby')
+    call add(g:coc_global_extensions, 'coc-solargraph')
   endif
 
   if executable('rustc')
@@ -379,6 +379,10 @@ function! s:LoadPlugins(timer)
     nnoremap <silent> <Leader>w :<C-u>Windows<CR>
   endif
 
+  if executable('fd')
+    let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow --type f'
+  endif
+
   " nerdtree
   let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
   let g:NERDTreeQuitOnOpen = 1
@@ -486,9 +490,9 @@ function! s:LoadPlugins(timer)
     vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
   endif
 
-  " papercolor-theme
-  let s:colors_name = 'PaperColor'
-  let g:airline_theme = tolower(s:colors_name)
+  " onedark.vim
+  let s:colors_name = 'onedark'
+  let g:airline_theme = s:colors_name
 
   if !empty(getcompletion(s:colors_name, 'color'))
     set background=dark
