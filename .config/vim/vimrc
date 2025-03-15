@@ -92,6 +92,8 @@ if has('win32')
   if has('vcon')
     set termguicolors
   endif
+else
+  set termguicolors
 endif
 
 augroup vimrc
