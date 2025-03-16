@@ -34,7 +34,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:>-,trail:_,extends:>,precedes:<,conceal:-
+set listchars=tab:>-,trail:_,extends:>,precedes:<,conceal:*
 set nrformats-=octal
 set number
 set relativenumber

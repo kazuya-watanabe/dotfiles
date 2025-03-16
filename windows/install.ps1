@@ -39,35 +39,37 @@ New-Item -Force -ItemType Junction -Value (Join-Path -Path $GitDir -ChildPath 'i
 winget install --interactive --id AdGuard.AdGuard
 winget install --interactive --id AdGuard.AdGuardVPN
 winget install --interactive --id Amazon.Games
-winget install --interactive --id Atlassian.Sourcetree
-winget install --interactive --id BurntSushi.ripgrep.MSVC
-winget install --interactive --id Docker.DockerCLI
-winget install --interactive --id Docker.DockerCompose
 winget install --interactive --id EpicGames.EpicGamesLauncher
 winget install --interactive --id GOG.Galaxy
 winget install --interactive --id GeekUninstaller.GeekUninstaller
 winget install --interactive --id GnuPG.Gpg4win
 winget install --interactive --id HeidiSQL.HeidiSQL
 winget install --interactive --id Libretro.RetroArch
-winget install --interactive --id Mozilla.Thunderbird.ja
 winget install --interactive --id OliverSchwendener.ueli
-winget install --interactive --id Postman.Postman
+winget install --interactive --id Valve.Steam
+winget install --interactive --id VideoLAN.VLC
+
+winget install --interactive --id BurntSushi.ripgrep.MSVC
+winget install --interactive --id Docker.DockerCLI
+winget install --interactive --id Docker.DockerCompose
+winget install --interactive --id GNU.Wget2
+winget install --interactive --id Gyan.FFmpeg.Shared
+winget install --interactive --id ImageMagick.ImageMagick
 winget install --interactive --id Python.Python.3.12
 winget install --interactive --id Schniz.fnm
 winget install --interactive --id Starship.Starship
-winget install --interactive --id Valve.Steam
-winget install --interactive --id VideoLAN.VLC
+winget install --interactive --id UniversalCtags.Ctags
 winget install --interactive --id ajeetdsouza.zoxide
 winget install --interactive --id dandavison.delta
 winget install --interactive --id facebook.watchman
 winget install --interactive --id gokcehan.lf
 winget install --interactive --id jftuga.less
+winget install --interactive --id jqlang.jq
 winget install --interactive --id junegunn.fzf
 winget install --interactive --id lsd-rs.lsd
 winget install --interactive --id sharkdp.bat
 winget install --interactive --id sharkdp.fd
 winget install --interactive --id vim.vim
-winget install --interactive --id UniversalCtags.Ctags
 
 fnm install 22
 fnm default 22
