@@ -85,6 +85,12 @@ if has('gui_running')
   set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
 endif
 
+if has('vim_starting')
+  let &t_SI .= "\e[6 q"
+  let &t_EI .= "\e[2 q"
+  let &t_SR .= "\e[4 q"
+endif
+
 if has('win32')
   set completeslash=slash
   set fileformats=unix,dos
@@ -191,6 +197,8 @@ function! s:LoadPlugins(timer)
     if has('python3')
       Plug 'CoderCookE/vim-chatgpt'
     endif
+
+    Plug 'ryanoasis/vim-devicons'
 
     call plug#end()
   endif
@@ -445,11 +453,8 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-airline
-  let g:airline#extensions#tabline#formatter = 'short_path'
   let g:airline#extensions#tabline#show_buffers = 0
-  let g:airline#extensions#tabline#show_close_button = 0
   let g:airline#extensions#tabline#show_splits = 0
-  let g:airline#extensions#tabline#show_tab_count = 0
   let g:airline_experimental = 1
   let g:airline_powerline_fonts = 1
   let g:airline_left_sep = ''
