@@ -24,6 +24,7 @@ set display=lastline
 set encoding=utf-8
 set expandtab
 set fileignorecase
+set fillchars=vert:│,fold:─,foldopen:󰍝,foldclose:󰍟,foldsep:│,diff:─,eob:󰜥,lastline:
 set formatoptions+=jmM | set formatoptions-=c | set formatoptions-=t
 set history=10000
 set hlsearch
@@ -34,7 +35,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:>-,trail:_,extends:>,precedes:<,conceal:*
+set listchars=tab:󰅂─,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
 set nrformats-=octal
 set number
 set relativenumber
@@ -43,7 +44,7 @@ set scrolloff=5
 set sessionoptions-=help
 set shiftwidth=2
 set shortmess+=acI
-set showbreak=>--\ 
+set showbreak=󱞪\ \ \ 
 set showcmd
 set showmatch
 set sidescrolloff=5
@@ -149,8 +150,8 @@ nnoremap Y y$
 nnoremap [q :<C-u>cprevious<CR>
 nnoremap ]q :<C-u>cnext<CR>
 
-if has('win32')
-  nnoremap <Leader>sh :<C-u>Vterminal powershell.exe<CR>
+if has('win32') && executable('powershell')
+  nnoremap <Leader>sh :<C-u>Vterminal powershell<CR>
 else
   nnoremap <Leader>sh :<C-u>Vterminal<CR>
 endif
@@ -461,6 +462,19 @@ function! s:LoadPlugins(timer)
   let g:airline_right_sep = ''
   let g:airline_left_alt_sep = ''
   let g:airline_right_alt_sep = ''
+
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+  let g:airline_symbols.linenr = ' ['
+  let g:airline_symbols.maxlinenr = ']'
+  let g:airline_symbols.colnr = ' '
+  let g:airline_symbols.branch = '󰘬'
+  let g:airline_symbols.paste = '󰆒 Paste'
+  let g:airline_symbols.readonly = '󰑇 Readonly'
+  let g:airline_symbols.spell = '󰓆 Spell'
+  let g:airline_symbols.crypt = '󰌾 Crypt'
 
   " vim-buffergator
   let g:buffergator_autoexpand_on_split = 0
