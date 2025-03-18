@@ -38,7 +38,7 @@
         "defaults": 
         {
             "colorScheme": "One Half Dark",
-            "cursorShape": "vintage",
+            "cursorShape": "filledBox",
             "font": 
             {
                 "face": "Hack Nerd Font Mono,Cascadia Code",

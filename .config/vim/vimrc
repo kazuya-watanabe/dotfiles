@@ -35,7 +35,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:󰅂─,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
+set listchars=tab:󰅂─,leadmultispace:\ ,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
 set nrformats-=octal
 set number
 set relativenumber
@@ -57,6 +57,7 @@ set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
 set noswapfile
+set termguicolors
 set ttimeout
 set ttimeoutlen=100
 set undodir=$MYVIMDIR/undo
@@ -95,12 +96,6 @@ endif
 if has('win32')
   set completeslash=slash
   set fileformats=unix,dos
-
-  if has('vcon')
-    set termguicolors
-  endif
-else
-  set termguicolors
 endif
 
 augroup vimrc
@@ -467,9 +462,9 @@ function! s:LoadPlugins(timer)
     let g:airline_symbols = {}
   endif
 
-  let g:airline_symbols.linenr = ' ['
-  let g:airline_symbols.maxlinenr = ']'
-  let g:airline_symbols.colnr = ' '
+  let g:airline_symbols.linenr = ' '
+  let g:airline_symbols.maxlinenr = ''
+  let g:airline_symbols.colnr = ':'
   let g:airline_symbols.branch = '󰘬'
   let g:airline_symbols.paste = '󰆒 Paste'
   let g:airline_symbols.readonly = '󰑇 Readonly'
@@ -510,6 +505,14 @@ function! s:LoadPlugins(timer)
 
     vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
   endif
+
+  " vim-devicons
+  let g:webdevicons_enable_unite = 0
+  let g:webdevicons_enable_vimfiler = 0
+  let g:webdevicons_enable_ctrlp = 0
+  let g:webdevicons_enable_startify = 0
+  let g:webdevicons_enable_flagship_statusline = 0
+  let g:webdevicons_enable_denite = 0
 
   " onedark.vim
   let s:colors_name = 'onedark'
