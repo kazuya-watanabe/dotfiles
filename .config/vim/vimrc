@@ -35,7 +35,7 @@ set langmenu=none
 set laststatus=2
 set lazyredraw
 set list
-set listchars=tab:󰅂─,leadmultispace:\ ,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
+set listchars=tab:󰅂─,leadmultispace:\ │,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
 set nrformats-=octal
 set number
 set relativenumber
