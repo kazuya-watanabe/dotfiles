@@ -158,21 +158,6 @@ function! s:LoadPlugins(timer)
   packadd nohlsearch
 
   if executable('git') && plug#begin('~/.local/vim-plug')
-    Plug 'airblade/vim-gitgutter'
-    Plug 'dhruvasagar/vim-table-mode'
-    Plug 'easymotion/vim-easymotion'
-    Plug 'github/copilot.vim'
-    Plug 'jeetsukumaran/vim-buffergator'
-    Plug 'joshdick/onedark.vim'
-    Plug 'mbbill/undotree'
-    Plug 'preservim/nerdtree'
-    Plug 'sheerun/vim-polyglot'
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-repeat'
-    Plug 'tpope/vim-surround'
-    Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes' | let g:airline_extensions = [ 'branch', 'tabline' ]
-    Plug 'vim-jp/vimdoc-ja'
-
     if executable('ctags')
       Plug 'preservim/tagbar'
     endif
@@ -194,9 +179,47 @@ function! s:LoadPlugins(timer)
       Plug 'CoderCookE/vim-chatgpt'
     endif
 
+    Plug 'airblade/vim-gitgutter'
+    Plug 'dhruvasagar/vim-table-mode'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'github/copilot.vim'
+    Plug 'jeetsukumaran/vim-buffergator'
+    Plug 'joshdick/onedark.vim'
+    Plug 'mbbill/undotree'
+    Plug 'preservim/nerdtree'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-obsession'
+    Plug 'tpope/vim-repeat'
+    Plug 'tpope/vim-surround'
+    Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
+    Plug 'vim-jp/vimdoc-ja'
     Plug 'ryanoasis/vim-devicons'
 
+    let g:airline_extensions = [
+          \ 'branch',
+          \ 'coc',
+          \ 'fugitiveline',
+          \ 'fzf',
+          \ 'obsession',
+          \ 'quickfix',
+          \ 'scrollbar',
+          \ 'tabline',
+          \ 'tagbar',
+          \ 'term',
+          \ 'undotree',
+          \ 'whitespace',
+          \ 'wordcount',
+          \ ]
+
     call plug#end()
+
+    for key in keys(g:plugs)
+      if !isdirectory(expand(g:plugs[key].dir .. '/.git'))
+        PlugInstall
+        break
+      endif
+    endfor
   endif
 
   " ale
@@ -274,11 +297,9 @@ function! s:LoadPlugins(timer)
     call add(g:coc_global_extensions, 'coc-sql')
   endif
 
-  if has('gui_running') && exists(':CocStart')
+  if exists(':CocStart')
     CocStart
-  endif
 
-  if exists(':CocCommand')
     function! s:ShowDocumentation()
       if CocAction('hasProvider', 'hover')
         call CocActionAsync('doHover')
@@ -449,8 +470,13 @@ function! s:LoadPlugins(timer)
   endif
 
   " vim-airline
+  let g:airline#extensions#ale#error_symbol = ' Error:'
+  let g:airline#extensions#ale#warning_symbol = ' Warning:'
+  let g:airline#extensions#coc#error_symbol = g:airline#extensions#ale#error_symbol
+  let g:airline#extensions#coc#warning_symbol = g:airline#extensions#ale#warning_symbol
   let g:airline#extensions#tabline#show_buffers = 0
   let g:airline#extensions#tabline#show_splits = 0
+
   let g:airline_experimental = 1
   let g:airline_powerline_fonts = 1
   let g:airline_left_sep = ''
