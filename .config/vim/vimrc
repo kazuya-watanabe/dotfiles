@@ -157,7 +157,194 @@ function! s:LoadPlugins(timer)
   packadd! matchit
   packadd nohlsearch
 
-  if executable('git') && plug#begin('~/.local/vim-plug')
+  let l:vimplug = expand($MYVIMDIR . '/autoload/plug.vim')
+
+  if !filereadable(l:vimplug)
+    if executable('curl')
+      call system('curl -fLo ' . l:vimplug . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    endif
+
+    if !filereadable(l:vimplug)
+      echoerr 'Please install the vim-plug manually. You can download it from https://github.com/junegunn/vim-plug and put it in ' . l:vimplug
+
+      finish
+    endif
+  endif
+
+  if executable('git') && plug#begin('~/.local/vim/plugin')
+    " ale
+    let g:ale_completion_enabled = 1
+    let g:ale_linters = { 'markdown': [ 'textlint' ] }
+
+    " coc.nvim
+    let g:coc_data_home = '~/.local/vim/coc'
+    let g:coc_global_extensions = [
+          \ 'coc-highlight', 'coc-snippets',
+          \ 'coc-markdown-preview-enhanced', 'coc-webview',
+          \ 'coc-vimlsp',
+          \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
+          \ 'coc-html', 'coc-css',
+          \ ]
+
+    if executable('clangd')
+      call add(g:coc_global_extensions, 'coc-clangd')
+    endif
+
+    if executable('cmake')
+      call add(g:coc_global_extensions, 'coc-cmake')
+    endif
+
+    if executable('docker')
+      call add(g:coc_global_extensions, 'coc-docker')
+    endif
+
+    if executable('dotnet')
+      call add(g:coc_global_extensions, 'coc-omnisharp')
+    endif
+
+    if executable('go')
+      call add(g:coc_global_extensions, 'coc-go')
+    endif
+
+    if executable('javac')
+      call add(g:coc_global_extensions, 'coc-java')
+    endif
+
+    if executable('lua') || executable('luajit')
+      call add(g:coc_global_extensions, 'coc-lua')
+    endif
+
+    if executable('node')
+      call extend(g:coc_global_extensions, [
+            \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
+            \ 'coc-angular', 'coc-prisma', '@yaegassy/coc-volar', '@yaegassy/coc-tailwindcss3',
+            \ ])
+    endif
+
+    if executable('perl')
+      call add(g:coc_global_extensions, 'coc-perl')
+    endif
+
+    if executable('php')
+      call extend(g:coc_global_extensions, [
+            \ 'coc-phpls', 'coc-phpactor', 'coc-php-cs-fixer', '@yaegassy/coc-phpstan',
+            \ '@yaegassy/coc-laravel', 'coc-blade',
+            \ ])
+    endif
+
+    if executable('python3') || executable('python')
+      call extend(g:coc_global_extensions, [ 'coc-pyright', 'coc-pydocstring', ])
+    endif
+
+    if executable('ruby')
+      call add(g:coc_global_extensions, 'coc-solargraph')
+    endif
+
+    if executable('rustc')
+      call add(g:coc_global_extensions, 'coc-rust-analyzer')
+    endif
+
+    if executable('sqlite3') || executable('psql') || executable('mysql')
+      call add(g:coc_global_extensions, 'coc-sql')
+    endif
+
+    " fzf
+    let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
+    let g:fzf_layout = { 'down': '40%' }
+    let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
+
+    " nerdtree
+    let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
+    let g:NERDTreeQuitOnOpen = 1
+    let g:NERDTreeShowHidden = 1
+    let g:NERDTreeWinSize = 30
+
+    " tagbar
+    let g:tagbar_autofocus = 1
+    let g:tagbar_width = 30
+
+    " translate-shell.vim
+    let g:trans_advanced_options = '-brief'
+    let g:trans_default_direction = ':ja'
+    let g:trans_join_lines = 1
+
+    " undotree
+    let g:undotree_SetFocusWhenToggle = 1
+    let g:undotree_SplitWidth = 30
+    let g:undotree_WindowLayout = 3
+
+    " vim-airline
+    let g:airline_extensions = [
+          \ 'branch',
+          \ 'coc',
+          \ 'fugitiveline',
+          \ 'fzf',
+          \ 'obsession',
+          \ 'quickfix',
+          \ 'scrollbar',
+          \ 'tabline',
+          \ 'tagbar',
+          \ 'term',
+          \ 'undotree',
+          \ 'whitespace',
+          \ 'wordcount',
+          \ ]
+    let g:airline_experimental = 1
+    let g:airline_powerline_fonts = 1
+    let g:airline_left_sep = ''
+    let g:airline_right_sep = ''
+    let g:airline_left_alt_sep = ''
+    let g:airline_right_alt_sep = ''
+
+    if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+    endif
+
+    let g:airline_symbols.linenr = ' '
+    let g:airline_symbols.maxlinenr = ''
+    let g:airline_symbols.colnr = ':'
+    let g:airline_symbols.branch = '󰘬'
+    let g:airline_symbols.paste = '󰆒 Paste'
+    let g:airline_symbols.readonly = '󰑇 Readonly'
+    let g:airline_symbols.spell = '󰓆 Spell'
+    let g:airline_symbols.crypt = '󰌾 Crypt'
+
+    let g:airline#extensions#ale#error_symbol = ' Error:'
+    let g:airline#extensions#ale#warning_symbol = ' Warning:'
+    let g:airline#extensions#coc#error_symbol = g:airline#extensions#ale#error_symbol
+    let g:airline#extensions#coc#warning_symbol = g:airline#extensions#ale#warning_symbol
+    let g:airline#extensions#tabline#show_buffers = 0
+    let g:airline#extensions#tabline#show_splits = 0
+
+    " vim-buffergator
+    let g:buffergator_autoexpand_on_split = 0
+    let g:buffergator_autoupdate = 1
+    let g:buffergator_suppress_keymaps = 1
+    let g:buffergator_vsplit_size = 30
+
+    " vim-devicons
+    let g:webdevicons_enable_unite = 0
+    let g:webdevicons_enable_vimfiler = 0
+    let g:webdevicons_enable_ctrlp = 0
+    let g:webdevicons_enable_startify = 0
+    let g:webdevicons_enable_flagship_statusline = 0
+    let g:webdevicons_enable_denite = 0
+
+    Plug 'airblade/vim-gitgutter'
+    Plug 'dhruvasagar/vim-table-mode'
+    Plug 'easymotion/vim-easymotion'
+    Plug 'github/copilot.vim'
+    Plug 'jeetsukumaran/vim-buffergator'
+    Plug 'joshdick/onedark.vim'
+    Plug 'mbbill/undotree'
+    Plug 'preservim/nerdtree'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-obsession'
+    Plug 'tpope/vim-repeat'
+    Plug 'tpope/vim-surround'
+    Plug 'vim-jp/vimdoc-ja'
+
     if executable('ctags')
       Plug 'preservim/tagbar'
     endif
@@ -179,124 +366,27 @@ function! s:LoadPlugins(timer)
       Plug 'CoderCookE/vim-chatgpt'
     endif
 
-    Plug 'airblade/vim-gitgutter'
-    Plug 'dhruvasagar/vim-table-mode'
-    Plug 'easymotion/vim-easymotion'
-    Plug 'github/copilot.vim'
-    Plug 'jeetsukumaran/vim-buffergator'
-    Plug 'joshdick/onedark.vim'
-    Plug 'mbbill/undotree'
-    Plug 'preservim/nerdtree'
-    Plug 'sheerun/vim-polyglot'
-    Plug 'tpope/vim-fugitive'
-    Plug 'tpope/vim-obsession'
-    Plug 'tpope/vim-repeat'
-    Plug 'tpope/vim-surround'
-    Plug 'vim-airline/vim-airline' | Plug 'vim-airline/vim-airline-themes'
-    Plug 'vim-jp/vimdoc-ja'
+    Plug 'vim-airline/vim-airline'
     Plug 'ryanoasis/vim-devicons'
-
-    let g:airline_extensions = [
-          \ 'branch',
-          \ 'coc',
-          \ 'fugitiveline',
-          \ 'fzf',
-          \ 'obsession',
-          \ 'quickfix',
-          \ 'scrollbar',
-          \ 'tabline',
-          \ 'tagbar',
-          \ 'term',
-          \ 'undotree',
-          \ 'whitespace',
-          \ 'wordcount',
-          \ ]
 
     call plug#end()
 
     for key in keys(g:plugs)
       if !isdirectory(expand(g:plugs[key].dir .. '/.git'))
-        PlugInstall
+        echomsg 'Please wait for a while to complete the installation.'
+
+        PlugInstall --sync
+
+        if exists(':CocInstall')
+          CocInstall -sync
+        endif
+
         break
       endif
     endfor
   endif
 
-  " ale
-  let g:ale_completion_enabled = 1
-  let g:ale_linters = { 'markdown': [ 'textlint' ] }
-
   " coc.nvim
-  let g:coc_global_extensions = [
-        \ 'coc-highlight', 'coc-snippets',
-        \ 'coc-markdown-preview-enhanced', 'coc-webview',
-        \ 'coc-vimlsp',
-        \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
-        \ 'coc-html', 'coc-css',
-        \ ]
-
-  if executable('clangd')
-    call add(g:coc_global_extensions, 'coc-clangd')
-  endif
-
-  if executable('cmake')
-    call add(g:coc_global_extensions, 'coc-cmake')
-  endif
-
-  if executable('docker')
-    call add(g:coc_global_extensions, 'coc-docker')
-  endif
-
-  if executable('dotnet')
-    call add(g:coc_global_extensions, 'coc-omnisharp')
-  endif
-
-  if executable('go')
-    call add(g:coc_global_extensions, 'coc-go')
-  endif
-
-  if executable('javac')
-    call add(g:coc_global_extensions, 'coc-java')
-  endif
-
-  if executable('lua') || executable('luajit')
-    call add(g:coc_global_extensions, 'coc-lua')
-  endif
-
-  if executable('node')
-    call extend(g:coc_global_extensions, [
-          \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
-          \ 'coc-angular', 'coc-prisma', '@yaegassy/coc-volar', '@yaegassy/coc-tailwindcss3',
-          \ ])
-  endif
-
-  if executable('perl')
-    call add(g:coc_global_extensions, 'coc-perl')
-  endif
-
-  if executable('php')
-    call extend(g:coc_global_extensions, [
-          \ 'coc-phpls', 'coc-phpactor', 'coc-php-cs-fixer', '@yaegassy/coc-phpstan',
-          \ '@yaegassy/coc-laravel', 'coc-blade',
-          \ ])
-  endif
-
-  if executable('python3') || executable('python')
-    call extend(g:coc_global_extensions, [ 'coc-pyright', 'coc-pydocstring', ])
-  endif
-
-  if executable('ruby')
-    call add(g:coc_global_extensions, 'coc-solargraph')
-  endif
-
-  if executable('rustc')
-    call add(g:coc_global_extensions, 'coc-rust-analyzer')
-  endif
-
-  if executable('sqlite3') || executable('psql') || executable('mysql')
-    call add(g:coc_global_extensions, 'coc-sql')
-  endif
-
   if exists(':CocStart')
     CocStart
 
@@ -394,11 +484,11 @@ function! s:LoadPlugins(timer)
   endif
 
   " fzf
-  let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
-  let g:fzf_layout = { 'down': '40%' }
-  let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
-
   if exists(':Files')
+    if executable('fd')
+      let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow --type f'
+    endif
+
     nnoremap <silent> <Leader>f :<C-u>Files<CR>
     nnoremap <silent> <Leader>h :<C-u>History<CR>
     nnoremap <silent> <Leader>c :<C-u>History:<CR>
@@ -406,16 +496,7 @@ function! s:LoadPlugins(timer)
     nnoremap <silent> <Leader>w :<C-u>Windows<CR>
   endif
 
-  if executable('fd')
-    let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow --type f'
-  endif
-
   " nerdtree
-  let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
-  let g:NERDTreeQuitOnOpen = 1
-  let g:NERDTreeShowHidden = 1
-  let g:NERDTreeWinSize = 30
-
   if exists(':NERDTreeToggleVCS')
     function! s:NERDTreeToggleVCS()
       try
@@ -430,9 +511,6 @@ function! s:LoadPlugins(timer)
   endif
 
   " tagbar
-  let g:tagbar_autofocus = 1
-  let g:tagbar_width = 30
-
   if exists(':TagbarToggle')
     function! s:TagbarToggle()
       try
@@ -446,16 +524,7 @@ function! s:LoadPlugins(timer)
     nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
   endif
 
-  " translate-shell.vim
-  let g:trans_advanced_options = '-brief'
-  let g:trans_default_direction = ':ja'
-  let g:trans_join_lines = 1
-
   " undotree
-  let g:undotree_SetFocusWhenToggle = 1
-  let g:undotree_SplitWidth = 30
-  let g:undotree_WindowLayout = 3
-
   if exists(':UndotreeToggle')
     function! s:UndotreeToggle()
       try
@@ -469,40 +538,7 @@ function! s:LoadPlugins(timer)
     nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
   endif
 
-  " vim-airline
-  let g:airline#extensions#ale#error_symbol = ' Error:'
-  let g:airline#extensions#ale#warning_symbol = ' Warning:'
-  let g:airline#extensions#coc#error_symbol = g:airline#extensions#ale#error_symbol
-  let g:airline#extensions#coc#warning_symbol = g:airline#extensions#ale#warning_symbol
-  let g:airline#extensions#tabline#show_buffers = 0
-  let g:airline#extensions#tabline#show_splits = 0
-
-  let g:airline_experimental = 1
-  let g:airline_powerline_fonts = 1
-  let g:airline_left_sep = ''
-  let g:airline_right_sep = ''
-  let g:airline_left_alt_sep = ''
-  let g:airline_right_alt_sep = ''
-
-  if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-  endif
-
-  let g:airline_symbols.linenr = ' '
-  let g:airline_symbols.maxlinenr = ''
-  let g:airline_symbols.colnr = ':'
-  let g:airline_symbols.branch = '󰘬'
-  let g:airline_symbols.paste = '󰆒 Paste'
-  let g:airline_symbols.readonly = '󰑇 Readonly'
-  let g:airline_symbols.spell = '󰓆 Spell'
-  let g:airline_symbols.crypt = '󰌾 Crypt'
-
   " vim-buffergator
-  let g:buffergator_autoexpand_on_split = 0
-  let g:buffergator_autoupdate = 1
-  let g:buffergator_suppress_keymaps = 1
-  let g:buffergator_vsplit_size = 30
-
   if exists(':BuffergatorTabsToggle')
     function! s:BuffergatorToggle()
       try
@@ -531,14 +567,6 @@ function! s:LoadPlugins(timer)
 
     vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
   endif
-
-  " vim-devicons
-  let g:webdevicons_enable_unite = 0
-  let g:webdevicons_enable_vimfiler = 0
-  let g:webdevicons_enable_ctrlp = 0
-  let g:webdevicons_enable_startify = 0
-  let g:webdevicons_enable_flagship_statusline = 0
-  let g:webdevicons_enable_denite = 0
 
   " onedark.vim
   let s:colors_name = 'onedark'

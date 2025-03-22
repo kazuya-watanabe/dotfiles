@@ -1,5 +1,6 @@
 .config/lf/files
 .config/lf/history
+.config/vim/autoload/plug.vim
 .config/vim/backup/*
 .config/vim/swap/*
 .config/vim/undo/*
