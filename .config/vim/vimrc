@@ -276,6 +276,7 @@ function! s:LoadPlugins(timer)
 
     " vim-airline
     let g:airline_extensions = [
+          \ 'ale',
           \ 'branch',
           \ 'coc',
           \ 'fugitiveline',
@@ -287,8 +288,6 @@ function! s:LoadPlugins(timer)
           \ 'tagbar',
           \ 'term',
           \ 'undotree',
-          \ 'whitespace',
-          \ 'wordcount',
           \ ]
     let g:airline_experimental = 1
     let g:airline_powerline_fonts = 1
@@ -309,11 +308,15 @@ function! s:LoadPlugins(timer)
     let g:airline_symbols.readonly = '󰑇 Readonly'
     let g:airline_symbols.spell = '󰓆 Spell'
     let g:airline_symbols.crypt = '󰌾 Crypt'
+    let g:airline_symbols.dirty = ' 󱐋'
+    let g:airline_symbols.notexists = '󱥸'
+    let g:airline_symbols.whitespace = '󱓼'
 
     let g:airline#extensions#ale#error_symbol = ' Error:'
     let g:airline#extensions#ale#warning_symbol = ' Warning:'
     let g:airline#extensions#coc#error_symbol = g:airline#extensions#ale#error_symbol
     let g:airline#extensions#coc#warning_symbol = g:airline#extensions#ale#warning_symbol
+    let g:airline#extensions#obsession#indicator_text = ' Session'
     let g:airline#extensions#tabline#show_buffers = 0
     let g:airline#extensions#tabline#show_splits = 0
 
