@@ -45,7 +45,6 @@ set scrolloff=5
 set sessionoptions-=help
 set shiftwidth=2
 set shortmess+=acI
-set showbreak=󱞪\ \ \ 
 set showcmd
 set showmatch
 set sidescrolloff=5
@@ -74,6 +73,8 @@ set wildmode=longest:full,full
 set wildoptions=fuzzy,pum,tagfile
 set wrap
 set nowritebackup
+
+let &showbreak = '󱞪   '
 
 if executable('rg')
   set grepformat=%f:%l:%c:%m
@@ -119,30 +120,28 @@ let g:maplocalleader = ' '
 
 noremap n nzz
 noremap N Nzz
-noremap <C-@> <C-]>
+noremap Y y$
 
-cnoremap <C-a> <Home>
-cnoremap <C-b> <Left>
-cnoremap <C-d> <Del>
-cnoremap <C-e> <End>
-cnoremap <C-f> <Right>
-cnoremap <C-n> <Down>
-cnoremap <C-p> <Up>
+noremap! <C-a> <Home>
+noremap! <C-e> <End>
+noremap! <C-d> <Del>
+noremap! <C-b> <Left>
+noremap! <C-f> <Right>
+map! <C-n> <Down>
+map! <C-p> <Up>
 
-inoremap <C-a> <Home>
-inoremap <C-b> <Left>
-inoremap <C-d> <Del>
-inoremap <C-e> <End>
-inoremap <C-f> <Right>
-imap <C-n> <Down>
-imap <C-p> <Up>
+noremap! ¥ \
+noremap! <M-¥> ¥
+noremap! <M-\> ¥
 
 nnoremap <C-w>- <C-w>s
 nnoremap <C-w>\| <C-w>v
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
 nnoremap <silent> <S-Tab> :<C-u>tabprevious<CR>
 nnoremap <silent> <Tab> :<C-u>tabnext<CR>
-nnoremap Y y$
+nnoremap <silent> <M-.> :<C-u>if tabpagenr() != tabpagenr('$') \| tabmove +\| endif<CR>
+nnoremap <silent> <M-,> :<C-u>if tabpagenr() != 1 \| tabmove -\| endif<CR>
+
 nnoremap [q :<C-u>cprevious<CR>
 nnoremap ]q :<C-u>cnext<CR>
 
@@ -288,6 +287,7 @@ function! s:LoadPlugins(timer)
           \ 'tagbar',
           \ 'term',
           \ 'undotree',
+          \ 'whitespace',
           \ ]
     let g:airline_experimental = 1
     let g:airline_powerline_fonts = 1
@@ -309,11 +309,11 @@ function! s:LoadPlugins(timer)
     let g:airline_symbols.spell = '󰓆 Spell'
     let g:airline_symbols.crypt = '󰌾 Crypt'
     let g:airline_symbols.dirty = ' 󱐋'
-    let g:airline_symbols.notexists = '󱥸'
-    let g:airline_symbols.whitespace = '󱓼'
+    let g:airline_symbols.notexists = ' 󱥸'
+    let g:airline_symbols.whitespace = '󱗽󱞥'
 
-    let g:airline#extensions#ale#error_symbol = ' Error:'
-    let g:airline#extensions#ale#warning_symbol = ' Warning:'
+    let g:airline#extensions#ale#error_symbol = '󰅖 Error:'
+    let g:airline#extensions#ale#warning_symbol = '󰈅 Warning:'
     let g:airline#extensions#coc#error_symbol = g:airline#extensions#ale#error_symbol
     let g:airline#extensions#coc#warning_symbol = g:airline#extensions#ale#warning_symbol
     let g:airline#extensions#obsession#indicator_text = ' Session'
@@ -380,10 +380,6 @@ function! s:LoadPlugins(timer)
         echomsg 'Please wait for a while to complete the installation.'
 
         PlugInstall --sync
-
-        if exists(':CocInstall')
-          CocInstall -sync
-        endif
 
         break
       endif
@@ -491,6 +487,8 @@ function! s:LoadPlugins(timer)
   if exists(':Files')
     if executable('fd')
       let $FZF_DEFAULT_COMMAND = 'fd --hidden --follow --type f'
+    elseif executable('rg')
+      let $FZF_DEFAULT_COMMAND = 'rg --hidden --follow --files'
     endif
 
     nnoremap <silent> <Leader>f :<C-u>Files<CR>
