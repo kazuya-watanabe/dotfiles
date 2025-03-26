@@ -217,7 +217,7 @@ function! s:LoadPlugins(timer)
     if executable('node')
       call extend(g:coc_global_extensions, [
             \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
-            \ 'coc-angular', 'coc-prisma', '@yaegassy/coc-volar', '@yaegassy/coc-tailwindcss3',
+            \ 'coc-prisma', '@yaegassy/coc-volar',
             \ ])
     endif
 
@@ -428,6 +428,7 @@ function! s:LoadPlugins(timer)
     nmap <leader>ac  <Plug>(coc-codeaction-cursor)
     nmap <leader>as  <Plug>(coc-codeaction-source)
     nmap <leader>qf  <Plug>(coc-fix-current)
+    nmap <C-a> <Plug>(coc-codeaction)
 
     nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
     xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)

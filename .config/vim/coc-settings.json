@@ -1,4 +1,11 @@
 {
+  "coc.preferences.formatOnSave": true,
+  "codeLens.enable": true,
+  "colors.enable": true,
+  "eslint.autoFixOnSave": true,
+  "intelephense.environment.documentRoot": "**/public/",
+  "intelephense.environment.phpVersion": "8.3.0",
+  "snippets.snipmate.enable": false,
   "suggest.completionItemKindLabels": {
     "text": "󰬁 Text",
     "method": "󰆧 Method",
@@ -26,5 +33,7 @@
     "operator": "󰦒 Operator",
     "typeParameter": "󰦂 TypeParameter",
     "default": "󱓼 ?"
-  }
+  },
+  "tsserver.locale": "ja",
+  "volar.tsLocale": "ja"
 }
