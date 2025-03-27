@@ -3,9 +3,11 @@
   "codeLens.enable": true,
   "colors.enable": true,
   "eslint.autoFixOnSave": true,
+  "extensions.updateCheck": "weekly",
   "intelephense.environment.documentRoot": "**/public/",
   "intelephense.environment.phpVersion": "8.3.0",
-  "snippets.snipmate.enable": false,
+  "snippets.snipmate.enable": true,
+  "snippets.ultisnips.enable": false,
   "suggest.completionItemKindLabels": {
     "text": "󰬁 Text",
     "method": "󰆧 Method",
