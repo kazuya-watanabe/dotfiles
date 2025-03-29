@@ -248,6 +248,11 @@ function! s:LoadPlugins(timer)
       call add(g:coc_global_extensions, 'coc-sql')
     endif
 
+    " dadbod
+    let g:db_ui_winwidth = 30
+    let g:db_ui_win_position = 'right'
+    let g:db_ui_use_nerd_fonts = 1
+
     " fzf
     let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
     let g:fzf_layout = { 'down': '40%' }
@@ -339,10 +344,11 @@ function! s:LoadPlugins(timer)
     Plug 'easymotion/vim-easymotion'
     Plug 'github/copilot.vim'
     Plug 'jeetsukumaran/vim-buffergator'
-    Plug 'joshdick/onedark.vim'
     Plug 'mbbill/undotree'
     Plug 'preservim/nerdtree'
+    Plug 'sainnhe/sonokai'
     Plug 'sheerun/vim-polyglot'
+    Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
     Plug 'tpope/vim-fugitive'
     Plug 'tpope/vim-obsession'
     Plug 'tpope/vim-repeat'
@@ -423,7 +429,7 @@ function! s:LoadPlugins(timer)
     nmap <leader>f  <Plug>(coc-format-selected)
 
     xmap <leader>a  <Plug>(coc-codeaction-selected)
-    nmap <leader>a  <Plug>(coc-codeaction)
+    nmap <leader>a  <Plug>(coc-codeaction-selected)
 
     nmap <leader>ac  <Plug>(coc-codeaction-cursor)
     nmap <leader>as  <Plug>(coc-codeaction-source)
@@ -457,13 +463,13 @@ function! s:LoadPlugins(timer)
     nmap <silent> <C-s> <Plug>(coc-range-select)
     xmap <silent> <C-s> <Plug>(coc-range-select)
 
-    nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-    nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-    nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-    nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-    nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-    nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-    nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+    nnoremap <silent><nowait> <LocalLeader>g  :<C-u>CocList diagnostics<cr>
+    nnoremap <silent><nowait> <LocalLeader>e  :<C-u>CocList extensions<cr>
+    nnoremap <silent><nowait> <LocalLeader>r  :<C-u>CocList commands<cr>
+    "nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+    "nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+    "nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+    "nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 
     let g:coc_snippet_next = '<C-j>'
     let g:coc_snippet_prev = '<C-k>'
@@ -484,6 +490,25 @@ function! s:LoadPlugins(timer)
     augroup end
   endif
 
+  " dadbod
+  if exists(':DBUIToggle')
+    function! s:DBUIToggle()
+      try
+        TagbarClose
+      catch
+      endtry
+
+      try
+        UndotreeHide
+      catch
+      endtry
+
+      DBUIToggle
+    endfunction
+
+    nnoremap <silent> <LocalLeader>d :<C-u>call <SID>DBUIToggle()<CR>
+  endif
+
   " fzf
   if exists(':Files')
     if executable('fd')
@@ -492,11 +517,11 @@ function! s:LoadPlugins(timer)
       let $FZF_DEFAULT_COMMAND = 'rg --hidden --follow --files'
     endif
 
-    nnoremap <silent> <Leader>f :<C-u>Files<CR>
-    nnoremap <silent> <Leader>h :<C-u>History<CR>
-    nnoremap <silent> <Leader>c :<C-u>History:<CR>
-    nnoremap <silent> <Leader>s :<C-u>History/<CR>
-    nnoremap <silent> <Leader>w :<C-u>Windows<CR>
+    nnoremap <silent> <LocalLeader>f :<C-u>Files<CR>
+    nnoremap <silent> <LocalLeader>h :<C-u>History<CR>
+    nnoremap <silent> <LocalLeader>c :<C-u>History:<CR>
+    nnoremap <silent> <LocalLeader>s :<C-u>History/<CR>
+    nnoremap <silent> <LocalLeader>w :<C-u>Windows<CR>
   endif
 
   " nerdtree
@@ -510,12 +535,17 @@ function! s:LoadPlugins(timer)
       NERDTreeToggleVCS
     endfunction
 
-    nnoremap <silent> <Leader>e :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+    nnoremap <silent> <LocalLeader>n :<C-u>call <SID>NERDTreeToggleVCS()<CR>
   endif
 
   " tagbar
   if exists(':TagbarToggle')
     function! s:TagbarToggle()
+      try
+        DBUIClose
+      catch
+      endtry
+
       try
         UndotreeHide
       catch
@@ -524,12 +554,17 @@ function! s:LoadPlugins(timer)
       TagbarToggle
     endfunction
 
-    nnoremap <silent> <Leader>t :<C-u>call <SID>TagbarToggle()<CR>
+    nnoremap <silent> <LocalLeader>t :<C-u>call <SID>TagbarToggle()<CR>
   endif
 
   " undotree
   if exists(':UndotreeToggle')
     function! s:UndotreeToggle()
+      try
+        DBUIClose
+      catch
+      endtry
+
       try
         TagbarClose
       catch
@@ -538,7 +573,7 @@ function! s:LoadPlugins(timer)
       UndotreeToggle
     endfunction
 
-    nnoremap <silent> <Leader>u :<C-u>call <SID>UndotreeToggle()<CR>
+    nnoremap <silent> <LocalLeader>u :<C-u>call <SID>UndotreeToggle()<CR>
   endif
 
   " vim-buffergator
@@ -552,7 +587,7 @@ function! s:LoadPlugins(timer)
       BuffergatorToggle
     endfunction
 
-    nnoremap <silent> <Leader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+    nnoremap <silent> <LocalLeader>b :<C-u>call <SID>BuffergatorToggle()<CR>
   endif
 
   " vim-chatgpt
@@ -571,9 +606,11 @@ function! s:LoadPlugins(timer)
     vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
   endif
 
-  " onedark.vim
-  let s:colors_name = 'onedark'
+  " sonokai
+  let s:colors_name = 'sonokai'
   let g:airline_theme = s:colors_name
+  let g:sonokai_diagnostic_text_highlight = 1
+  let g:sonokai_diagnostic_line_highlight = 1
 
   if !empty(getcompletion(s:colors_name, 'color'))
     set background=dark
