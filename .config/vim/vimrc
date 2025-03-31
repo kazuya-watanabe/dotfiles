@@ -678,17 +678,18 @@ EOF
       execute a:firstline .. ',' .. a:lastline .. "call vim_ai#AIChatRun(a:range, l:config, a:prompt)"
     endfunction
 
-    command! -range AIComment <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate comments')
-    command! -range AICommit <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate commit message')
-    command! -range AIExplain <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'explain')
-    command! -range AIFindBug <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'find bugs and code smells')
-    command! -range AIUnitTest <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate unit tests')
+    command! -range AIComment <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate comments. you must answer in japanese.')
+    command! -range AICommit <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate commit message. you must answer in japanese.')
+    command! -range AIExplain <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'explain. you must answer in japanese.')
+    command! -range AIFindBug <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'find bugs and code smells. you must answer in japanese.')
+    command! -range AIUnitTest <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate unit tests. you must answer in japanese.')
+    command! -range AIReview <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'review. you must answer in japanese.')
 
-    command! -range AISQL <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a database administrator', 'optimize SQL query')
-    command! -range AISimplify <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a code assistant', 'simplify')
-    command! -range AISpell <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a proofreading expert', 'fix grammar and spelling errors')
-    command! -range AITransEn <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to English')
-    command! -range AITransJa <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to Japanese')
+    command! -range AISQL <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a database administrator', 'optimize sql query.')
+    command! -range AISimplify <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a code assistant', 'simplify.')
+    command! -range AISpell <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a proofreading expert', 'fix grammar and spelling errors.')
+    command! -range AITransEn <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to english.')
+    command! -range AITransJa <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to japanese.')
   endif
 
 endfunction
