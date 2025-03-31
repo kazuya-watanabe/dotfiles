@@ -12,13 +12,11 @@ let g:loaded_vimballPlugin = 1
 
 set autoindent
 set autoread
-set backspace=indent,eol,start
-set nobackup
 set backupdir=$MYVIMDIR/backup
 set belloff=all
 set clipboard^=unnamed
 set cmdheight=2
-set completeopt=menuone,longest,preview
+set completeopt=fuzzy,menuone,noselect,popup
 set diffopt^=vertical,algorithm:histogram
 set directory=$MYVIMDIR/swap
 set display=lastline
@@ -31,8 +29,8 @@ set history=10000
 set hlsearch
 set ignorecase
 set incsearch
-set nolangremap
 set langmenu=none
+set nolangremap
 set laststatus=2
 set lazyredraw
 set list
@@ -46,6 +44,7 @@ set sessionoptions-=help
 set shiftwidth=2
 set shortmess+=acI
 set showcmd
+set showfulltag
 set showmatch
 set sidescrolloff=5
 set smartcase
@@ -53,6 +52,7 @@ set smartindent
 set smarttab
 set softtabstop=-1
 set spelllang=en,cjk
+set spelloptions=camel
 set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
@@ -64,14 +64,14 @@ set undodir=$MYVIMDIR/undo
 set undofile
 set updatetime=300
 set viewdir=$MYVIMDIR/view
-set viminfo+=n$MYVIMDIR/viminfo
+set viminfofile=$MYVIMDIR/viminfo
 set virtualedit=block
 set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
 set wildoptions=fuzzy,pum,tagfile
-set wrap
+set nowrap
 set nowritebackup
 
 let &showbreak = '󱞪   '
@@ -179,7 +179,7 @@ function! s:LoadPlugins(timer)
     " coc.nvim
     let g:coc_data_home = '~/.local/vim/coc'
     let g:coc_global_extensions = [
-          \ 'coc-highlight', 'coc-snippets',
+          \ 'coc-snippets',
           \ 'coc-markdown-preview-enhanced', 'coc-webview',
           \ 'coc-vimlsp',
           \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
@@ -278,6 +278,51 @@ function! s:LoadPlugins(timer)
     let g:undotree_SplitWidth = 30
     let g:undotree_WindowLayout = 3
 
+    " vim-ai
+    let g:vim_ai_token_file_path = expand('~/.config/openai.token')
+    let s:vim_ai_default_prompt =<< trim EOF
+You are a general assistant.
+Answer shortly, consisely and only what you are asked.
+Do not provide any explanantion or comments if not requested.
+If you answer in a code, do not wrap it in markdown code block.
+You must answer in Japanese.
+EOF
+    let g:vim_ai_complete = {
+          \   'options': {
+          \     'model': 'gpt-4o-mini',
+          \     'temperature': 0.1,
+          \     'stream': 1,
+          \     'selection_boundary': '#####',
+          \     'initial_prompt': s:vim_ai_default_prompt,
+          \   },
+          \   'ui': {
+          \     'paste_mode': 0,
+          \   },
+          \ }
+    let g:vim_ai_edit = {
+          \   'options': {
+          \     'model': 'gpt-4o-mini',
+          \     'temperature': 0.1,
+          \     'stream': 1,
+          \     'selection_boundary': '#####',
+          \     'initial_prompt': s:vim_ai_default_prompt,
+          \   },
+          \   'ui': {
+          \     'paste_mode': 0,
+          \   },
+          \ }
+    let g:vim_ai_chat = {
+          \   'options': {
+          \     'model': 'gpt-4o-mini',
+          \     'temperature': 1.0,
+          \     'stream': 1,
+          \     'initial_prompt': s:vim_ai_default_prompt,
+          \   },
+          \   'ui': {
+          \     'paste_mode': 0,
+          \   },
+          \ }
+
     " vim-airline
     let g:airline_extensions = [
           \ 'ale',
@@ -373,7 +418,7 @@ function! s:LoadPlugins(timer)
     endif
 
     if has('python3')
-      Plug 'CoderCookE/vim-chatgpt'
+      Plug 'madox2/vim-ai'
     endif
 
     Plug 'vim-airline/vim-airline'
@@ -485,7 +530,7 @@ function! s:LoadPlugins(timer)
     command! -nargs=0 OpenPreview CocCommand markdown-preview-enhanced.openPreview
 
     augroup vimrc
-      autocmd CursorHold * silent call CocActionAsync('highlight')
+      "autocmd CursorHold * silent call CocActionAsync('highlight')
       autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     augroup end
   endif
@@ -536,6 +581,18 @@ function! s:LoadPlugins(timer)
     endfunction
 
     nnoremap <silent> <LocalLeader>n :<C-u>call <SID>NERDTreeToggleVCS()<CR>
+  endif
+
+  " sonokai
+  let s:colors_name = 'sonokai'
+  let g:airline_theme = s:colors_name
+  let g:sonokai_diagnostic_text_highlight = 1
+  let g:sonokai_diagnostic_line_highlight = 1
+
+  if !empty(getcompletion(s:colors_name, 'color'))
+    set background=dark
+
+    execute 'colorscheme ' .. s:colors_name
   endif
 
   " tagbar
@@ -590,33 +647,50 @@ function! s:LoadPlugins(timer)
     nnoremap <silent> <LocalLeader>b :<C-u>call <SID>BuffergatorToggle()<CR>
   endif
 
-  " vim-chatgpt
-  let s:openai_token_file = expand('~/.config/openai.token')
+  " vim-ai
+  if exists(':AIChat')
+    augroup vimrc
+      autocmd FileType aichat xnoremap <leader>g :AIChat<CR>
+      autocmd FileType aichat nnoremap <leader>g :AIChat<CR>
+    augroup end
 
-  if filereadable(s:openai_token_file) && exists(':Ask')
-    let g:openai_api_key = readfile(s:openai_token_file, '', 1)[0]
-    let g:chat_gpt_max_tokens = 2000
-    let g:chat_gpt_model = 'gpt-4o-mini'
-    let g:chat_gpt_session_mode = 1
-    let g:chat_gpt_temperature = 0.4
-    let g:chat_gpt_lang = 'Japanese'
-    let g:chat_gpt_split_direction = 'horizontal'
-    let g:split_ratio = 4
+    function! s:AIRangeEdit(range, initial_prompt, prompt) range
+      let l:config = {
+            \   'options': {
+            \     'model': 'gpt-4o-mini',
+            \     'initial_prompt': a:initial_prompt,
+            \     'temperature': 0.1,
+            \   },
+            \ }
 
-    vmap <silent> <Leader>0 <Plug>(chatgpt-menu)
+      execute a:firstline .. ',' .. a:lastline .. "call vim_ai#AIEditRun(a:range, l:config, a:prompt)"
+    endfunction
+
+    function! s:AIRangeChat(range, initial_prompt, prompt) range
+      let l:config = {
+            \   'options': {
+            \     'model': 'gpt-4o-mini',
+            \     'initial_prompt': a:initial_prompt,
+            \     'temperature': 0.1,
+            \   },
+            \ }
+
+      execute a:firstline .. ',' .. a:lastline .. "call vim_ai#AIChatRun(a:range, l:config, a:prompt)"
+    endfunction
+
+    command! -range AIComment <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate comments')
+    command! -range AICommit <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate commit message')
+    command! -range AIExplain <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'explain')
+    command! -range AIFindBug <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'find bugs and code smells')
+    command! -range AIUnitTest <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate unit tests')
+
+    command! -range AISQL <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a database administrator', 'optimize SQL query')
+    command! -range AISimplify <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a code assistant', 'simplify')
+    command! -range AISpell <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a proofreading expert', 'fix grammar and spelling errors')
+    command! -range AITransEn <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to English')
+    command! -range AITransJa <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to Japanese')
   endif
 
-  " sonokai
-  let s:colors_name = 'sonokai'
-  let g:airline_theme = s:colors_name
-  let g:sonokai_diagnostic_text_highlight = 1
-  let g:sonokai_diagnostic_line_highlight = 1
-
-  if !empty(getcompletion(s:colors_name, 'color'))
-    set background=dark
-
-    execute 'colorscheme ' .. s:colors_name
-  endif
 endfunction
 
 if has('gui_running')
