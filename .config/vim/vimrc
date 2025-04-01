@@ -280,12 +280,13 @@ function! s:LoadPlugins(timer)
 
     " vim-ai
     let g:vim_ai_token_file_path = expand('~/.config/openai.token')
+    let g:vim_ai_chat_markdown = 1
     let s:vim_ai_default_prompt =<< trim EOF
-You are a general assistant.
-Answer shortly, consisely and only what you are asked.
-Do not provide any explanantion or comments if not requested.
-If you answer in a code, do not wrap it in markdown code block.
-You must answer in Japanese.
+you are a general assistant.
+answer shortly, consisely and only what you are asked.
+do not provide any explanantion or comments if not requested.
+if you answer in a code, do not wrap it in markdown code block.
+you must answer in japanese.
 EOF
     let g:vim_ai_complete = {
           \   'options': {
@@ -294,9 +295,6 @@ EOF
           \     'stream': 1,
           \     'selection_boundary': '#####',
           \     'initial_prompt': s:vim_ai_default_prompt,
-          \   },
-          \   'ui': {
-          \     'paste_mode': 0,
           \   },
           \ }
     let g:vim_ai_edit = {
@@ -307,9 +305,6 @@ EOF
           \     'selection_boundary': '#####',
           \     'initial_prompt': s:vim_ai_default_prompt,
           \   },
-          \   'ui': {
-          \     'paste_mode': 0,
-          \   },
           \ }
     let g:vim_ai_chat = {
           \   'options': {
@@ -317,9 +312,6 @@ EOF
           \     'temperature': 1.0,
           \     'stream': 1,
           \     'initial_prompt': s:vim_ai_default_prompt,
-          \   },
-          \   'ui': {
-          \     'paste_mode': 0,
           \   },
           \ }
 
@@ -650,46 +642,26 @@ EOF
   " vim-ai
   if exists(':AIChat')
     augroup vimrc
+      autocmd FileType aichat autocmd! nohlsearch
       autocmd FileType aichat xnoremap <leader>g :AIChat<CR>
       autocmd FileType aichat nnoremap <leader>g :AIChat<CR>
+      autocmd FileType aichat setlocal wrap
     augroup end
 
-    function! s:AIRangeEdit(range, initial_prompt, prompt) range
-      let l:config = {
-            \   'options': {
-            \     'model': 'gpt-4o-mini',
-            \     'initial_prompt': a:initial_prompt,
-            \     'temperature': 0.1,
-            \   },
-            \ }
+    command! -range -nargs=* AIComment <line1>,<line2>AIChat you are a code assistant. generate block comments for the following code. you must answer in japanese. <args>
+    command! -range -nargs=* AIExplain <line1>,<line2>AIChat you are a code assistant. explain the folowing code. you must answer in japanese. <args>
+    command! -range -nargs=* AICommit <line1>,<line2>AIChat you are a code assistant. generate commit message for the following changes/code. you must answer in japanese. <args>
+    command! -range -nargs=* AIFindBug <line1>,<line2>AIChat you are a code assistant. find bugs and code smells. you must answer in japanese. <args>
+    command! -range -nargs=* AIRefactor <line1>,<line2>AIChat you are a code assistant, refactor the folllowing code. <args>
+    command! -range -nargs=* AIReview <line1>,<line2>AIChat you are a code assistant. review the following code. you must answer in japanese. <args>
+    command! -range -nargs=* AIUnitTest <line1>,<line2>AIChat you are a code assistant. generate unit tests for the following code. <args>
+    command! -range -nargs=* AISQL <line1>,<line2>AIChat you are a database administrator. optimize the following sql query. <args>
+    command! -range -nargs=* AISummarize <line1>,<line2>AIChat you are a proofreading expert, summarize following document in japanese. <args>
 
-      execute a:firstline .. ',' .. a:lastline .. "call vim_ai#AIEditRun(a:range, l:config, a:prompt)"
-    endfunction
-
-    function! s:AIRangeChat(range, initial_prompt, prompt) range
-      let l:config = {
-            \   'options': {
-            \     'model': 'gpt-4o-mini',
-            \     'initial_prompt': a:initial_prompt,
-            \     'temperature': 0.1,
-            \   },
-            \ }
-
-      execute a:firstline .. ',' .. a:lastline .. "call vim_ai#AIChatRun(a:range, l:config, a:prompt)"
-    endfunction
-
-    command! -range AIComment <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate comments. you must answer in japanese.')
-    command! -range AICommit <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate commit message. you must answer in japanese.')
-    command! -range AIExplain <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'explain. you must answer in japanese.')
-    command! -range AIFindBug <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'find bugs and code smells. you must answer in japanese.')
-    command! -range AIUnitTest <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'generate unit tests. you must answer in japanese.')
-    command! -range AIReview <line1>,<line2>call s:AIRangeChat(<range>, 'you are a code assistant', 'review. you must answer in japanese.')
-
-    command! -range AISQL <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a database administrator', 'optimize sql query.')
-    command! -range AISimplify <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a code assistant', 'simplify.')
-    command! -range AISpell <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a proofreading expert', 'fix grammar and spelling errors.')
-    command! -range AITransEn <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to english.')
-    command! -range AITransJa <line1>,<line2>call s:AIRangeEdit(<range>, 'you are a translator', 'translate to japanese.')
+    command! -range -nargs=* AISimplify <line1>,<line2>AIEdit you are a proofreading expert, simplify the following document to make it easier to understand, while keeping the original meaning. <args>
+    command! -range -nargs=* AISpell <line1>,<line2>AIEdit you are a proofreading expert. fix grammar and spelling errors. <args>
+    command! -range -nargs=* AITransEn <line1>,<line2>AIEdit you are a translator. translate to english. <args>
+    command! -range -nargs=* AITransJa <line1>,<line2>AIEdit you are a translator. translate to japanese. <args>
   endif
 
 endfunction
