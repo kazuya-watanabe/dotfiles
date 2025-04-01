@@ -155,7 +155,6 @@ function! s:LoadPlugins(timer)
   packadd comment
   packadd! editorconfig
   packadd! matchit
-  packadd nohlsearch
 
   let l:vimplug = expand($MYVIMDIR .. '/autoload/plug.vim')
 
@@ -642,35 +641,31 @@ EOF
   " vim-ai
   if exists(':AIChat')
     augroup vimrc
-      autocmd FileType aichat autocmd! nohlsearch
-      autocmd FileType aichat xnoremap <leader>g :AIChat<CR>
-      autocmd FileType aichat nnoremap <leader>g :AIChat<CR>
-      autocmd FileType aichat setlocal wrap
+      autocmd FileType aichat execute 'xnoremap <leader>g :AIChat<CR> | nnoremap <leader>g :AIChat<CR> | inoremap <C-Enter> <Esc>:AIChat<CR> | setlocal wrap'
     augroup end
 
     " code assist
-    command! -range -nargs=* AIComment <line1>,<line2>AIChat you are a code assistant. generate block comments for the following code. you must answer in japanese. <args>
-    command! -range -nargs=* AICommit <line1>,<line2>AIChat you are a code assistant. generate commit message for the following changes/code. you must answer in japanese. <args>
-    command! -range -nargs=* AIExplain <line1>,<line2>AIChat you are a code assistant. explain the folowing code. you must answer in japanese. <args>
-    command! -range -nargs=* AIFindBug <line1>,<line2>AIChat you are a code assistant. find bugs and code smells. you must answer in japanese. <args>
-    command! -range -nargs=* AIRefactor <line1>,<line2>AIChat you are a code assistant, refactor the folllowing code. <args>
-    command! -range -nargs=* AIReview <line1>,<line2>AIChat you are a code assistant. review the following code. you must answer in japanese. <args>
-    command! -range -nargs=* AIUnitTest <line1>,<line2>AIChat you are a code assistant. generate unit tests for the following code. <args>
+    command! -range -nargs=* AIComment <line1>,<line2>AIChat "you are a code assistant. generate block comments for the following code. you must answer in japanese. <args>"
+    command! -range -nargs=* AICommit <line1>,<line2>AIChat "you are a code assistant. generate commit message for the following changes/code. you must answer in japanese. <args>"
+    command! -range -nargs=* AIExplain <line1>,<line2>AIChat "you are a code assistant. explain the folowing code. you must answer in japanese. <args>"
+    command! -range -nargs=* AIFindBug <line1>,<line2>AIChat "you are a code assistant. find bugs and code smells. you must answer in japanese. <args>"
+    command! -range -nargs=* AIRefactor <line1>,<line2>AIChat "you are a code assistant, refactor the folllowing code. <args>"
+    command! -range -nargs=* AIReview <line1>,<line2>AIChat "you are a code assistant. review the following code. you must answer in japanese. <args>"
+    command! -range -nargs=* AIUnitTest <line1>,<line2>AIChat "you are a code assistant. generate unit tests for the following code. <args>"
 
     " sql assist
-    command! -range -nargs=* AISQL <line1>,<line2>AIChat you are a database administrator. optimize the following sql query. <args>
-    command! -range -nargs=* AIDBExplain <line1>,<line2>AIChat you are a database administrator. analyze the following result of execution plan. <args>
+    command! -range -nargs=* AISQL <line1>,<line2>AIChat "you are a database administrator. optimize the following sql query. <args>"
+    command! -range -nargs=* AIDBExplain <line1>,<line2>AIChat "you are a database administrator. analyze the following result of execution plan. <args>"
 
     " text assist
-    command! -range -nargs=* AISummarize <line1>,<line2>AIChat you are a proofreading expert, summarize following document in japanese. <args>
-    command! -range -nargs=* AISimplify <line1>,<line2>AIEdit you are a proofreading expert, simplify the following document to make it easier to understand, while keeping the original meaning. <args>
-    command! -range -nargs=* AISpell <line1>,<line2>AIEdit you are a proofreading expert. fix grammar and spelling errors. <args>
+    command! -range -nargs=* AISummarize <line1>,<line2>AIChat "you are a proofreading expert, summarize following document in japanese. <args>"
+    command! -range -nargs=* AISimplify <line1>,<line2>AIChat "you are a proofreading expert, simplify the following document to make it easier to understand, while keeping the original meaning. <args>"
+    command! -range -nargs=* AISpell <line1>,<line2>AIChat "you are a proofreading expert. fix grammar and spelling errors. <args>"
 
     " translation
-    command! -range -nargs=* AITransEn <line1>,<line2>AIEdit you are a translator. translate to english. <args>
-    command! -range -nargs=* AITransJa <line1>,<line2>AIEdit you are a translator. translate to japanese. <args>
+    command! -range -nargs=* AITransEn <line1>,<line2>AIChat "you are a translator. translate to english. <args>"
+    command! -range -nargs=* AITransJa <line1>,<line2>AIChat "you are a translator. translate to japanese. <args>"
   endif
-
 endfunction
 
 if has('gui_running')
