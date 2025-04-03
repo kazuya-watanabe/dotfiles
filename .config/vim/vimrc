@@ -104,10 +104,9 @@ augroup vimrc
   autocmd!
   autocmd BufNewFile,BufRead *.ahk,*.bat,*.cmd,*.ps1,*.reg,*.vb,*.vbs setlocal fileformat=dos fileencoding=cp932 completeslash=backslash
   autocmd BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
-  autocmd FileType dbout,fugitive,help,qf nnoremap <silent> <buffer> q :<C-u>quit<CR>
+  autocmd FileType dbout,fugitive,help,qf nnoremap <silent><buffer> q :<C-u>quit<CR>
   autocmd FileType html,markdown,txt setlocal spell
-  autocmd FileType aichat noremap <silent> <buffer> <Leader>i :AIChat<CR>
-  autocmd FileType aichat inoremap <silent> <buffer> <C-i> <Esc>:<C-u>AIChat<CR>
+  autocmd FileType aichat execute 'noremap <silent><buffer> <Leader>i :AIChat<CR> | setlocal wrap'
 augroup END
 
 command! -nargs=* Grep grep <args> | cwindow
@@ -290,26 +289,21 @@ EOF
     let g:vim_ai_complete = {
           \   'options': {
           \     'model': 'gpt-4o-mini',
-          \     'temperature': 0.1,
-          \     'stream': 1,
-          \     'selection_boundary': '#####',
+          \     'selection_boundary': '```',
           \     'initial_prompt': s:vim_ai_default_prompt,
           \   },
           \ }
     let g:vim_ai_edit = {
           \   'options': {
           \     'model': 'gpt-4o-mini',
-          \     'temperature': 0.1,
-          \     'stream': 1,
-          \     'selection_boundary': '#####',
+          \     'selection_boundary': '```',
           \     'initial_prompt': s:vim_ai_default_prompt,
           \   },
           \ }
     let g:vim_ai_chat = {
           \   'options': {
           \     'model': 'gpt-4o-mini',
-          \     'temperature': 1.0,
-          \     'stream': 1,
+          \     'selection_boundary': '```',
           \     'initial_prompt': s:vim_ai_default_prompt,
           \   },
           \ }
@@ -381,7 +375,7 @@ EOF
     Plug 'github/copilot.vim'
     Plug 'jeetsukumaran/vim-buffergator'
     Plug 'mbbill/undotree'
-    Plug 'preservim/nerdtree' | Plug 'jistr/vim-nerdtree-tabs'
+    Plug 'preservim/nerdtree'
     Plug 'sainnhe/sonokai'
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
@@ -527,8 +521,8 @@ EOF
   endif
 
   " dadbod
-  if exists(':DBUIToggle')
-    function! s:DBUIToggle()
+  if exists(':DBUI')
+    function! s:DBUI()
       try
         TagbarClose
       catch
@@ -539,10 +533,15 @@ EOF
       catch
       endtry
 
-      DBUIToggle
+      try
+        DBUIClose
+      catch
+      finally
+        DBUI
+      endtry
     endfunction
 
-    nnoremap <silent> <LocalLeader>d :<C-u>call <SID>DBUIToggle()<CR>
+    nnoremap <silent> <LocalLeader>d :<C-u>call <SID>DBUI()<CR>
   endif
 
   " fzf
@@ -561,17 +560,22 @@ EOF
   endif
 
   " nerdtree
-  if exists(':NERDTreeTabsToggle')
-    function! s:NERDTreeTabsToggle()
+  if exists(':NERDTree')
+    function! s:NERDTree()
       try
         BuffergatorClose
       catch
       endtry
 
-      NERDTreeTabsToggle
+      try
+        NERDTreeClose
+      catch
+      finally
+        NERDTree
+      endtry
     endfunction
 
-    nnoremap <silent> <LocalLeader>n :<C-u>call <SID>NERDTreeTabsToggle()<CR>
+    nnoremap <silent> <LocalLeader>n :<C-u>call <SID>NERDTree()<CR>
   endif
 
   " sonokai
@@ -587,8 +591,8 @@ EOF
   endif
 
   " tagbar
-  if exists(':TagbarToggle')
-    function! s:TagbarToggle()
+  if exists(':TagbarOpen')
+    function! s:TagbarOpen()
       try
         DBUIClose
       catch
@@ -599,15 +603,20 @@ EOF
       catch
       endtry
 
-      TagbarToggle
+      try
+        TagbarClose
+      catch
+      finally
+        TagbarOpen
+      endtry
     endfunction
 
-    nnoremap <silent> <LocalLeader>t :<C-u>call <SID>TagbarToggle()<CR>
+    nnoremap <silent> <LocalLeader>t :<C-u>call <SID>TagbarOpen()<CR>
   endif
 
   " undotree
-  if exists(':UndotreeToggle')
-    function! s:UndotreeToggle()
+  if exists(':UndotreeShow')
+    function! s:UndotreeShow()
       try
         DBUIClose
       catch
@@ -618,63 +627,73 @@ EOF
       catch
       endtry
 
-      UndotreeToggle
+      try
+        UndotreeHide
+      catch
+      finally
+        UndotreeShow
+      endtry
     endfunction
 
-    nnoremap <silent> <LocalLeader>u :<C-u>call <SID>UndotreeToggle()<CR>
+    nnoremap <silent> <LocalLeader>u :<C-u>call <SID>UndotreeShow()<CR>
   endif
 
   " vim-buffergator
-  if exists(':BuffergatorToggle')
-    function! s:BuffergatorToggle()
+  if exists(':BuffergatorOpen')
+    function! s:BuffergatorOpen()
       try
-        NERDTreeTabsClose
+        NERDTreeClose
       catch
       endtry
 
-      BuffergatorToggle
+      try
+        BuffergatorClose
+      catch
+      finally
+        BuffergatorOpen
+      endtry
     endfunction
 
-    nnoremap <silent> <LocalLeader>b :<C-u>call <SID>BuffergatorToggle()<CR>
+    nnoremap <silent> <LocalLeader>b :<C-u>call <SID>BuffergatorOpen()<CR>
   endif
 
   " vim-ai
   if exists(':AIChat')
     " code assist
     command! -range -nargs=* AIComment <line1>,<line2>AIChat
-          \ "you are a code assistant. generate block comments for the following code. you must answer in japanese. <args>"
+          \ 'you are a code assistant. generate block comments for the following code. you must answer in japanese. <args>'
     command! -range -nargs=* AICommit <line1>,<line2>AIChat
-          \ "you are a code assistant. generate commit message for the following changes/code. you must answer in japanese. <args>"
+          \ 'you are a code assistant. generate commit message for the following changes/code. you must answer in japanese. <args>'
     command! -range -nargs=* AIExplain <line1>,<line2>AIChat
-          \ "you are a code assistant. explain the folowing code. you must answer in japanese. <args>"
+          \ 'you are a code assistant. explain the folowing code. you must answer in japanese. <args>'
     command! -range -nargs=* AIFindBug <line1>,<line2>AIChat
-          \ "you are a code assistant. find bugs and code smells. you must answer in japanese. <args>"
+          \ 'you are a code assistant. find bugs and code smells. you must answer in japanese. <args>'
     command! -range -nargs=* AIRefactor <line1>,<line2>AIChat
-          \ "you are a code assistant, refactor the folllowing code. <args>"
+          \ 'you are a code assistant, refactor the folllowing code. <args>'
     command! -range -nargs=* AIReview <line1>,<line2>AIChat
-          \ "you are a code assistant. review the following code. you must answer in japanese. <args>"
+          \ 'you are a code assistant. review the following code. you must answer in japanese. <args>'
     command! -range -nargs=* AIUnitTest <line1>,<line2>AIChat
-          \ "you are a code assistant. generate unit tests for the following code. <args>"
+          \ 'you are a code assistant. generate unit tests for the following code. <args>'
 
-    " sql assist
+    " database assist
     command! -range -nargs=* AISQL <line1>,<line2>AIChat
-          \ "you are a database administrator. optimize the following sql query. <args>"
+          \ 'you are a database administrator. optimize the following sql query. <args>'
     command! -range -nargs=* AIDBExplain <line1>,<line2>AIChat
-          \ "you are a database administrator. analyze the following result of execution plan. <args>"
+          \ 'you are a database administrator. analyze the following result of execution plan. <args>'
 
     " text assist
     command! -range -nargs=* AISummarize <line1>,<line2>AIChat
-          \ "you are a proofreading expert, summarize following document in japanese. <args>"
+          \ 'you are a proofreading expert, summarize following document in japanese. <args>'
     command! -range -nargs=* AISimplify <line1>,<line2>AIChat
-          \ "you are a proofreading expert, simplify the following document to make it easier to understand, while keeping the original meaning. <args>"
+          \ 'you are a proofreading expert, simplify the following document to make it easier to understand, while keeping the original meaning. <args>'
     command! -range -nargs=* AISpell <line1>,<line2>AIChat
-          \ "you are a proofreading expert. fix grammar and spelling errors. <args>"
+          \ 'you are a proofreading expert. fix grammar and spelling errors. <args>'
 
     " translation
     command! -range -nargs=* AITransEn <line1>,<line2>AIChat
-          \ "you are a translator. translate to english. <args>"
+          \ 'you are a translator. translate to english. <args>'
     command! -range -nargs=* AITransJa <line1>,<line2>AIChat
-          \ "you are a translator. translate to japanese. <args>"
+          \ 'you are a translator. translate to japanese. <args>'
   endif
 endfunction
 
