@@ -16,7 +16,7 @@ set backupdir=$MYVIMDIR/backup
 set belloff=all
 set clipboard^=unnamed
 set cmdheight=2
-set completeopt=fuzzy,menuone,noselect,popup
+set completeopt=menuone,noselect,popup
 set diffopt^=vertical,algorithm:histogram
 set directory=$MYVIMDIR/swap
 set display=lastline
@@ -37,6 +37,7 @@ set list
 set listchars=tab:󰅂─,leadmultispace:\ │,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
 set nrformats-=octal
 set number
+set previewpopup=height:10,width:60
 set relativenumber
 set ruler
 set scrolloff=5
@@ -70,7 +71,7 @@ set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
-set wildoptions=fuzzy,pum,tagfile
+set wildoptions=pum,tagfile
 set nowrap
 set nowritebackup
 
@@ -255,8 +256,7 @@ function! s:LoadPlugins(timer)
 
     " fzf
     let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
-    let g:fzf_layout = { 'down': '40%' }
-    let g:fzf_preview_window = [ 'right,50%', 'Ctrl-/' ]
+    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
     " nerdtree
     let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
@@ -369,6 +369,12 @@ EOF
     let g:webdevicons_enable_flagship_statusline = 0
     let g:webdevicons_enable_denite = 0
 
+    if !exists('g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols')
+      let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols = {}
+    endif
+
+    let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['vue'] = '󰡄'
+
     Plug 'airblade/vim-gitgutter'
     Plug 'dhruvasagar/vim-table-mode'
     Plug 'easymotion/vim-easymotion'
@@ -383,7 +389,6 @@ EOF
     Plug 'tpope/vim-obsession'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
-    Plug 'vim-jp/vimdoc-ja'
 
     if executable('ctags')
       Plug 'preservim/tagbar'
@@ -533,12 +538,8 @@ EOF
       catch
       endtry
 
-      try
-        DBUIClose
-      catch
-      finally
-        DBUI
-      endtry
+      DBUIClose
+      DBUI
     endfunction
 
     nnoremap <silent> <LocalLeader>d :<C-u>call <SID>DBUI()<CR>
@@ -567,12 +568,8 @@ EOF
       catch
       endtry
 
-      try
-        NERDTreeClose
-      catch
-      finally
-        NERDTree
-      endtry
+      NERDTreeClose
+      NERDTree
     endfunction
 
     nnoremap <silent> <LocalLeader>n :<C-u>call <SID>NERDTree()<CR>
@@ -603,12 +600,8 @@ EOF
       catch
       endtry
 
-      try
-        TagbarClose
-      catch
-      finally
-        TagbarOpen
-      endtry
+      TagbarClose
+      TagbarOpen
     endfunction
 
     nnoremap <silent> <LocalLeader>t :<C-u>call <SID>TagbarOpen()<CR>
@@ -627,12 +620,8 @@ EOF
       catch
       endtry
 
-      try
-        UndotreeHide
-      catch
-      finally
-        UndotreeShow
-      endtry
+      UndotreeHide
+      UndotreeShow
     endfunction
 
     nnoremap <silent> <LocalLeader>u :<C-u>call <SID>UndotreeShow()<CR>
@@ -646,12 +635,8 @@ EOF
       catch
       endtry
 
-      try
-        BuffergatorClose
-      catch
-      finally
-        BuffergatorOpen
-      endtry
+      BuffergatorClose
+      BuffergatorOpen
     endfunction
 
     nnoremap <silent> <LocalLeader>b :<C-u>call <SID>BuffergatorOpen()<CR>
