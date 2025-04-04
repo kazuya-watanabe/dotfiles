@@ -1,4 +1,5 @@
 {
+  "coc.preferences.enableMessageDialog": true,
   "coc.preferences.formatOnSave": true,
   "codeLens.enable": true,
   "colors.enable": true,

@@ -136,8 +136,6 @@ noremap! ¥ \
 noremap! <M-¥> ¥
 noremap! <M-\> ¥
 
-nnoremap <C-w>- <C-w>s
-nnoremap <C-w>\| <C-w>v
 nnoremap <silent> <Esc><Esc> :<C-u>nohlsearch<CR>
 nnoremap <silent> <S-Tab> :<C-u>tabprevious<CR>
 nnoremap <silent> <Tab> :<C-u>tabnext<CR>
@@ -175,7 +173,10 @@ function! s:LoadPlugins(timer)
   if executable('git') && plug#begin('~/.local/vim/plugin')
     " ale
     let g:ale_completion_enabled = 1
-    let g:ale_linters = { 'markdown': [ 'textlint' ] }
+    let g:ale_linters = {
+          \ 'markdown': [ 'textlint' ],
+          \ 'text': [ 'textlint' ],
+          \ }
 
     " coc.nvim
     let g:coc_data_home = '~/.local/vim/coc'
@@ -185,6 +186,8 @@ function! s:LoadPlugins(timer)
           \ 'coc-vimlsp',
           \ 'coc-json', 'coc-toml', 'coc-xml', 'coc-yaml',
           \ 'coc-html', 'coc-css',
+          \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
+          \ 'coc-prisma', '@yaegassy/coc-volar',
           \ ]
 
     if executable('clangd')
@@ -213,13 +216,6 @@ function! s:LoadPlugins(timer)
 
     if executable('lua') || executable('luajit')
       call add(g:coc_global_extensions, 'coc-lua')
-    endif
-
-    if executable('node')
-      call extend(g:coc_global_extensions, [
-            \ 'coc-tsserver', 'coc-eslint', 'coc-prettier',
-            \ 'coc-prisma', '@yaegassy/coc-volar',
-            \ ])
     endif
 
     if executable('perl')
@@ -256,7 +252,7 @@ function! s:LoadPlugins(timer)
 
     " fzf
     let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
-    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+    let g:fzf_layout = { 'down': '40%' }
 
     " nerdtree
     let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
@@ -287,26 +283,23 @@ do not provide any explanantion or comments if not requested.
 you must answer in japanese.
 EOF
     let g:vim_ai_complete = {
-          \   'options': {
-          \     'model': 'gpt-4o-mini',
-          \     'selection_boundary': '```',
-          \     'initial_prompt': s:vim_ai_default_prompt,
-          \   },
-          \ }
+          \ 'options': {
+          \   'model': 'gpt-4o-mini',
+          \   'selection_boundary': '```',
+          \   'initial_prompt': s:vim_ai_default_prompt,
+          \ }}
     let g:vim_ai_edit = {
-          \   'options': {
-          \     'model': 'gpt-4o-mini',
-          \     'selection_boundary': '```',
-          \     'initial_prompt': s:vim_ai_default_prompt,
-          \   },
-          \ }
+          \ 'options': {
+          \   'model': 'gpt-4o-mini',
+          \   'selection_boundary': '```',
+          \   'initial_prompt': s:vim_ai_default_prompt,
+          \ }}
     let g:vim_ai_chat = {
-          \   'options': {
-          \     'model': 'gpt-4o-mini',
-          \     'selection_boundary': '```',
-          \     'initial_prompt': s:vim_ai_default_prompt,
-          \   },
-          \ }
+          \ 'options': {
+          \   'model': 'gpt-4o-mini',
+          \   'selection_boundary': '```',
+          \   'initial_prompt': s:vim_ai_default_prompt,
+          \ }}
 
     " vim-airline
     let g:airline_extensions = [
@@ -469,7 +462,6 @@ EOF
     nmap <leader>ac  <Plug>(coc-codeaction-cursor)
     nmap <leader>as  <Plug>(coc-codeaction-source)
     nmap <leader>qf  <Plug>(coc-fix-current)
-    nmap <C-a> <Plug>(coc-codeaction)
 
     nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
     xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
@@ -477,14 +469,14 @@ EOF
 
     nmap <leader>cl  <Plug>(coc-codelens-action)
 
-    xmap if <Plug>(coc-funcobj-i)
-    omap if <Plug>(coc-funcobj-i)
-    xmap af <Plug>(coc-funcobj-a)
-    omap af <Plug>(coc-funcobj-a)
-    xmap ic <Plug>(coc-classobj-i)
-    omap ic <Plug>(coc-classobj-i)
-    xmap ac <Plug>(coc-classobj-a)
-    omap ac <Plug>(coc-classobj-a)
+    " xmap if <Plug>(coc-funcobj-i)
+    " omap if <Plug>(coc-funcobj-i)
+    " xmap af <Plug>(coc-funcobj-a)
+    " omap af <Plug>(coc-funcobj-a)
+    " xmap ic <Plug>(coc-classobj-i)
+    " omap ic <Plug>(coc-classobj-i)
+    " xmap ac <Plug>(coc-classobj-a)
+    " omap ac <Plug>(coc-classobj-a)
 
     if has('nvim-0.4.0') || has('patch-8.2.0750')
       nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -501,10 +493,10 @@ EOF
     nnoremap <silent><nowait> <LocalLeader>g  :<C-u>CocList diagnostics<cr>
     nnoremap <silent><nowait> <LocalLeader>e  :<C-u>CocList extensions<cr>
     nnoremap <silent><nowait> <LocalLeader>r  :<C-u>CocList commands<cr>
-    "nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-    "nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-    "nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-    "nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+    " nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+    " nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+    " nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+    " nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 
     let g:coc_snippet_next = '<C-j>'
     let g:coc_snippet_prev = '<C-k>'
@@ -522,7 +514,7 @@ EOF
     augroup vimrc
       "autocmd CursorHold * silent call CocActionAsync('highlight')
       autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    augroup end
+    augroup END
   endif
 
   " dadbod
