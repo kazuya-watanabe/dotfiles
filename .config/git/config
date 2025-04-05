@@ -2,20 +2,22 @@
 	autocrlf = false
 	editor = vim
 	ignoreCase = false
+	pager = delta
 	quotePath = false
 	symlinks = true
 
 [credential "https://github.com"]
-	helper = 
 	helper = !gh auth git-credential
 
 [credential "https://gist.github.com"]
-	helper = 
 	helper = !gh auth git-credential
 
 [delta]
 	keep-plus-minus-markers = true
+	line-numbers = true
 	navigate = true
+	side-by-side = true
+	syntax-theme = OneHalfDark
 
 [diff]
 	algorithm = histogram

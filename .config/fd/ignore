@@ -1,8 +1,2 @@
 *~
-*.bak
-.git/
-.venv/
-build/
-dist/
-node_modules/
-vendor/
+.git

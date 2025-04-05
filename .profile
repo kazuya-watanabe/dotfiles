@@ -21,7 +21,10 @@ if [ -r "${HOME}/.cargo/env" ]; then
 fi
 
 # fzf
-export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f --exclude .git/ --exclude .venv/ --exclude build/ --exclude dist/ --exclude node_modules/ --exclude vendor/'
+export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f'
+export FZF_DEFAULT_OPTS='--height 40% --reverse --inline-info --preview "bat --style=numbers --color=always {}"'
+export FZF_CTRL_T_COMMAND='fd --hidden --follow --type f'
+export FZF_CTRL_T_OPTS='--height 40% --reverse --inline-info --preview "bat --style=numbers --color=always {}"'
 
 # less
 export PAGER=less

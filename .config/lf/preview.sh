@@ -42,7 +42,7 @@ case "$1" in
         img2sixel -w 400 "$1"
         ;;
       text/*)
-        bat --color=always --style=plain "$1"
+        bat --color=always --style=plain --file-name "$1" "$1"
         ;;
     esac
     ;;

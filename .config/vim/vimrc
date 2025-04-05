@@ -252,13 +252,7 @@ function! s:LoadPlugins(timer)
 
     " fzf
     let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
-    let g:fzf_layout = { 'down': '40%' }
-
-    if !exists('g:fzf_vim')
-      let g:fzf_vim = {}
-    endif
-
-    let g:fzf_vim.preview_window = [ 'right,50%', 'Ctrl-p' ]
+    let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
     " nerdtree
     let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
@@ -381,10 +375,10 @@ EOF
     Plug 'jeetsukumaran/vim-buffergator'
     Plug 'mbbill/undotree'
     Plug 'preservim/nerdtree'
-    Plug 'sainnhe/sonokai'
+    Plug 'joshdick/onedark.vim'
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
-    Plug 'tpope/vim-fugitive'
+    Plug 'tpope/vim-fugitive' | Plug 'junegunn/gv.vim'
     Plug 'tpope/vim-obsession'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
@@ -573,11 +567,9 @@ EOF
     nnoremap <silent> <LocalLeader>n :<C-u>call <SID>NERDTree()<CR>
   endif
 
-  " sonokai
-  let s:colors_name = 'sonokai'
+  " onedark
+  let s:colors_name = 'onedark'
   let g:airline_theme = s:colors_name
-  let g:sonokai_diagnostic_text_highlight = 1
-  let g:sonokai_diagnostic_line_highlight = 1
 
   if !empty(getcompletion(s:colors_name, 'color'))
     set background=dark
