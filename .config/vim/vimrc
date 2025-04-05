@@ -254,6 +254,12 @@ function! s:LoadPlugins(timer)
     let g:fzf_action = { 'Ctrl-t': 'tab split', 'Ctrl-i': 'split', 'Ctrl-s': 'vsplit' }
     let g:fzf_layout = { 'down': '40%' }
 
+    if !exists('g:fzf_vim')
+      let g:fzf_vim = {}
+    endif
+
+    let g:fzf_vim.preview_window = [ 'right,50%', 'Ctrl-p' ]
+
     " nerdtree
     let g:NERDTreeIgnore = [ '\~$', '\.git$' ]
     let g:NERDTreeShowHidden = 1
