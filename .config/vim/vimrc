@@ -312,10 +312,10 @@ function! s:LoadPlugins(timer)
     let g:vim_ai_token_file_path = expand('~/.config/openai.token')
     let g:vim_ai_chat_markdown = 1
     let s:vim_ai_default_prompt =<< trim EOF
-you are a general assistant.
-answer shortly, consisely and only what you are asked.
-do not provide any explanantion or comments if not requested.
-you must answer in japanese.
+You are a general assistant.
+Answer shortly, consisely and only what you are asked.
+Do not provide any explanantion or comments if not requested.
+You must answer in japanese.
 EOF
     let g:vim_ai_complete = {
           \ 'options': {
