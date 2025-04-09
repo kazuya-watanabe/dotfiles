@@ -16,7 +16,7 @@ set backupdir=$MYVIMDIR/backup
 set belloff=all
 set clipboard^=unnamed
 set cmdheight=2
-set completeopt=menuone,noselect,popup
+set completeopt=menuone,longest,preview,fuzzy
 set diffopt^=vertical,algorithm:histogram
 set directory=$MYVIMDIR/swap
 set display=lastline
@@ -37,7 +37,6 @@ set list
 set listchars=tab:󰅂─,leadmultispace:\ │,trail:󱓼,extends:󰄾,precedes:󰄽,conceal:
 set nrformats-=octal
 set number
-set previewpopup=height:10,width:60
 set relativenumber
 set ruler
 set scrolloff=5
@@ -70,7 +69,7 @@ set whichwrap+=<,>,~,[,]
 set wildignorecase
 set wildmenu
 set wildmode=longest:full,full
-set wildoptions=pum,tagfile
+set wildoptions=fuzzy,pum,tagfile
 set nowrap
 set nowritebackup
 
