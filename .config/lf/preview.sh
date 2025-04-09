@@ -4,19 +4,19 @@ set -euo pipefail
 
 case "$1" in
   *.htm?)
-    pandoc --standalone --from=html --to=markdown "$1" | bat --color=always --style=plain --language markdown
+    pandoc --standalone --from=html --to=markdown "$1" | bat --color=always --language markdown
     ;;
   *.pdf)
-    pdftohtml -stdout -i "$1" | pandoc --standalone --from=html --to=markdown | bat --color=always --style=plain --language html
+    pdftohtml -stdout -i "$1" | pandoc --standalone --from=html --to=markdown | bat --color=always --language html
     ;;
   *.docx)
-    pandoc --standalone --from=docx --to=markdown "$1" | bat --color=always --style=plain --language markdown
+    pandoc --standalone --from=docx --to=markdown "$1" | bat --color=always --language markdown
     ;;
   *.pptx)
-    pptx2md --disable-image --output /dev/stdout "$1" | bat --color=always --style=plain --language markdown
+    pptx2md --disable-image --output /dev/stdout "$1" | bat --color=always --language markdown
     ;;
   *.xlsx)
-    xlsx2csv "$1" | bat --color=always --style=plain --language csv
+    xlsx2csv "$1" | bat --color=always --language csv
     ;;
   *.7z)
     7z l "$1"
@@ -31,7 +31,7 @@ case "$1" in
     ffprobe -hide_banner -i "$1" 2>&1
     ;;
   *.json)
-    jq . "$1" | bat --color=always --style=plain --language json
+    jq . "$1" | bat --color=always --language json
     ;;
   *.svg)
     svg2png -w 400 "$1" | img2sixel -w 400
@@ -42,7 +42,7 @@ case "$1" in
         img2sixel -w 400 "$1"
         ;;
       text/*)
-        bat --color=always --style=plain --file-name "$1" "$1"
+        bat --color=always --file-name "$1" "$1"
         ;;
     esac
     ;;

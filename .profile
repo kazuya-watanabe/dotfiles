@@ -22,9 +22,9 @@ fi
 
 # fzf
 export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f'
-export FZF_DEFAULT_OPTS='--height 40% --reverse --inline-info --preview "bat --style=numbers --color=always {}"'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --preview "bat --color=always {}"'
 export FZF_CTRL_T_COMMAND='fd --hidden --follow --type f'
-export FZF_CTRL_T_OPTS='--height 40% --reverse --inline-info --preview "bat --style=numbers --color=always {}"'
+export FZF_CTRL_T_OPTS='--height 40% --layout=reverse --preview "bat --color=always {}"'
 
 # less
 export PAGER=less
