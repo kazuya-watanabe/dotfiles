@@ -382,7 +382,7 @@ EOF
     Plug 'joshdick/onedark.vim'
     Plug 'sheerun/vim-polyglot'
     Plug 'tpope/vim-dadbod' | Plug 'kristijanhusak/vim-dadbod-ui' | Plug 'kristijanhusak/vim-dadbod-completion'
-    Plug 'tpope/vim-fugitive' | Plug 'junegunn/gv.vim'
+    Plug 'tpope/vim-fugitive' | Plug 'junegunn/gv.vim' | Plug 'kazuya-watanabe/gflow.vim'
     Plug 'tpope/vim-obsession'
     Plug 'tpope/vim-repeat'
     Plug 'tpope/vim-surround'
