@@ -58,7 +58,6 @@ set splitbelow
 set splitright
 set statusline=%<%f\ %m%r%=%{'['.(&fileencoding!=''?&fileencoding:&encoding).']['.&fileformat.']'}%y\ %p\ %l:%v
 set noswapfile
-set termguicolors
 set ttimeout
 set ttimeoutlen=100
 set undodir=$MYVIMDIR/undo
@@ -86,6 +85,10 @@ if exists('+macmeta')
   set macmeta
 endif
 
+if exists('+termguicolors')
+  set termguicolors
+endif
+
 if has('gui_running')
   set guioptions+=chk | set guioptions-=T | set guioptions-=e | set guioptions-=m
 endif
@@ -110,42 +113,8 @@ augroup vimrc
   autocmd FileType,BufRead aichat execute 'noremap <silent><buffer> <Leader>i :<C-u>AIChat<CR> | xnoremap <silent><buffer> <Leader>i :<C-u>AIChat<CR> | setlocal wrap'
 augroup END
 
-function! s:Note(...)
-  let l:note_dir_path = get(g:, 'note_dir_path', '~/Documents/Notes/%Y-%m')
-  let l:note_template_path = get(g:, 'note_template_path', '~/Documents/Notes/.template.md')
-
-  if a:0 == 0
-    let l:note_file_path = l:note_dir_path .. '/' .. '%Y-%m-%d.md'
-  else
-    let l:note_filename = a:1
-
-    if filereadable(expand(l:note_filename))
-      let l:note_file_path = l:note_filename
-    else
-      let l:note_file_path = l:note_dir_path .. '/' .. l:note_filename
-    endif
-  endif
-
-  call mkdir(expand(strftime(l:note_dir_path)), 'p')
-
-  let l:note_file_path = expand(strftime(l:note_file_path))
-  let l:note_template_path = expand(l:note_template_path)
-
-  if filereadable(l:note_file_path)
-    execute 'edit ' .. l:note_file_path
-  else
-    execute 'edit ' .. l:note_file_path
-
-    if filereadable(l:note_template_path)
-      execute '0read ' .. l:note_template_path
-    endif
-  endif
-
-  execute 'normal! G'
-endfunction
-
 command! -nargs=* Grep grep <args> | cwindow
-command! -nargs=? Note call <SID>Note(<f-args>)
+command! Note call mkdir(expand(strftime('~/Documents/Notes/%Y-%m')), 'p') | execute 'edit ' .. expand(strftime('~/Documents/Notes/%Y-%m/%Y-%m-%d.md'))
 command! -nargs=* Vterminal vertical terminal ++close <args>
 
 if executable('tig')
@@ -315,6 +284,7 @@ function! s:LoadPlugins(timer)
 You are a general assistant.
 Answer shortly, consisely and only what you are asked.
 Do not provide any explanantion or comments if not requested.
+If you answer in a code, do not wrap it in markdown code block.
 You must answer in japanese.
 EOF
     let g:vim_ai_complete = {
@@ -671,39 +641,39 @@ EOF
   if exists(':AIChat')
     " code assist
     command! -range -nargs=* AIComment <line1>,<line2>AIChat
-          \ 'You are a code assistant. Generate comprehensive block comments for the following code, including explanations of the purpose, parameters, return values, and error handling. Format the comments in a style appropriate to the programming language of the code provided. You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Generate comprehensive block comments for the following code, including explanations of the purpose, parameters, return values, and error handling. Format the comments in a style appropriate to the programming language of the code provided. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AICommit <line1>,<line2>AIChat
-          \ 'You are a code assistant. Generate a concise yet comprehensive commit message for the following changes/code. Include details such as the purpose of the changes, affected components, and any relevant context or issue references. You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Generate a concise yet comprehensive commit message for the following changes/code. Include details such as the purpose of the changes, affected components, and any relevant context or issue references. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AIExplain <line1>,<line2>AIChat
-          \ 'You are a code assistant. Provide a clear and detailed explanation of the following code, Covering its purpose, logic, key components, input/output behavior, and any notable algorithms or patterns used. Please format your explanation in a well-structured manner (e.g., using paragraphs or bullet points as appropriate). You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Provide a clear and detailed explanation of the following code, Covering its purpose, logic, key components, input/output behavior, and any notable algorithms or patterns used. Please format your explanation in a well-structured manner (e.g., using paragraphs or bullet points as appropriate). If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AIFindBug <line1>,<line2>AIChat
-          \ 'You are a code assistant. Analyze the following code and identify any potential bugs and code smells. For each issue found, provide a brief explanation and possible suggestions for improvement. Format your answer in a clear and organized manner (e.g., using bullet points or numbered lists). You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Analyze the following code and identify any potential bugs and code smells. For each issue found, provide a brief explanation and possible suggestions for improvement. Format your answer in a clear and organized manner (e.g., using bullet points or numbered lists). If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AIRefactor <line1>,<line2>AIChat
-          \ 'You are a code assistant. Refactor the following code to improve its readability, maintainability, and performance while preserving its original functionality. For each major change, provide a brief explanation of the improvement made. You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Refactor the following code to improve its readability, maintainability, and performance while preserving its original functionality. For each major change, provide a brief explanation of the improvement made. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AIReview <line1>,<line2>AIChat
-          \ 'You are a code assistant. Review the following code by evaluating its readability, maintainability, performance, and potential issues (including bugs and security risks). For each identified issue, provide a clear explanation along with suggestions for improvement. Format your answer using bullet points or numbered lists as appropriate. You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Review the following code by evaluating its readability, maintainability, performance, and potential issues (including bugs and security risks). For each identified issue, provide a clear explanation along with suggestions for improvement. Format your answer using bullet points or numbered lists as appropriate. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AIUnitTest <line1>,<line2>AIChat
-          \ 'You are a code assistant. Generate comprehensive unit tests for the following code, covering normal cases, edge cases, and potential error conditions. Use an appropriate testing framework based on the programming language of the code provided, and ensure the test cases are well-structured and easy to understand. You must answer in Japanese. <args>'
+          \ 'You are a code assistant. Generate comprehensive unit tests for the following code, covering normal cases, edge cases, and potential error conditions. Use an appropriate testing framework based on the programming language of the code provided, and ensure the test cases are well-structured and easy to understand. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
 
     " database assist
     command! -range -nargs=* AISQL <line1>,<line2>AIChat
-          \ 'You are a database administrator. Analyze and optimize the following sql query to improve its performance while preserving its correctness. Provide detailed explanations for each optimization step, including changes made, expected performance improvements, and any assumptions regarding the database schema or indexing. Use an appropriate format (e.g., bullet points or numbered lists) to clearly present your recommendations. You must answer in Japanese. <args>'
+          \ 'You are a database administrator. Analyze and optimize the following sql query to improve its performance while preserving its correctness. Provide detailed explanations for each optimization step, including changes made, expected performance improvements, and any assumptions regarding the database schema or indexing. Use an appropriate format (e.g., bullet points or numbered lists) to clearly present your recommendations. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AIDBExplain <line1>,<line2>AIChat
-          \ 'You are a database administrator. Analyze the following execution plan result to identify any potential performance issues, such as bottlenecks, inefficient joins, or missing indexes. Provide detailed explanations for each identified issue and suggest possible improvements. Format your answer using bullet points or numbered lists for clarity. You must answer in Japanese. <args>'
+          \ 'You are a database administrator. Analyze the following execution plan result to identify any potential performance issues, such as bottlenecks, inefficient joins, or missing indexes. Provide detailed explanations for each identified issue and suggest possible improvements. Format your answer using bullet points or numbered lists for clarity. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
 
     " text assist
     command! -range -nargs=* AISummarize <line1>,<line2>AIChat
-          \ 'You are a proofreading expert. Carefully review the following document and extract its main points to produce a concise and accurate summary in Japanese. The summary should clearly capture the key ideas and structure of the document. Please format your answer in clear paragraphs or bullet points as appropriate. You must answer in Japanese. <args>'
+          \ 'You are a proofreading expert. Carefully review the following document and extract its main points to produce a concise and accurate summary in Japanese. The summary should clearly capture the key ideas and structure of the document. Please format your answer in clear paragraphs or bullet points as appropriate. If you answer in a code, do not wrap it in markdown code block. You must answer in Japanese. <args>'
     command! -range -nargs=* AISimplify <line1>,<line2>AIChat
-          \ 'You are a proofreading expert. Simplify the following document to improve its clarity and readability, while preserving its original meaning. Identify and remove unnecessary complexity, restructure sentences for better flow, and use plain language without losing key information. Format your answer in clear paragraphs or bullet points as appropriate. <args>'
+          \ 'You are a proofreading expert. Simplify the following document to improve its clarity and readability, while preserving its original meaning. Identify and remove unnecessary complexity, restructure sentences for better flow, and use plain language without losing key information. Format your answer in clear paragraphs or bullet points as appropriate. If you answer in a code, do not wrap it in markdown code block. <args>'
     command! -range -nargs=* AISpell <line1>,<line2>AIChat
-          \ 'You are a proofreading expert. Fix grammar and spelling errors in the following document, ensuring that the original meaning is preserved. Provide the corrected text in a clear format. <args>'
+          \ 'You are a proofreading expert. Fix grammar and spelling errors in the following document, ensuring that the original meaning is preserved. Provide the corrected text in a clear format. If you answer in a code, do not wrap it in markdown code block. <args>'
 
     " translation
     command! -range -nargs=* AITransEn <line1>,<line2>AIChat
-          \ 'You are a translator. Translate the following text to English using natural American English. If any part of the text requires an explanation, include it as a footnote rather than within the main text. Each footnote should provide explanations in both Japanese and English for the following: 1. Expressions or terms that might be unclear to non-Japanese speakers. 2. Phrases that differ in British English. 3. Expressions that might be inappropriate or problematic in other countries (particularly in the United States). <args>'
+          \ 'You are a translator. Translate the following text to English using natural American English. If any part of the text requires an explanation, include it as a footnote rather than within the main text. Each footnote should provide explanations in both Japanese and English for the following: 1. Expressions or terms that might be unclear to non-Japanese speakers. 2. Phrases that differ in British English. 3. Expressions that might be inappropriate or problematic in other countries (particularly in the United States). If you answer in a code, do not wrap it in markdown code block. <args>'
     command! -range -nargs=* AITransJa <line1>,<line2>AIChat
-          \ 'You are a translator. Translate the following text into Japanese, prioritizing accuracy. If there are parts that are difficult to express directly in Japanese, you may paraphrase them while preserving the original meaning. Do not include explanations within the main text; instead, add them as footnotes. Each footnote should provide explanations in both Japanese and English for the following: 1. Topics rooted in the cultural or historical context specific to the original text''s language. 2. Uncommon technical or specialized terms. 2. Sections involving legal or moral issues. <args>'
+          \ 'You are a translator. Translate the following text into Japanese, prioritizing accuracy. If there are parts that are difficult to express directly in Japanese, you may paraphrase them while preserving the original meaning. Do not include explanations within the main text; instead, add them as footnotes. Each footnote should provide explanations in both Japanese and English for the following: 1. Topics rooted in the cultural or historical context specific to the original text''s language. 2. Uncommon technical or specialized terms. 2. Sections involving legal or moral issues. If you answer in a code, do not wrap it in markdown code block. <args>'
   endif
 endfunction
 
