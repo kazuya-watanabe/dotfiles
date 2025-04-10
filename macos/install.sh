@@ -77,6 +77,7 @@ brew install --formula docker
 brew install --formula docker-completion
 brew install --formula fd
 brew install --formula ffmpeg
+brew install --formula fnm
 brew install --formula fzf
 brew install --formula gawk
 brew install --formula git-delta
@@ -89,7 +90,6 @@ brew install --formula lf
 brew install --formula libsixel
 brew install --formula lima
 brew install --formula lsd
-brew install --formula node
 brew install --formula p7zip
 brew install --formula pandoc
 brew install --formula poppler
@@ -107,18 +107,15 @@ brew install --formula wget
 brew install --formula xz
 brew install --formula zoxide
 
-export N_PREFIX="${HOME}/.npm"
-
-mkdir -pv "${HOME}/.npm/lib"
+fnm install 22
+fnm use 22
+eval "$(fnm env --use-on-cd)"
 
 npm --global install corepack
-npm --global install n
 npm --global install textlint
 npm --global install textlint-rule-preset-ja-technical-writing
 npm --global install textlint-rule-prh
 npm --global install trash-cli
-
-n install lts
 
 export PYTHONUSERBASE="${HOME}/.local"
 
@@ -129,11 +126,6 @@ pip3 install --user --break-system-packages pipenv
 pip3 install --user --break-system-packages pptx2md
 pip3 install --user --break-system-packages xlsx2csv
 pip3 install --user --break-system-packages yt-dlp
-
-if brew list --formula node >/dev/null 2>&1; then
-  brew uninstall --formula node
-  brew autoremove
-fi
 
 if [ ! -x "${HOME}/.tmux/plugins/tpm/bin/install_plugins" ]; then
   git clone https://github.com/tmux-plugins/tpm.git "${HOME}/.tmux/plugins/tpm"

@@ -6,7 +6,7 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 export XDG_CACHE_HOME="${HOME}/.cache"
 export XDG_DATA_HOME="${HOME}/.local/share"
 export XDG_STATE_HOME="${HOME}/.local/state"
-export PATH="${HOME}/.local/bin":"${HOME}/.npm/bin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
+export PATH="${HOME}/.local/bin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
 
 umask 0022
 
@@ -20,6 +20,11 @@ if [ -r "${HOME}/.cargo/env" ]; then
   source "${HOME}/.cargo/env"
 fi
 
+# fnm
+if type fnm >/dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd)"
+fi
+
 # fzf
 export FZF_DEFAULT_COMMAND='fd --hidden --follow --type f'
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --preview "bat --color=always {}"'
@@ -31,9 +36,6 @@ export PAGER=less
 export LESS=-iFJMRX
 export LESSOPEN='| lesspipe.sh %s'
 export LESS_ADVANCED_PREPROCESSOR=1
-
-# n
-export N_PREFIX="${HOME}/.npm"
 
 # python3
 export PYTHONUSERBASE="${HOME}/.local"
