@@ -1,15 +1,15 @@
 if has('win32')
-  set guifont=Hack_Nerd_Font_Mono:h12,Consolas:h12
-  set guifontwide=MS_Gothic:h12
+  set guifont=Hack_Nerd_Font_Mono:h11,Consolas:h11
+  set guifontwide=MS_Gothic:h11
   set renderoptions=type:directx
 elseif has('gui_gtk')
   set guifont=Hack\ Nerd\ Font\ Mono\ 11,Monospace\ 11
 elseif has('osx')
-  set guifont=Hack\ Nerd\ Font\ Mono:h14,Menlo:h14
-  set guifontwide=YuGo-Medium:h14
+  set guifont=Hack\ Nerd\ Font\ Mono:h15,Menlo:h15
+  set guifontwide=HiraginoSans-W3:h15
 endif
 
-set columns=160
+set columns=200
 set lines=50
 
 source $VIMRUNTIME/delmenu.vim
