@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-export PATH="${HOME}/.npm/bin":"${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
+export PATH="${HOME}/.local/bin":"${HOME}/.local/sbin":"${HOME}/bin":"${HOME}/sbin":"/opt/homebrew/bin":"/opt/homebrew/sbin":${PATH}
 
 if ! type brew >/dev/null 2>&1; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -34,7 +34,6 @@ test ! -e "${HOME}/.config/tig" && ln -fsv "${GITDIR}/.config/tig" "${HOME}/.con
 test ! -e "${HOME}/.config/vim" && ln -fsv "${GITDIR}/.config/vim" "${HOME}/.config/vim"
 test ! -e "${HOME}/.curlrc" && ln -fsv "${GITDIR}/.curlrc" "${HOME}/.curlrc"
 test ! -e "${HOME}/.inputrc" && ln -fsv "${GITDIR}/.inputrc" "${HOME}/.inputrc"
-test ! -e "${HOME}/.npmrc" && ln -fsv "${GITDIR}/.npm-rc" "${HOME}/.npmrc"
 test ! -e "${HOME}/.profile" && ln -fsv "${GITDIR}/.profile" "${HOME}/.profile"
 test ! -e "${HOME}/.textlintrc" && ln -fsv "${GITDIR}/.textlintrc" "${HOME}/.textlintrc"
 test ! -e "${HOME}/.tmux.conf" && ln -fsv "${GITDIR}/.tmux.conf" "${HOME}/.tmux.conf"
