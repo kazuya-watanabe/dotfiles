@@ -117,7 +117,7 @@ augroup vimrc
   autocmd BufNewFile,BufRead gitconfig,.gitconfig,*/git/config,*/.git/config setlocal tabstop=4 noexpandtab
   autocmd FileType,BufRead dbout,fugitive,help,qf nnoremap <silent><buffer> q :<C-u>quit<CR>
   autocmd FileType,BufRead html,markdown,txt setlocal spell
-  autocmd FileType,BufRead aichat execute 'setlocal wrap | inoremap <buffer> <C-i> <Esc>:<C-u>AIChat<CR>'
+  autocmd FileType,BufRead aichat execute 'setlocal wrap | nnoremap <buffer> <Leader>a :<C-u>AIChat<CR>'
 augroup END
 
 command! -nargs=* Grep grep <args> | cwindow
@@ -285,6 +285,7 @@ function! s:LoadPlugins(timer)
     let g:undotree_WindowLayout = 3
 
     " vim-ai
+    let g:vim_ai_chat = { 'options': { 'selection_boundary': '```' } }
     let g:vim_ai_chat_markdown = 1
     let g:vim_ai_token_file_path = expand('~/.config/openai.token')
     let s:vim_ai_roles_config_file = expand($MYVIMDIR .. '/roles.ini')
@@ -294,43 +295,6 @@ function! s:LoadPlugins(timer)
     endif
 
     unlet s:vim_ai_roles_config_file
-
-    let s:initial_complete_prompt =<< trim END
->>> system
-
-You are a general assistant.
-Answer shortly, concisely, and only what you are asked.
-Do not provide any explanation or comments if not requested.
-If you answer in code, do not wrap it in a markdown code block.
-You must answer in Japanese.
-END
-    let s:initial_chat_prompt =<< trim END
->>> system
-
-You are a general assistant.
-If you attach a code block add syntax type after ``` to enable syntax highlighting.
-You must answer in japanese.
-END
-
-    let g:vim_ai_complete = {
-          \ 'options': {
-          \   'initial_prompt': s:initial_complete_prompt,
-          \   },
-          \ }
-    let g:vim_ai_edit = {
-          \ 'options': {
-          \   'initial_prompt': s:initial_complete_prompt,
-          \   },
-          \ }
-    let g:vim_ai_chat = {
-          \ 'options': {
-          \   'initial_prompt': s:initial_chat_prompt,
-          \   'selection_boundary': '```',
-          \   },
-          \ }
-
-    unlet s:initial_complete_prompt
-    unlet s:initial_chat_prompt
 
     " vim-airline
     let g:airline_extensions = [
