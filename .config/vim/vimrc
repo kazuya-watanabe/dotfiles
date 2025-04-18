@@ -616,6 +616,33 @@ END
     nnoremap <silent> <LocalLeader>u :<C-u>call <SID>UndotreeShow()<CR>
   endif
 
+  " vim-ai
+  if exists(':AIChat')
+    function! s:DefineAICommand(name, prompt, model = 'gpt-41-mini', temperature = 2)
+      execute printf('command! -range=%% -nargs=* -complete=customlist,vim_ai#RoleCompletionChat %s <line1>,<line2>AIChat /model/%s /temperature/%d /prompt/%s /below <args>', a:name, a:model, a:temperature, a:prompt)
+    endfunction
+
+    call s:DefineAICommand('AIComment', 'comment')
+    call s:DefineAICommand('AICommit', 'commit')
+    call s:DefineAICommand('AIUnitTest', 'unit-test')
+    call s:DefineAICommand('AIExplain', 'explain')
+    call s:DefineAICommand('AIFindBug', 'find-bug')
+    call s:DefineAICommand('AIRefactor', 'refactor')
+    call s:DefineAICommand('AIReview', 'review')
+    call s:DefineAICommand('AIOptimizeSQL', 'optimize-sql')
+    call s:DefineAICommand('AIExplainSQL', 'explain-sql')
+
+    call s:DefineAICommand('AIProofread', 'proofread')
+    call s:DefineAICommand('AISimplify', 'simplify')
+    call s:DefineAICommand('AISummarize', 'summarize')
+    call s:DefineAICommand('AITranslateEnglish', 'translate-english')
+    call s:DefineAICommand('AITranslateJapanese', 'translate-japanese')
+
+    if exists(':AINewChat')
+      delcommand AINewChat
+    endif
+  endif
+
   " vim-buffergator
   if exists(':BuffergatorOpen')
     function! s:BuffergatorOpen()
@@ -629,25 +656,6 @@ END
     endfunction
 
     nnoremap <silent> <LocalLeader>b :<C-u>call <SID>BuffergatorOpen()<CR>
-  endif
-
-  " vim-ai
-  if exists(':AIChat')
-    command! -range=% -nargs=* AIComment <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /comment <args>
-    command! -range=% -nargs=* AICommit <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /commit <args>
-    command! -range=% -nargs=* AIUnitTest <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /unit-test <args>
-    command! -range=% -nargs=* AIExplain <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /explain <args>
-    command! -range=% -nargs=* AIFindBug <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /find-bug <args>
-    command! -range=% -nargs=* AIRefactor <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /refactor <args>
-    command! -range=% -nargs=* AIReview <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /review <args>
-    command! -range=% -nargs=* AIOptimizeSQL <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /optimize-sql <args>
-    command! -range=% -nargs=* AIExplainSQL <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /explain-sql <args>
-
-    command! -range=% -nargs=* AIProofread <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /proofread <args>
-    command! -range=% -nargs=* AISimplify <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /simplify <args>
-    command! -range=% -nargs=* AISummarize <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /summarize <args>
-    command! -range=% -nargs=* AITranslateEnglish <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /translate-english <args>
-    command! -range=% -nargs=* AITranslateJapanese <line1>,<line2>AIChat /gpt-41-mini /temp-2 /below /translate-japanese <args>
   endif
 endfunction
 
